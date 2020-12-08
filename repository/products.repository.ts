@@ -1,5 +1,4 @@
 import {connectToDatabase} from "@middleware/mongo.middleware";
-import {Collection} from "mongodb";
 import RepositoryAbstract from "@repository/repository.abstract";
 
 export const PRODUCTS_COLLECTION = 'products';

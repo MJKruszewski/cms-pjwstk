@@ -1,5 +1,4 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {connectToDatabase} from "@middleware/mongo.middleware";
 import {provide} from "../../../../fixtures/fixtures.provider";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
