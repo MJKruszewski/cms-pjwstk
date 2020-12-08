@@ -1,9 +1,13 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {connectToDatabase} from "@middleware/mongo.middleware";
+import {provide} from "../../../../fixtures/fixtures.provider";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    let k = await connectToDatabase();
-    await k.collection('test').insertOne({'kekw': 'kekw'});
+    const fixtures = provide();
 
-    res.status(200).json( await k.collection('test').find({}).toArray())
+    for (const fn of fixtures) {
+        await fn();
+    }
+
+    res.status(204).json({});
 }
