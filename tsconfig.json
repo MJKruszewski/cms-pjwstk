@@ -23,7 +23,8 @@
       "@middleware/*": ["middleware/*"],
       "@repository/*": ["repository/*"],
       "@service/*": ["service/*"],
-      "@domain/*": ["domain/*"]
+      "@domain/*": ["domain/*"],
+      "@fixture/*": ["fixtures/*"]
     }
   },
   "exclude": [

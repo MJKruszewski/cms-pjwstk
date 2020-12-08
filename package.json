@@ -36,6 +36,7 @@
     "@middleware/*": "dist/middleware",
     "@repository/*": "dist/repository",
     "@service/*": "dist/service",
+    "@fixture/*": "dist/fixtures",
     "@domain/*": "dist/domain"
   },
   "homepage": "https://github.com/MJKruszewski/cms-pjwstk#readme"

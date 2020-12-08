@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {provide} from "../../../../fixtures/fixtures.provider";
+import {provide} from "@fixture/fixtures.provider";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const fixtures = provide();
