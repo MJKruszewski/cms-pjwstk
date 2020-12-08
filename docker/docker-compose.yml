@@ -3,10 +3,14 @@ version: '2'
 services:
   cms-mongodb:
     image: 'mongo'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=cms
+      - MONGO_INITDB_ROOT_PASSWORD=cmsPass
+      - MONGO_INITDB_DATABASE=cms
     ports:
       - "27017:27017"
     volumes:
-      - 'mongodb_data:/mongodb'
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 volumes:
   mongodb_data:
