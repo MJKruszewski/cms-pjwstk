@@ -1,4 +1,4 @@
-import { HomeFilled } from '@ant-design/icons';
+import { HomeFilled, BuildOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useRouter } from 'next/dist/client/router';
 import React, { CSSProperties, FunctionComponent, ReactElement, useEffect, useState } from 'react';
@@ -24,7 +24,12 @@ const menuConfig: MenuConfigItem[] = [
     key: '/',
     icon: <HomeFilled />,
     content: 'Home'
-  }
+  },
+  {
+    key: '/products',
+    icon: <BuildOutlined />,
+    content: 'Products'
+  },
 ];
 
 const SiderMenu: FunctionComponent = () => {

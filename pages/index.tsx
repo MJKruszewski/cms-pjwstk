@@ -27,13 +27,15 @@ const Home: FC = () => {
           -
         </Button>
       </div>
-      <style jsx>{`
-        .counter-example {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-        }
-      `}</style>
+      <style jsx>
+        {`
+          .counter-example {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+          }
+        `}
+      </style>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { HYDRATE, createWrapper } from 'next-redux-wrapper';
 import { useDispatch } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import counterSaga from './counterSaga';
+import productsSaga from 'src/products/saga';
 
 const bindMiddleware = (...middleware: any) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -29,6 +30,7 @@ const store = createStore(reducer, bindMiddleware(sagaMiddleware));
 
 // example how to add saga
 sagaMiddleware.run(counterSaga);
+sagaMiddleware.run(productsSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch
