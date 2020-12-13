@@ -1,3 +1,20 @@
+export interface ProductStock {
+    free: number,
+    sold: number,
+    available: number,
+}
+export interface ProductPrice {
+    base: string,
+}
+export interface Product {
+    name: string,
+    description: string,
+    price: ProductPrice,
+    stock: ProductStock,
+    type: ProductTypeEnum,
+    features: ProductFeature[],
+    requirements: ProductRequirement[],
+}
 export enum ProductFeatureCodeEnum {
     PCI = 'pci',
     HDMI_PORT = 'hdmiPorts',
@@ -11,13 +28,6 @@ export enum ProductFeatureCodeEnum {
     CORES = 'cores',
     MEMORY_TYPE = 'memoryType',
     MEMORY_SIZE = 'memorySize',
-}
-export interface Product {
-    name: string,
-    description: string,
-    type: ProductTypeEnum,
-    features: ProductFeature[],
-    requirements: ProductRequirement[],
 }
 export enum ProductTypeEnum {
     MOTHERBOARD = 'motherboard',
