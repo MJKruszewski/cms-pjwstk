@@ -3,8 +3,8 @@ import { createStore, applyMiddleware } from '@reduxjs/toolkit';
 import { HYDRATE, createWrapper } from 'next-redux-wrapper';
 import { useDispatch } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import counterSaga from './counterSaga';
-import productsSaga from 'src/products/saga';
+import productsSaga from '@src/products/saga';
+import counterSaga from "@store/counterSaga";
 
 const bindMiddleware = (...middleware: any) => {
   if (process.env.NODE_ENV !== 'production') {

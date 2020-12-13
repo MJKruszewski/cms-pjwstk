@@ -24,7 +24,9 @@
       "@repository/*": ["repository/*"],
       "@service/*": ["service/*"],
       "@domain/*": ["domain/*"],
-      "@fixture/*": ["fixtures/*"]
+      "@fixture/*": ["fixtures/*"],
+      "@src/*": ["src/*"],
+      "@store/*": ["store/*"]
     }
   },
   "exclude": [

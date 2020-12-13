@@ -47,6 +47,8 @@
     "@repository/*": "dist/repository",
     "@service/*": "dist/service",
     "@fixture/*": "dist/fixtures",
+    "@store/*": "dist/store",
+    "@src/*": "dist/src",
     "@domain/*": "dist/domain"
   },
   "homepage": "https://github.com/MJKruszewski/cms-pjwstk#readme"

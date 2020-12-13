@@ -1,4 +1,4 @@
-import { createGenericSlice, GenericState } from 'store/genericDataSlice';
+import { createGenericSlice, GenericState } from '@store/genericDataSlice';
 
 const initialState: GenericState<any> = {
   status: 'idle',

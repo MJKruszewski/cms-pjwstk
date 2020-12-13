@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import counterReducer from './counterReducer';
-import productsReducer from 'src/products/slice';
+import productsReducer from '@src/products/slice';
+import counterReducer from "@store/counterReducer";
 
 const rootReducer = combineReducers({
   counter: counterReducer,
