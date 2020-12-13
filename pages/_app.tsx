@@ -1,5 +1,5 @@
 import React, { FunctionComponent, Fragment } from 'react';
-import type { AppProps } from 'next/app';
+import type, { AppProps } from 'next/app';
 import { Layout } from 'antd';
 import SiderMenu from 'src/commons/sider-menu';
 

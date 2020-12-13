@@ -1,6 +1,6 @@
 import {connectToDatabase} from "@middleware/mongo.middleware";
 import * as faker from 'faker';
-import {PRODUCTS_COLLECTION} from "@repository/products.repository";
+import {PRODUCTS_COLLECTION, ProductTypeEnum} from "@repository/products.repository";
 
 interface Motherboard {
     code: string,
@@ -123,6 +123,7 @@ export async function motherboardFixture() {
 
             await collection.insertOne({
                 name: faker.commerce.productName(),
+                type: ProductTypeEnum.MOTHERBOARD,
                 description: faker.commerce.productDescription(),
                 features: features,
                 requirements: [],

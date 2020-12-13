@@ -12,8 +12,17 @@ export enum ProductFeatureCodeEnum {
 export interface Product {
     name: string,
     description: string,
+    type: ProductTypeEnum,
     features: ProductFeature[],
     requirements: any,
+}
+export enum ProductTypeEnum {
+    MOTHERBOARD = 'motherboard',
+    PROCESSOR = 'processor',
+    RAM = 'ram',
+    GPU = 'gpu',
+    POWER = 'power',
+    STORAGE = 'storage',
 }
 export interface ProductFeature {
     code: ProductFeatureCodeEnum,
