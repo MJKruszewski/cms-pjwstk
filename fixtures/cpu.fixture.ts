@@ -3,12 +3,11 @@ import * as faker from 'faker';
 import {PRODUCTS_COLLECTION} from "@repository/products.repository";
 import {ProductTypeEnum} from "@domain/product.domain";
 
-interface Motherboard {
+interface Processor {
     code: string,
     sockets: string[],
+    cores: string[],
     producer: string[],
-    pci: string[],
-    ddr: string[],
 }
 
 const brands = [
@@ -16,14 +15,18 @@ const brands = [
     "Intel"
 ];
 
-const supports: Motherboard[] = [
+const supports: Processor[] = [
     {
         code: "AMD",
         producer: [
-            "GIGABYTE",
-            "ASUS",
-            "ASROCK",
-            "MSI",
+            "AMD",
+        ],
+        cores: [
+            '8',
+            '12',
+            '16',
+            '32',
+            '64'
         ],
         sockets: [
             "AM5",
@@ -31,25 +34,15 @@ const supports: Motherboard[] = [
             "AM3",
             "AM2",
         ],
-        ddr: [
-            "DDR1",
-            "DDR2",
-            "DDR3",
-            "DDR4",
-        ],
-        pci: [
-            "PCI-Ex16",
-            "PCI-Ex8",
-            "PCIx8",
-        ],
     },
     {
         code: "Intel",
         producer: [
-            "GIGABYTE",
-            "ASUS",
-            "ASROCK",
-            "MSI",
+            "Intel",
+        ],
+        cores: [
+            '2',
+            '4',
         ],
         sockets: [
             "1200",
@@ -59,21 +52,10 @@ const supports: Motherboard[] = [
             "1155",
             "1155 Coffe lake",
         ],
-        ddr: [
-            "DDR1",
-            "DDR2",
-            "DDR3",
-            "DDR4",
-        ],
-        pci: [
-            "PCI-Ex16",
-            "PCI-Ex8",
-            "PCIx8",
-        ],
     }
 ];
 
-export async function motherboardFixture() {
+export async function cpuFixture() {
     const db = await connectToDatabase();
 
     await db.collection(PRODUCTS_COLLECTION).drop().catch(i => {});
@@ -83,7 +65,7 @@ export async function motherboardFixture() {
         let index = supports.findIndex(value => {
             return value.code === brand;
         });
-        let data: Motherboard = supports[index];
+        let data: Processor = supports[index];
 
         for (let i = 0; i < faker.random.number({
             min: 12,
@@ -92,42 +74,39 @@ export async function motherboardFixture() {
             let features = [];
 
             features.push({
+                code: 'clock',
+                value: faker.random.float({ min: 1, max: 5, precision: 1}).toString()  + 'GHz'
+            });
+            features.push({
+                code: 'cores',
+                value: faker.random.arrayElement(data.cores)
+            });
+            features.push({
                 code: 'producer',
                 value: faker.random.arrayElement(data.producer)
             });
-            features.push({
-                code: 'processor',
-                value: brand
-            });
+            let socket = faker.random.arrayElement(data.sockets);
             features.push({
                 code: 'socket',
-                value: faker.random.arrayElement(data.sockets)
+                value: socket
             });
             features.push({
-                code: 'memoryType',
-                value: faker.random.arrayElement(data.ddr)
-            });
-            features.push({
-                code: 'pci',
-                value: "PCI-Ex16"
+                code: 'integratedGraphics',
+                value: faker.random.boolean() ? '1' : '0'
             });
 
-            for (let i = 0; i < faker.random.number({
-                min: 1,
-                max: 5
-            }); i++) {
-                features.push({
-                    code: 'pci',
-                    value: faker.random.arrayElement(data.pci)
-                });
-            }
+            let requirements = [];
+            requirements.push({
+                code: 'socket',
+                value: socket
+            });
 
             await collection.insertOne({
                 name: faker.commerce.productName(),
-                type: ProductTypeEnum.MOTHERBOARD,
+                type: ProductTypeEnum.PROCESSOR,
                 description: faker.commerce.productDescription(),
                 features: features,
-                requirements: [],
+                requirements: requirements,
             })
         }
     }

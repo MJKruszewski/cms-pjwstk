@@ -1,11 +1,10 @@
 import {connectToDatabase} from "@middleware/mongo.middleware";
 import * as faker from 'faker';
 import {PRODUCTS_COLLECTION} from "@repository/products.repository";
-import {ProductTypeEnum} from "@domain/product.domain";
+import {ProductFeatureCodeEnum, ProductTypeEnum} from "@domain/product.domain";
 
-interface Motherboard {
+interface Gpu {
     code: string,
-    sockets: string[],
     producer: string[],
     pci: string[],
     ddr: string[],
@@ -13,57 +12,45 @@ interface Motherboard {
 
 const brands = [
     "AMD",
-    "Intel"
+    "Nvidia"
 ];
 
-const supports: Motherboard[] = [
+const supports: Gpu[] = [
     {
         code: "AMD",
         producer: [
+            "AMD",
             "GIGABYTE",
             "ASUS",
             "ASROCK",
             "MSI",
-        ],
-        sockets: [
-            "AM5",
-            "AM4",
-            "AM3",
-            "AM2",
-        ],
-        ddr: [
-            "DDR1",
-            "DDR2",
-            "DDR3",
-            "DDR4",
         ],
         pci: [
             "PCI-Ex16",
             "PCI-Ex8",
             "PCIx8",
         ],
+        ddr: [
+            "GDDR1",
+            "GDDR2",
+            "GDDR3",
+            "GDDR4",
+        ],
     },
     {
-        code: "Intel",
+        code: "Nvidia",
         producer: [
+            "Nvidia",
             "GIGABYTE",
             "ASUS",
             "ASROCK",
             "MSI",
         ],
-        sockets: [
-            "1200",
-            "1151",
-            "2066",
-            "1150",
-            "1155",
-            "1155 Coffe lake",
-        ],
         ddr: [
-            "DDR1",
-            "DDR2",
-            "DDR3",
-            "DDR4",
+            "GDDR1",
+            "GDDR2",
+            "GDDR3",
+            "GDDR4",
         ],
         pci: [
             "PCI-Ex16",
@@ -73,7 +60,7 @@ const supports: Motherboard[] = [
     }
 ];
 
-export async function motherboardFixture() {
+export async function gpuFixture() {
     const db = await connectToDatabase();
 
     await db.collection(PRODUCTS_COLLECTION).drop().catch(i => {});
@@ -83,7 +70,7 @@ export async function motherboardFixture() {
         let index = supports.findIndex(value => {
             return value.code === brand;
         });
-        let data: Motherboard = supports[index];
+        let data: Gpu = supports[index];
 
         for (let i = 0; i < faker.random.number({
             min: 12,
@@ -92,42 +79,47 @@ export async function motherboardFixture() {
             let features = [];
 
             features.push({
+                code: 'clock',
+                value: faker.random.number({ min: 900, max: 2586, precision: 0}).toString()  + 'MHz'
+            });
+            features.push({
                 code: 'producer',
                 value: faker.random.arrayElement(data.producer)
             });
+            let pci = faker.random.arrayElement(data.pci);
             features.push({
-                code: 'processor',
-                value: brand
-            });
-            features.push({
-                code: 'socket',
-                value: faker.random.arrayElement(data.sockets)
-            });
-            features.push({
-                code: 'memoryType',
-                value: faker.random.arrayElement(data.ddr)
-            });
-            features.push({
-                code: 'pci',
-                value: "PCI-Ex16"
+                code: ProductFeatureCodeEnum.PCI_CONNECTOR,
+                value: pci
             });
 
-            for (let i = 0; i < faker.random.number({
-                min: 1,
-                max: 5
-            }); i++) {
-                features.push({
-                    code: 'pci',
-                    value: faker.random.arrayElement(data.pci)
-                });
-            }
+            let requirements = [];
+            requirements.push({
+                code: ProductFeatureCodeEnum.PCI,
+                value: pci
+            });
+
+            features.push({
+                code: ProductFeatureCodeEnum.HDMI_PORT,
+                value: faker.random.number({
+                    min: 1,
+                    max: 5
+                }).toString()
+            });
+
+            features.push({
+                code: ProductFeatureCodeEnum.DISPLAY_PORT,
+                value: faker.random.number({
+                    min: 1,
+                    max: 5
+                }).toString()
+            });
 
             await collection.insertOne({
                 name: faker.commerce.productName(),
-                type: ProductTypeEnum.MOTHERBOARD,
+                type: ProductTypeEnum.GPU,
                 description: faker.commerce.productDescription(),
                 features: features,
-                requirements: [],
+                requirements: requirements,
             })
         }
     }
