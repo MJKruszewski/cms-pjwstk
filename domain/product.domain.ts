@@ -1,7 +1,7 @@
 export interface ProductStock {
     free: number,
     sold: number,
-    available: number,
+    all: number,
 }
 export interface ProductPrice {
     base: string,
@@ -9,11 +9,15 @@ export interface ProductPrice {
 export interface Product {
     name: string,
     description: string,
+    images: Image[]
     price: ProductPrice,
     stock: ProductStock,
     type: ProductTypeEnum,
     features: ProductFeature[],
     requirements: ProductRequirement[],
+}
+export interface Image {
+    src: string;
 }
 export enum ProductFeatureCodeEnum {
     PCI = 'pci',

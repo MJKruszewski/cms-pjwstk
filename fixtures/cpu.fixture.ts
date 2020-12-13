@@ -1,7 +1,7 @@
 import {connectToDatabase} from "@middleware/mongo.middleware";
 import * as faker from 'faker';
-import {PRODUCTS_COLLECTION} from "@repository/products.repository";
 import {ProductTypeEnum} from "@domain/product.domain";
+import {PRODUCTS_COLLECTION} from "@repository/collections.config";
 
 interface Processor {
     code: string,
@@ -57,8 +57,6 @@ const supports: Processor[] = [
 
 export async function cpuFixture() {
     const db = await connectToDatabase();
-
-    await db.collection(PRODUCTS_COLLECTION).drop().catch(i => {});
     const collection = await db.collection(PRODUCTS_COLLECTION);
 
     for (const brand of brands) {
@@ -101,10 +99,26 @@ export async function cpuFixture() {
                 value: socket
             });
 
+            const all = faker.random.number({min: 1300, max: 5000});
+            const sold = faker.random.number({min: 1, max: 1000});
+
             await collection.insertOne({
                 name: faker.commerce.productName(),
                 type: ProductTypeEnum.PROCESSOR,
                 description: faker.commerce.productDescription(),
+                images: [
+                    {
+                        src: 'gpu1.png'
+                    }
+                ],
+                stock: {
+                    free: all - sold,
+                    sold: sold,
+                    all: all,
+                },
+                price: {
+                    base: faker.random.float({min: 2, max: 15000, precision: 2}).toString(),
+                },
                 features: features,
                 requirements: requirements,
             })

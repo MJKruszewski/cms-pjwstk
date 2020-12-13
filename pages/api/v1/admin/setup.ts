@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {provide} from "@fixture/fixtures.provider";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const fixtures = provide();
+    const fixtures = await provide();
 
     for (const fn of fixtures) {
         await fn();

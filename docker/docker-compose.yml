@@ -11,6 +11,16 @@ services:
       - "27017:27017"
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  mongo-gui:
+    container_name: "mongo-gui"
+    image: ugleiton/mongo-gui
+    restart: always
+    ports:
+      - "4321:4321"
+    environment:
+      - MONGO_URL=mongodb://cms:cmsPass@mongodb:27017/cms
+    links:
+      - cms-mongodb:mongodb
 
 volumes:
   mongodb_data:

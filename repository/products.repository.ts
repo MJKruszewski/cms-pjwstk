@@ -1,8 +1,7 @@
 import {connectToDatabase} from "@middleware/mongo.middleware";
 import RepositoryAbstract from "@repository/repository.abstract";
 import {Product} from "@domain/product.domain";
-
-export const PRODUCTS_COLLECTION = 'products';
+import {PRODUCTS_COLLECTION} from "@repository/collections.config";
 
 export default class ProductsRepository extends RepositoryAbstract<Product> {
 

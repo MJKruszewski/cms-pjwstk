@@ -13,7 +13,7 @@ export default abstract class RepositoryAbstract<T> {
     }
 
     async findOne(id): Promise<WithId<T>> {
-        return this.collection.findOne({ _id: id })
+        return this.collection.findOne({_id: id})
     }
 
     public async insertOne(entity: OptionalId<T>): Promise<InsertOneWriteOpResult<WithId<T>>> {

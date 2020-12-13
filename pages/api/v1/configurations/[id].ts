@@ -4,6 +4,7 @@ import {PcConfigurationDto} from "@domain/configuration.domain";
 import {ConfigurationMapper} from "@service/configuration.mapper";
 import {WithId} from "mongodb";
 import ProductsRepository from "@repository/products.repository";
+import {Types} from "mongoose";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const configurationRepository: PcConfigurationsRepository = await PcConfigurationsRepository.build();
@@ -25,7 +26,7 @@ const put = async (req: NextApiRequest, res: NextApiResponse, configurationRepos
     res.status(200).json(result.value);
 };
 const get = async (req: NextApiRequest, res: NextApiResponse, configurationRepository: PcConfigurationsRepository, productsRepository: ProductsRepository) => {
-    const { id } = req.query;
+    const {id} = req.query;
 
     if (id === undefined) {
         res.status(404).json({code: 'not-fount'});
@@ -37,10 +38,12 @@ const get = async (req: NextApiRequest, res: NextApiResponse, configurationRepos
     let components = [];
 
     for (const item of configuration.components) {
-        components.push(await productsRepository.findOne(item));
+        components.push(await productsRepository.findOne(Types.ObjectId(item)));
     }
 
-    components = components.filter((item) => { return item !== undefined && item !== null; });
+    components = components.filter((item) => {
+        return item !== undefined && item !== null;
+    });
 
     const response: WithId<PcConfigurationDto> = {
         _id: configuration._id,
