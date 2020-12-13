@@ -1,4 +1,5 @@
 import {Collection, InsertOneWriteOpResult, OptionalId, WithId} from "mongodb";
+import {PcConfiguration} from "@domain/configuration.domain";
 
 export default abstract class RepositoryAbstract<T> {
 
@@ -9,6 +10,10 @@ export default abstract class RepositoryAbstract<T> {
 
     public async findAll(): Promise<T[]> {
         return this.collection.find({}).toArray();
+    }
+
+    async findOne(id): Promise<WithId<T>> {
+        return this.collection.findOne({ _id: id })
     }
 
     public async insertOne(entity: OptionalId<T>): Promise<InsertOneWriteOpResult<WithId<T>>> {
