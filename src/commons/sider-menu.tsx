@@ -30,6 +30,11 @@ const menuConfig: MenuConfigItem[] = [
     icon: <BuildOutlined />,
     content: 'Products'
   },
+  {
+    key: '/cart',
+    icon: <BuildOutlined />,
+    content: 'Cart'
+  },
 ];
 
 const SiderMenu: FunctionComponent = () => {
