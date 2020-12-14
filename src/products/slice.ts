@@ -1,6 +1,7 @@
+import { Product } from '@domain/product.domain';
 import { createGenericSlice, GenericState } from '@store/genericDataSlice';
 
-const initialState: GenericState<any> = {
+const initialState: GenericState<Product[]> = {
   status: 'idle',
 };
 

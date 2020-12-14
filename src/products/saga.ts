@@ -1,8 +1,7 @@
-import { PayloadAction } from '@reduxjs/toolkit';
 import { put, takeEvery } from 'redux-saga/effects';
 import { request, success, failure } from './slice';
 
-function* fetchProducts({ payload }: PayloadAction<any>) {
+function* fetchProducts() {
   try {
     const response = yield fetch('/api/v1/products');
     const data = yield response.json();
