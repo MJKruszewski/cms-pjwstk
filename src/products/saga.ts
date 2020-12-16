@@ -1,7 +1,9 @@
+import { PcConfigurationDto } from '@domain/configuration.domain';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { put, takeEvery } from 'redux-saga/effects';
-import { request, success, failure } from './slice';
+import { request, success, failure, postConfiguration, postConfigurationFinished } from './slice';
 
-function* fetchProducts() {
+function* fetchProductsSaga() {
   try {
     const response = yield fetch('/api/v1/products');
     const data = yield response.json();
@@ -11,8 +13,25 @@ function* fetchProducts() {
   }
 }
 
+function* postConfigurationSaga({ payload }: PayloadAction<PcConfigurationDto>) {
+  try {
+    const response = yield fetch('/api/v1/configurations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = yield response.json();
+    yield(put(postConfigurationFinished(true)))
+  } catch (error) {
+    yield put(postConfigurationFinished(false))
+  }
+}
+
 function* saga() {
-  yield takeEvery(request.type, fetchProducts);
+  yield takeEvery(request.type, fetchProductsSaga);
+  yield takeEvery(postConfiguration.type, postConfigurationSaga);
 }
 
 export default saga;

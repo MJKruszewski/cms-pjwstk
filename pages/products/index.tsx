@@ -3,13 +3,14 @@ import { Button, message, Result, Spin, Steps, Table, Tag, Typography } from 'an
 import React, { FC, useEffect, useState } from 'react'
 
 import { useSelector } from 'react-redux';
-import { request } from 'src/products/slice';
+import { request, postConfiguration } from 'src/products/slice';
 import { GenericState } from 'store/genericDataSlice';
 import { RootState, useAppDispatch } from 'store/rootStore';
+import { v4 as uuidv4 } from 'uuid';
+import randomColor from 'randomcolor';
 
 const { Step } = Steps;
 const { Paragraph, Text } = Typography;
-var randomColor = require('randomcolor');
 
 type SplitedArrayType = {
   [key in keyof ProductTypeEnum]: Product[];
@@ -32,9 +33,12 @@ const Products: FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0)
   const [splitedArrayByType, setSplitedArrayByType] = useState<SplitedArrayType>(initialSplitedArray)
   const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({})
+  const [selectedProducts, setSelectedProducts] = useState<Record<ProductTypeEnum, Product>>({} as Record<ProductTypeEnum, Product>)
+  const [currentUuid, setCurrentUuid] = useState<string>('')
 
   useEffect(() => {
     dispatch(request())
+    setCurrentUuid(uuidv4())
   }, [])
 
   useEffect(() => {
@@ -44,6 +48,10 @@ const Products: FC = () => {
     splitProductArray(data)
     createColorPalleteForTags(data)
   }, [data])
+
+  useEffect(() => {
+    console.log(selectedProducts)
+  }, [selectedProducts])
 
   const splitProductArray = (dataToSplit: Product[]) => {
     let splited: SplitedArrayType = {} as SplitedArrayType;
@@ -69,6 +77,14 @@ const Products: FC = () => {
   
   const next = () => setCurrentStep(currentStep + 1);
   const prev = () => setCurrentStep(currentStep - 1);
+  const submit = () => {
+    const components = Object.keys(selectedProducts).map(key => selectedProducts[key])
+    dispatch(postConfiguration({
+      externalId: currentUuid,
+      components
+    }))
+  }
+  
 
   const steps = !splitedArrayByType
     ? []
@@ -92,6 +108,19 @@ const Products: FC = () => {
     { title: 'Name', dataIndex: 'name', key: 'name' },
     { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures },
   ]
+  
+  const rowSelection = {
+    onChange: (_selectedRowKeys, selectedRows) => {
+      setSelectedProducts({
+        ...selectedProducts,
+        [selectedRows[0].type]: selectedRows[0]
+      })
+    },
+    getCheckboxProps: record => ({
+      name: record.name,
+    }),
+    type: 'radio' as const
+  };
 
   const stepActions = (
     <div style={{
@@ -103,7 +132,7 @@ const Products: FC = () => {
         </Button>
       )}
       {currentStep === steps.length - 1 && (
-        <Button type="primary" onClick={() => message.success('Processing complete!')}>
+        <Button type="primary" onClick={submit}>
           Done
         </Button>
       )}
@@ -154,12 +183,12 @@ const Products: FC = () => {
           pagination={false}
           columns={columns}
           expandable={{
-            expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
-            rowExpandable: record => record.name !== 'Not Expandable',
+            expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>
           }}
           dataSource={steps[currentStep].content}
           loading={status === 'loading'}
           scroll={{ y: 1000 }}
+          rowSelection={rowSelection}
         />
       </div>
       {stepActions}
