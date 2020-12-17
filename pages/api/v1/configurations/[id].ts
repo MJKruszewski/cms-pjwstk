@@ -29,13 +29,19 @@ const get = async (req: NextApiRequest, res: NextApiResponse, configurationRepos
     const {id} = req.query;
 
     if (id === undefined) {
-        res.status(404).json({code: 'not-fount'});
+        res.status(404).json({code: 'not-found'});
 
         return;
     }
 
     const configuration = await configurationRepository.findOneByExternalId(typeof id === 'string' ? id : id.pop());
     let components = [];
+
+    if (configuration === null) {
+        res.status(404).json({code: 'not-found'});
+
+        return;
+    }
 
     for (const item of configuration.components) {
         components.push(await productsRepository.findOne(Types.ObjectId(item)));

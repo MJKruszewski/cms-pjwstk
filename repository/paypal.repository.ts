@@ -1,29 +1,21 @@
-import * as paypal from "paypal-rest-sdk";
+import {client} from "@service/paypal.client";
+import {OrderDetails, PaymentDetails} from "@domain/order.domain";
+import * as paypalTypes from "onpaypal__checkout-server-sdk";
+const checkoutNodeJssdk = require('@paypal/checkout-server-sdk');
 
 export class PaypalRepository {
     constructor(
-        private readonly client = paypal,
+        private readonly paypalClient: paypalTypes.core.PayPalHttpClient,
     ) {
-        this.client.configure({
-            mode: 'sandbox',
-            client_id: process.env.PAYPAL_SANDBOX_CLIENT,
-            client_secret: process.env.PAYPAL_SECRET
-        });
     }
 
     static async build(): Promise<PaypalRepository> {
-        return new PaypalRepository();
+        return new PaypalRepository(client());
     }
 
-    async getPayment(paymentId: string): Promise<paypal.PaymentResponse> {
-        return new Promise((resolve) => {
-            this.client.payment.get(paymentId, {},(error, payment) => {
-                if (error || payment === null) {
-                    throw error;
-                } else {
-                    resolve(payment);
-                }
-            });
-        });
+    async getOrder(orderId: string): Promise<{result: OrderDetails & PaymentDetails}> {
+        let request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderId);
+
+        return this.paypalClient.execute(request);
     }
 }

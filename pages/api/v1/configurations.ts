@@ -19,7 +19,6 @@ const post = async (req: NextApiRequest, res: NextApiResponse, configurationRepo
     const configuration: PcConfigurationDto = req.body;
     const result = await configurationRepository.insertOne(ConfigurationMapper.map(configuration));
 
-
     res.status(201).json(result.ops.pop());
 };
 const get = async (req: NextApiRequest, res: NextApiResponse, configurationRepository: PcConfigurationsRepository) => {

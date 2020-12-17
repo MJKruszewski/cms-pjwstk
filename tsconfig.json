@@ -27,7 +27,11 @@
       "@fixture/*": ["fixtures/*"],
       "@src/*": ["src/*"],
       "@store/*": ["store/*"]
-    }
+    },
+    "typeRoots": [
+      "node_modules/onpaypal__checkout-server-sdk",
+      "node_modules/@types"
+    ]
   },
   "exclude": [
     "node_modules"

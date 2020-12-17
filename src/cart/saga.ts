@@ -6,6 +6,7 @@ import { request, success, failure, postPayment, postPaymentFinished } from './s
 
 function* fetchConfigurationSaga({ payload }: PayloadAction<string>) {
   try {
+    //TODO IN CART CAN BE MANY CONFIGURATIONS
     const response = yield fetch(`/api/v1/configurations/${payload}`);
     const data = yield response.json();
     yield (put(success(data)))

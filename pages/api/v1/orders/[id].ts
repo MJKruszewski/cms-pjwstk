@@ -23,7 +23,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse, orderRepository: O
     const {id} = req.query;
 
     if (id === undefined) {
-        res.status(404).json({code: 'not-fount'});
+        res.status(404).json({code: 'not-found'});
 
         return;
     }
@@ -55,6 +55,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse, orderRepository: O
 
     const response: WithId<OrderDto> = {
         _id: order._id,
+        orderId: order.externalOrder.id,
         configurations: configurations,
         email: order.email,
     };
