@@ -1,7 +1,6 @@
 import { Product, ProductTypeEnum } from '@domain/product.domain';
 import { Button, message, Result, Spin, Steps, Table, Tag, Typography } from 'antd';
 import React, { FC, useEffect, useState } from 'react'
-
 import { useSelector } from 'react-redux';
 import { request, postConfiguration } from 'src/products/slice';
 import { GenericState } from 'store/genericDataSlice';
@@ -86,13 +85,17 @@ const Products: FC = () => {
   };
   const submit = () => {
     setButtonLock(true);
-    const components = Object.keys(selectedProducts).map(key => selectedProducts[key])
-    dispatch(postConfiguration({
+    const components = Object.keys(selectedProducts).map(key => selectedProducts[key]);
+
+    //todo obsluga dodawania wielu konfiguracji na stack
+    const response = dispatch(postConfiguration({
       externalId: currentUuid,
       components
     }))
+
+    //todo redirect do koszyka!
   }
-  
+
 
   const steps = !splitedArrayByType
     ? []
@@ -114,8 +117,9 @@ const Products: FC = () => {
 
   const columns = [
     { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN" },
     { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures },
-  ]
+  ];
   
   const rowSelection = {
     onChange: (_selectedRowKeys, selectedRows) => {

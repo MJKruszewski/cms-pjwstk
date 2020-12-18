@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import { useRouter } from 'next/dist/client/router';
 import React, { CSSProperties, FunctionComponent, ReactElement, useEffect, useState } from 'react';
 import { MenuInfo } from 'rc-menu/lib/interface';
+import {ShoppingCartOutlined} from "@ant-design/icons/lib";
 
 const { Sider } = Layout;
 
@@ -32,7 +33,7 @@ const menuConfig: MenuConfigItem[] = [
   },
   {
     key: '/cart',
-    icon: <BuildOutlined />,
+    icon: <ShoppingCartOutlined />,
     content: 'Cart'
   },
 ];
