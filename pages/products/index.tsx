@@ -35,6 +35,7 @@ const Products: FC = () => {
   const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({})
   const [selectedProducts, setSelectedProducts] = useState<Record<ProductTypeEnum, Product>>({} as Record<ProductTypeEnum, Product>)
   const [currentUuid, setCurrentUuid] = useState<string>('')
+  const [buttonLock, setButtonLock] = useState<boolean>(true)
 
   useEffect(() => {
     dispatch(request())
@@ -75,9 +76,16 @@ const Products: FC = () => {
     setTagsPallete(newPallete)
   }
   
-  const next = () => setCurrentStep(currentStep + 1);
-  const prev = () => setCurrentStep(currentStep - 1);
+  const next = () => {
+    setButtonLock(true);
+    return setCurrentStep(currentStep + 1);
+  };
+  const prev = () => {
+    setButtonLock(true);
+    return setCurrentStep(currentStep - 1);
+  };
   const submit = () => {
+    setButtonLock(true);
     const components = Object.keys(selectedProducts).map(key => selectedProducts[key])
     dispatch(postConfiguration({
       externalId: currentUuid,
@@ -111,6 +119,8 @@ const Products: FC = () => {
   
   const rowSelection = {
     onChange: (_selectedRowKeys, selectedRows) => {
+      setButtonLock(false);
+
       setSelectedProducts({
         ...selectedProducts,
         [selectedRows[0].type]: selectedRows[0]
@@ -127,17 +137,17 @@ const Products: FC = () => {
       margin: '12px'
     }}>
       {currentStep < steps.length - 1 && (
-        <Button type="primary" onClick={() => next()}>
+        <Button type="primary" onClick={() => next()} style={{float: 'right'}} disabled={buttonLock}>
           Next
         </Button>
       )}
       {currentStep === steps.length - 1 && (
-        <Button type="primary" onClick={submit}>
-          Done
+        <Button type="primary" onClick={submit} style={{float: 'right'}} disabled={buttonLock}>
+          Add to cart
         </Button>
       )}
       {currentStep > 0 && (
-        <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+        <Button style={{ margin: '0 8px', float: 'left' }} onClick={() => prev()}>
           Previous
         </Button>
       )}
@@ -172,22 +182,29 @@ const Products: FC = () => {
       flexDirection: 'column',
       overflow: 'auto'
     }}>
-      PRODUCTS
-      <Steps current={currentStep}>
+      <Steps current={currentStep} style={{marginBottom: '25px'}}>
         {steps.map(item => (
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
+
       <div className="steps-content">
         <Table
           pagination={false}
           columns={columns}
           expandable={{
-            expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>
+            expandedRowRender: record => <div style={{display: 'inline'}}>
+              <div style={{display: 'inline'}}>
+                {record.images.map(img => <img src={window.location.origin + "/" + img.src} width={'300px'} />)}
+              </div>
+
+              <br/>
+              <p style={{ margin: 0 }}>{record.description}</p>
+            </div>
           }}
           dataSource={steps[currentStep].content}
           loading={status === 'loading'}
-          scroll={{ y: 1000 }}
+          scroll={{ y: 500 }}
           rowSelection={rowSelection}
         />
       </div>
