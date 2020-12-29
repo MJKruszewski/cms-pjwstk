@@ -80,7 +80,7 @@ const Cart: FC = () => {
   const onError = (err) => {
     console.log("Error!", err);
   };
-  const currency = 'PLN';
+  const currency = 'USD';
 
   const url = "https://www.paypal.com/sdk/js?client-id=Ab5D6N705DjZlueiajxmh3jWYoxRTRozHPo0BO8CTu3q1ojliJo22u62GxVKdIhPN9T41DLk6ySS_LLf";
   const renderFeatures = (features: Product['features']) => {

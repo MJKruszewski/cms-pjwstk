@@ -1,9 +1,8 @@
-import { HomeFilled, BuildOutlined } from '@ant-design/icons';
+import { BuildOutlined, ShoppingCartOutlined, AppstoreOutlined, HomeOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useRouter } from 'next/dist/client/router';
 import React, { CSSProperties, FunctionComponent, ReactElement, useEffect, useState } from 'react';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import {ShoppingCartOutlined} from "@ant-design/icons/lib";
 
 const { Sider } = Layout;
 
@@ -23,13 +22,18 @@ const menuItemStyle: CSSProperties = {
 const menuConfig: MenuConfigItem[] = [
   {
     key: '/',
-    icon: <HomeFilled />,
+    icon: <HomeOutlined />,
     content: 'Home'
   },
   {
     key: '/products',
-    icon: <BuildOutlined />,
+    icon: <AppstoreOutlined />,
     content: 'Products'
+  },
+  {
+    key: '/configurations/create',
+    icon: <BuildOutlined />,
+    content: 'New Configuration'
   },
   {
     key: '/cart',
@@ -56,6 +60,13 @@ const SiderMenu: FunctionComponent = () => {
       collapsible
       collapsed={leftSiderCollapsed}
       onCollapse={() => setLeftSiderCollapsed(!leftSiderCollapsed)}
+      style={{
+        overflow: "auto",
+        height: "100vh",
+        position: "sticky",
+        top: 0,
+        left: 0
+      }}
     >
       <Menu
         theme="dark"

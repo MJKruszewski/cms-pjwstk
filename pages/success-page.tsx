@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {Alert, Typography} from "antd";
+import {Alert, Result, Typography} from "antd";
 
 const { Paragraph, Text } = Typography;
 
@@ -10,10 +10,10 @@ const SuccessPage: FC = () => {
             flexDirection: 'column',
             overflow: 'auto'
         }}>
-            <Alert
-                message="Congratulations!"
-                description="You have successfully placed an order in our PC-Geek Shop! Be patient, we are starting completing your order to send it to you as quick as possible :) !"
-                type="success"
+            <Result
+              status='success'
+              title="Congratulations"
+              subTitle="You have successfully placed an order in our PC-Geek Shop! Be patient, we are starting completing your order to send it to you as quick as possible :) !"
             />
         </div>
     )
