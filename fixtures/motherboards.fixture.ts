@@ -76,6 +76,13 @@ const supports: Motherboard[] = [
 export async function motherboardFixture() {
     const db = await connectToDatabase();
     const collection = await db.collection(PRODUCTS_COLLECTION);
+    let promo = 0;
+    const maxPromo = faker.random.number({min: 1, max: 6});
+    const images = [
+        'motherboard1.png',
+        'motherboard2.png',
+        'motherboard3.png',
+    ];
 
     for (const brand of brands) {
         let index = supports.findIndex(value => {
@@ -126,10 +133,11 @@ export async function motherboardFixture() {
             await collection.insertOne({
                 name: faker.commerce.productName(),
                 type: ProductTypeEnum.MOTHERBOARD,
+                promoted: (++promo < maxPromo),
                 description: faker.commerce.productDescription(),
                 images: [
                     {
-                        src: 'gpu1.png'
+                        src: faker.random.arrayElement(images)
                     }
                 ],
                 stock: {

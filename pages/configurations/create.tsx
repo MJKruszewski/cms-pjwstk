@@ -1,13 +1,13 @@
-import { Product, ProductTypeEnum } from '@domain/product.domain';
-import { Button, message, Result, Spin, Steps, Table, Tag, Typography } from 'antd';
-import React, { FC, Fragment, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
-import { request, postConfiguration } from 'src/products/slice';
-import { GenericState } from 'store/genericDataSlice';
-import { RootState, useAppDispatch } from 'store/rootStore';
-import { v4 as uuidv4 } from 'uuid';
+import {Product, ProductTypeEnum} from '@domain/product.domain';
+import {Button, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
+import React, {FC, useEffect, useState} from 'react'
+import {useSelector} from 'react-redux';
+import {postConfiguration, request} from 'src/products/slice';
+import {GenericState} from 'store/genericDataSlice';
+import {RootState, useAppDispatch} from 'store/rootStore';
+import {v4 as uuidv4} from 'uuid';
 import randomColor from 'randomcolor';
-import { useRouter } from 'next/dist/client/router';
+import {useRouter} from 'next/dist/client/router';
 
 const { Step } = Steps;
 const { Paragraph, Text } = Typography;

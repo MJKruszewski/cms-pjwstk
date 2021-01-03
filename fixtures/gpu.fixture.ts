@@ -63,6 +63,13 @@ const supports: Gpu[] = [
 export async function gpuFixture() {
     const db = await connectToDatabase();
     const collection = await db.collection(PRODUCTS_COLLECTION);
+    let promo = 0;
+    const maxPromo = faker.random.number({min: 1, max: 6});
+    const images = [
+        'gpu1.png',
+        'gpu2.png',
+        'gpu3.png',
+    ];
 
     for (const brand of brands) {
         let index = supports.findIndex(value => {
@@ -78,7 +85,7 @@ export async function gpuFixture() {
 
             features.push({
                 code: 'clock',
-                value: faker.random.number({ min: 900, max: 2586, precision: 0}).toString()  + 'MHz'
+                value: faker.random.number({min: 900, max: 2586, precision: 0}).toString() + 'MHz'
             });
             features.push({
                 code: 'producer',
@@ -118,10 +125,11 @@ export async function gpuFixture() {
             await collection.insertOne({
                 name: faker.commerce.productName(),
                 type: ProductTypeEnum.GPU,
+                promoted: (++promo < maxPromo),
                 description: faker.commerce.productDescription(),
                 images: [
                     {
-                        src: 'gpu1.png'
+                        src: faker.random.arrayElement(images)
                     }
                 ],
                 stock: {

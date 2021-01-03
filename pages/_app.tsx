@@ -1,9 +1,8 @@
-import React, { Fragment, FunctionComponent } from 'react';
-import { AppProps } from 'next/app';
-import { Layout } from 'antd';
+import React, {Fragment, FunctionComponent} from 'react';
+import {AppProps} from 'next/app';
+import {Layout} from 'antd';
 import SiderMenu from 'src/commons/sider-menu';
-import { wrapper } from 'store/rootStore';
-
+import {wrapper} from 'store/rootStore';
 // import 'antd/dist/antd.css';
 import 'antd/dist/antd.dark.css';
 // import 'antd/dist/antd.compact.css';

@@ -1,5 +1,4 @@
 import {Collection, InsertOneWriteOpResult, OptionalId, WithId} from "mongodb";
-import {PcConfiguration} from "@domain/configuration.domain";
 
 export default abstract class RepositoryAbstract<T> {
 

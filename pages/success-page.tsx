@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {Alert, Result, Typography} from "antd";
+import {Result, Typography} from "antd";
 
 const { Paragraph, Text } = Typography;
 

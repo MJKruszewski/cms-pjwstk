@@ -1,6 +1,6 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { put, takeEvery } from 'redux-saga/effects';
-import { increment, decrement } from './counterReducer';
+import {PayloadAction} from '@reduxjs/toolkit';
+import {takeEvery} from 'redux-saga/effects';
+import {increment} from './counterReducer';
 
 function* decrementAgain({ payload }: PayloadAction<number>) {
   // yield put(decrement(payload));

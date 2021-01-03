@@ -9,6 +9,7 @@ export interface ProductPrice {
 export interface Product {
     name: string,
     description: string,
+    promoted ?: boolean,
     images: Image[]
     price: ProductPrice,
     stock: ProductStock,

@@ -1,9 +1,7 @@
-import { PcConfiguration, PcConfigurationDto } from '@domain/configuration.domain';
-import { OrderDto } from '@domain/order.domain';
-import { Product } from '@domain/product.domain';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { createGenericSlice, GenericState } from '@store/genericDataSlice';
-import { STATES } from 'mongoose';
+import {PcConfigurationDto} from '@domain/configuration.domain';
+import {OrderDto} from '@domain/order.domain';
+import {PayloadAction} from '@reduxjs/toolkit';
+import {createGenericSlice, GenericState} from '@store/genericDataSlice';
 
 const initialState: GenericState<PcConfigurationDto> = {
   status: 'idle',

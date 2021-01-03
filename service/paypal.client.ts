@@ -1,4 +1,3 @@
-import * as paypalTypes from "onpaypal__checkout-server-sdk";
 const checkoutNodeJssdk = require('@paypal/checkout-server-sdk');
 
 /**

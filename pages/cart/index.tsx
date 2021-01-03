@@ -1,15 +1,15 @@
-import {PcConfiguration, PcConfigurationDto} from '@domain/configuration.domain';
-import { request, postPayment } from '@src/cart/slice';
-import { GenericState } from '@store/genericDataSlice';
-import { RootState, useAppDispatch } from '@store/rootStore';
+import {PcConfigurationDto} from '@domain/configuration.domain';
+import {postPayment, request} from '@src/cart/slice';
+import {GenericState} from '@store/genericDataSlice';
+import {RootState, useAppDispatch} from '@store/rootStore';
 import React, {FC, useEffect, useState} from 'react'
-import {PayPalButton, PaypalOptions} from 'react-paypal-button-v2';
+import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Alert, Table, Tag, Typography} from "antd";
 import {Product} from "@domain/product.domain";
-import {router} from "next/client";
 import {useRouter} from "next/router";
+
 const { Paragraph, Text } = Typography;
 
 const Cart: FC = () => {

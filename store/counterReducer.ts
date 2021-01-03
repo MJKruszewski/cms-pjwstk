@@ -1,5 +1,5 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { createGenericSlice, GenericState } from './genericDataSlice';
+import {PayloadAction} from '@reduxjs/toolkit';
+import {createGenericSlice, GenericState} from './genericDataSlice';
 
 const initialCounterState: GenericState<number> = {
   status: 'idle',

@@ -1,7 +1,7 @@
-import { PcConfigurationDto } from '@domain/configuration.domain';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { put, takeEvery } from 'redux-saga/effects';
-import { request, success, failure, postConfiguration, postConfigurationFinished } from './slice';
+import {PcConfigurationDto} from '@domain/configuration.domain';
+import {PayloadAction} from '@reduxjs/toolkit';
+import {put, takeEvery} from 'redux-saga/effects';
+import {failure, postConfiguration, postConfigurationFinished, request, success} from './slice';
 
 function* fetchProductsSaga() {
   try {

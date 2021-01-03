@@ -1,7 +1,7 @@
 import rootReducer from './rootReducer';
-import { createStore, applyMiddleware } from '@reduxjs/toolkit';
-import { HYDRATE, createWrapper } from 'next-redux-wrapper';
-import { useDispatch } from 'react-redux';
+import {applyMiddleware, createStore} from '@reduxjs/toolkit';
+import {createWrapper, HYDRATE} from 'next-redux-wrapper';
+import {useDispatch} from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import productsSaga from '@src/products/saga';
 import cartSaga from '@src/cart/saga';

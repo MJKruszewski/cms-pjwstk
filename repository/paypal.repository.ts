@@ -1,6 +1,7 @@
 import {client} from "@service/paypal.client";
 import {OrderDetails, PaymentDetails} from "@domain/order.domain";
 import * as paypalTypes from "onpaypal__checkout-server-sdk";
+
 const checkoutNodeJssdk = require('@paypal/checkout-server-sdk');
 
 export class PaypalRepository {

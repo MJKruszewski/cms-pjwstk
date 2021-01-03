@@ -58,6 +58,14 @@ const supports: Processor[] = [
 export async function cpuFixture() {
     const db = await connectToDatabase();
     const collection = await db.collection(PRODUCTS_COLLECTION);
+    let promo = 0;
+    const maxPromo = faker.random.number({min: 1, max: 6});
+    const images = [
+        'cpu1.png',
+        'cpu2.png',
+        'cpu3.png',
+        'cpu4.png',
+    ];
 
     for (const brand of brands) {
         let index = supports.findIndex(value => {
@@ -73,7 +81,7 @@ export async function cpuFixture() {
 
             features.push({
                 code: 'clock',
-                value: faker.random.float({ min: 1, max: 5, precision: 1}).toString()  + 'GHz'
+                value: faker.random.float({min: 1, max: 5, precision: 1}).toString() + 'GHz'
             });
             features.push({
                 code: 'cores',
@@ -105,10 +113,11 @@ export async function cpuFixture() {
             await collection.insertOne({
                 name: faker.commerce.productName(),
                 type: ProductTypeEnum.PROCESSOR,
+                promoted: (++promo < maxPromo),
                 description: faker.commerce.productDescription(),
                 images: [
                     {
-                        src: 'gpu1.png'
+                        src: faker.random.arrayElement(images)
                     }
                 ],
                 stock: {

@@ -1,8 +1,8 @@
-import { BuildOutlined, ShoppingCartOutlined, AppstoreOutlined, HomeOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
-import { useRouter } from 'next/dist/client/router';
-import React, { CSSProperties, FunctionComponent, ReactElement, useEffect, useState } from 'react';
-import { MenuInfo } from 'rc-menu/lib/interface';
+import {AppstoreOutlined, BuildOutlined, HomeOutlined, ShoppingCartOutlined} from '@ant-design/icons';
+import {Layout, Menu} from 'antd';
+import {useRouter} from 'next/dist/client/router';
+import React, {CSSProperties, FunctionComponent, ReactElement, useEffect, useState} from 'react';
+import {MenuInfo} from 'rc-menu/lib/interface';
 
 const { Sider } = Layout;
 
@@ -23,7 +23,7 @@ const menuConfig: MenuConfigItem[] = [
   {
     key: '/',
     icon: <HomeOutlined />,
-    content: 'Home'
+    content: 'News'
   },
   {
     key: '/products',

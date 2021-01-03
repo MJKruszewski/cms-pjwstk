@@ -1,20 +1,18 @@
-import { Product, ProductTypeEnum } from '@domain/product.domain';
-import { Avatar, Button, Card, Divider, List, message, Result, Spin, Steps, Table, Tabs, Tag, Typography } from 'antd';
-import React, { CSSProperties, FC, Fragment, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux';
-import { request, postConfiguration } from 'src/products/slice';
-import { GenericState } from 'store/genericDataSlice';
-import { RootState, useAppDispatch } from 'store/rootStore';
-import { v4 as uuidv4 } from 'uuid';
+import {Product, ProductTypeEnum} from '@domain/product.domain';
+import {Card, Carousel, Image, List, Result, Spin, Steps, Tabs, Tag, Typography} from 'antd';
+import React, {CSSProperties, FC, Fragment, useEffect, useState} from 'react'
+import {useSelector} from 'react-redux';
+import {request} from 'src/products/slice';
+import {GenericState} from 'store/genericDataSlice';
+import {RootState, useAppDispatch} from 'store/rootStore';
+import {v4 as uuidv4} from 'uuid';
 import randomColor from 'randomcolor';
-import { useRouter } from 'next/dist/client/router';
-import { Image } from 'antd';
-import { SettingOutlined, EditOutlined, EllipsisOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Carousel } from 'antd';
+import {useRouter} from 'next/dist/client/router';
+import {EllipsisOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 
 const { Step } = Steps;
 const { TabPane } = Tabs;
-const { Meta } = Card
+const { Meta } = Card;
 const { Paragraph, Text } = Typography;
 
 type SplitedArrayType = {
@@ -37,6 +35,7 @@ const Products: FC = () => {
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [promoted, setPromoted] = useState<Product[]>([]);
   const [splitedArrayByType, setSplitedArrayByType] = useState<SplitedArrayType>(initialSplitedArray);
   const [selectedProducts, setSelectedProducts] = useState<Record<ProductTypeEnum, Product>>({} as Record<ProductTypeEnum, Product>);
   const [currentUuid, setCurrentUuid] = useState<string>('');
@@ -78,15 +77,15 @@ const Products: FC = () => {
   const handleItemCartClicked = (item: Product) => {
     // TODO: implement cart functionallity on front
     console.log('cart', item)
-  }
+  };
 
   const handleItemMoreClicked = (item: Product) => {
     // TODO: implement right drawer with product details and similiar products at the bottom
     console.log('more', item)
-  }
+  };
 
   const ProducerTag: FC<{ item: Product }> = ({ item }) => {
-    const producerFeature = item.features.filter(feature => feature.code === 'producer').pop()
+    const producerFeature = item.features.filter(feature => feature.code === 'producer').pop();
     
     return (
       <Tag color={randomColor({ luminosity: 'dark', seed: producerFeature.value })} >
@@ -95,7 +94,7 @@ const Products: FC = () => {
         </Text>
       </Tag>
     )
-  }
+  };
 
   const PriceTag: FC<{ price: string }> = ({ price }) => {
     
@@ -115,13 +114,13 @@ const Products: FC = () => {
         </style>
       </Fragment>
     )
-  }
+  };
 
   const ProductCover: FC<{ item: Product, style?: CSSProperties }> = ({ item, style }) => {
     return (
       <div style={style}>
         <div style={{ position: 'absolute' }}>
-          <Image src={item.images[0].src} />
+          <Image width='256px' height='185px' style={{height: '185px', maxHeight: '185px', minHeight: '185px' }} src={item.images[0].src} />
         </div>
         <div style={{
           position: 'absolute',
@@ -130,7 +129,7 @@ const Products: FC = () => {
           <ProducerTag item={item} />
         </div>
         <div style={{ visibility: 'hidden' }}>
-          <Image src={item.images[0].src} />
+          <Image width='256px' height='185px' style={{height: '185px', maxHeight: '185px', minHeight: '185px' }} src={item.images[0].src} />
         </div>
         <div style={{
           right: -8,
@@ -141,7 +140,7 @@ const Products: FC = () => {
         </div>
       </div>
     )
-  }
+  };
 
   const CarouselItem: FC<{ item: Product }> = ({ item }) => {
     return (
@@ -161,11 +160,11 @@ const Products: FC = () => {
         </div>
       </div>
     )
-  }
+  };
   
 
   const ListHeader: FC<{ stepIndex: number }> = ({ stepIndex }) => {
-    const contentToDisplay = steps[stepIndex]?.content.slice(0, 9) || []
+    const contentToDisplay = promoted && promoted.length > 0 ? promoted : (steps[stepIndex]?.content.slice(0, 9) || []);
     return (
       <div style={{ height: '20vh', display: 'flex', justifyContent: 'center', flexDirection: 'column', border: '2px dashed gold', borderRadius: '6px' }} >
         <Text strong ellipsis style={{ alignSelf: 'center', color: 'gold', marginBlock: '6px' }}>{'PROMOTED PRODUCTS'}</Text>
@@ -186,7 +185,7 @@ const Products: FC = () => {
         </style>
       </div>
     );
-  }
+  };
 
   const ItemCard: FC<{ item: Product }> = ({ item }) => (
     <Card

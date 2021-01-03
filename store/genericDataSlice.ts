@@ -1,4 +1,4 @@
-import { SliceCaseReducers, ValidateSliceCaseReducers, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers} from '@reduxjs/toolkit';
 
 export interface GenericState<T> {
   data?: T;
