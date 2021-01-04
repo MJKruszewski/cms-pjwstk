@@ -4,6 +4,7 @@ import {gpuFixture} from "@fixture/gpu.fixture";
 import {connectToDatabase} from "@middleware/mongo.middleware";
 import {NEWS_COLLECTION, PC_CONFIGURATION_COLLECTION, PRODUCTS_COLLECTION} from "@repository/collections.config";
 import {newsFixture} from "@fixture/news.fixture";
+import {ramFixture} from "@fixture/ram.fixture";
 
 export async function provide(): Promise<Function[]> {
     const db = await connectToDatabase();
@@ -16,6 +17,7 @@ export async function provide(): Promise<Function[]> {
         motherboardFixture,
         cpuFixture,
         gpuFixture,
+        ramFixture,
         newsFixture,
     ]
 }

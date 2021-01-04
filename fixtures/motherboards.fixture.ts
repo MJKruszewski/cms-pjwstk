@@ -112,7 +112,6 @@ export async function motherboardFixture() {
             });
 
             const psiQuantity = faker.random.number({min: 1, max: 5});
-
             for (let i = 0; i < psiQuantity; i++) {
                 features.push({
                     code: 'pci',
