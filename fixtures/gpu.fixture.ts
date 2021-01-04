@@ -81,7 +81,7 @@ export async function gpuFixture() {
 
             features.push({
                 code: 'clock',
-                value: faker.random.number({min: 900, max: 2586, precision: 0}).toString() + 'MHz'
+                value: faker.random.float({min: 900, max: 2586, precision: 0}).toFixed(1).toString() + 'MHz'
             });
             features.push({
                 code: 'producer',

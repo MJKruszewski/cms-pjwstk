@@ -77,14 +77,24 @@ export async function ramFixture() {
             let features = [];
 
             features.push({
-                code: 'clock',
-                value: faker.random.number({min: 1333, max: 3600, precision: 0}).toString() + 'MHz'
-            });
-            features.push({
                 code: 'producer',
                 value: faker.random.arrayElement(data.producer)
             });
 
+            features.push({
+                code: 'type',
+                value: faker.random.arrayElement(data.ddr)
+            });
+
+            features.push({
+                code: 'capacity',
+                value: faker.random.arrayElement(data.capacity)
+            });
+
+            features.push({
+                code: 'clock',
+                value: faker.random.float({min: 1200, max: 3600, precision: 400}).toFixed(1).toString() + 'Hz'
+            });
             await FixturesService.insertOneProduct(ProductTypeEnum.RAM, ramImages, features, null);
         }
     }
