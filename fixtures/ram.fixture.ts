@@ -6,7 +6,6 @@ interface Ram {
     code: string,
     producer: string[],
     ddr: string[],
-    capacity: string[]
 }
 
 const brands = [
@@ -25,15 +24,6 @@ const supports: Ram[] = [
             "DDR2",
             "DDR3",
             "DDR4",
-        ],
-        capacity: [
-            "2GB",
-            "4GB",
-            "8GB",
-            "16GB",
-            "32GB",
-            "64GB",
-            "128GB"
         ]
     },
     {
@@ -46,15 +36,6 @@ const supports: Ram[] = [
             "DDR2",
             "DDR3",
             "DDR4",
-        ],
-        capacity: [
-            "2GB",
-            "4GB",
-            "8GB",
-            "16GB",
-            "32GB",
-            "64GB",
-            "128GB"
         ]
     },
 ];
@@ -88,12 +69,12 @@ export async function ramFixture() {
 
             features.push({
                 code: 'capacity',
-                value: faker.random.arrayElement(data.capacity)
+                value: Math.pow(2, faker.random.float({min: 1, max: 8, precision: 1})).toFixed(0).toString() + 'Gb'
             });
 
             features.push({
                 code: 'clock',
-                value: faker.random.float({min: 1200, max: 3600, precision: 400}).toFixed(1).toString() + 'Hz'
+                value: faker.random.float({min: 1200, max: 3600, precision: 400}).toFixed(0).toString() + 'Hz'
             });
             await FixturesService.insertOneProduct(ProductTypeEnum.RAM, ramImages, features, null);
         }
