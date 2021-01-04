@@ -36,7 +36,7 @@ export enum ProductFeatureCodeEnum {
 }
 export enum ProductTypeEnum {
     MOTHERBOARD = 'motherboard',
-    PROCESSOR = 'processor',
+    CPU = 'processor',
     RAM = 'ram',
     GPU = 'gpu',
     POWER = 'power',

@@ -1,7 +1,6 @@
-import {connectToDatabase} from "@middleware/mongo.middleware";
 import * as faker from 'faker';
 import {ProductTypeEnum} from "@domain/product.domain";
-import {PRODUCTS_COLLECTION} from "@repository/collections.config";
+import {FixturesService} from "@fixture/fixtures.service";
 
 interface Motherboard {
     code: string,
@@ -73,16 +72,13 @@ const supports: Motherboard[] = [
     }
 ];
 
+const motherBoardImages = [
+    'motherboard1.png',
+    'motherboard2.png',
+    'motherboard3.png',
+];
+
 export async function motherboardFixture() {
-    const db = await connectToDatabase();
-    const collection = await db.collection(PRODUCTS_COLLECTION);
-    let promo = 0;
-    const maxPromo = faker.random.number({min: 1, max: 6});
-    const images = [
-        'motherboard1.png',
-        'motherboard2.png',
-        'motherboard3.png',
-    ];
 
     for (const brand of brands) {
         let index = supports.findIndex(value => {
@@ -90,10 +86,8 @@ export async function motherboardFixture() {
         });
         let data: Motherboard = supports[index];
 
-        for (let i = 0; i < faker.random.number({
-            min: 12,
-            max: 50
-        }); i++) {
+        const quantity = faker.random.number({min: 12, max: 50});
+        for (let i = 0; i < quantity; i++) {
             let features = [];
 
             features.push({
@@ -117,42 +111,17 @@ export async function motherboardFixture() {
                 value: "PCI-Ex16"
             });
 
-            for (let i = 0; i < faker.random.number({
-                min: 1,
-                max: 5
-            }); i++) {
+            const psiQuantity = faker.random.number({min: 1, max: 5});
+
+            for (let i = 0; i < psiQuantity; i++) {
                 features.push({
                     code: 'pci',
                     value: faker.random.arrayElement(data.pci)
                 });
             }
 
-            const all = faker.random.number({min: 1300, max: 5000});
-            const sold = faker.random.number({min: 1, max: 1000});
+            await FixturesService.insertOneProduct(ProductTypeEnum.MOTHERBOARD, motherBoardImages, features, null);
 
-            await collection.insertOne({
-                name: faker.commerce.productName(),
-                type: ProductTypeEnum.MOTHERBOARD,
-                promoted: (++promo < maxPromo),
-                description: faker.commerce.productDescription(),
-                images: [
-                    {
-                        src: faker.random.arrayElement(images)
-                    }
-                ],
-                stock: {
-                    free: all - sold,
-                    sold: sold,
-                    all: all,
-                },
-                price: {
-                    base: faker.random.float({min: 2, max: 15000, precision: 2}).toString(),
-                },
-                features: features,
-                requirements: [],
-            })
         }
     }
-
-    return true;
 }

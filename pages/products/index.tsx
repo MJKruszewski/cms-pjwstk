@@ -22,7 +22,7 @@ type SplitedArrayType = {
 // @ts-ignore
 const initialSplitedArray: SplitedArrayType = {
   [typeof ProductTypeEnum.MOTHERBOARD]: [] as Product[],
-  [typeof ProductTypeEnum.PROCESSOR]: [] as Product[],
+  [typeof ProductTypeEnum.CPU]: [] as Product[],
   [typeof ProductTypeEnum.RAM]: [] as Product[],
   [typeof ProductTypeEnum.GPU]: [] as Product[],
   [typeof ProductTypeEnum.POWER]: [] as Product[],
