@@ -35,9 +35,14 @@
     "typescript": "^4.1.2"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev:api": "next dev api -p 6969",
+    "dev:frontend": "next frontend dev -p 3000",
+    "dev:admin": "next dev admin -p 3001",
+    "build:admin": "next build admin",
+    "build:frontend": "next build frontend",
+    "build:api": "next build api",
+    "start:admin": "next start admin -p 3001",
+    "start:api": "next start api -p 6969"
   },
   "repository": {
     "type": "git",
@@ -47,15 +52,6 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/MJKruszewski/cms-pjwstk/issues"
-  },
-  "_moduleAliases": {
-    "@middleware/*": "dist/middleware",
-    "@repository/*": "dist/repository",
-    "@service/*": "dist/service",
-    "@fixture/*": "dist/fixtures",
-    "@store/*": "dist/store",
-    "@src/*": "dist/src",
-    "@domain/*": "dist/domain"
   },
   "homepage": "https://github.com/MJKruszewski/cms-pjwstk#readme"
 }
