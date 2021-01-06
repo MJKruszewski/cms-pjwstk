@@ -3,8 +3,6 @@ import {ProductFeatureCodeEnum, ProductTypeEnum} from "@apiDomain/product.domain
 import {FixturesService} from "@apiFixture/fixtures.service";
 
 interface Ram {
-    code: string,
-    producer: string[],
     ddr: string[],
 }
 
@@ -13,32 +11,15 @@ const brands = [
     "Kingston"
 ];
 
-const supports: Ram[] = [
+const support: Ram =
     {
-        code: "Corsair",
-        producer: [
-            "Corsair"
-        ],
         ddr: [
             "DDR1",
             "DDR2",
             "DDR3",
             "DDR4",
         ]
-    },
-    {
-        code: "Kingston",
-        producer: [
-            "Kingston"
-        ],
-        ddr: [
-            "DDR1",
-            "DDR2",
-            "DDR3",
-            "DDR4",
-        ]
-    },
-];
+    };
 
 const ramImages = [
     'ram1.png',
@@ -48,10 +29,6 @@ const ramImages = [
 export async function ramFixture() {
 
     for (const brand of brands) {
-        let index = supports.findIndex(value => {
-            return value.code === brand;
-        });
-        let data: Ram = supports[index];
 
         const quantity = faker.random.number({min: 12, max: 50});
         for (let i = 0; i < quantity; i++) {
@@ -59,12 +36,12 @@ export async function ramFixture() {
 
             features.push({
                 code: 'producer',
-                value: faker.random.arrayElement(data.producer)
+                value: brand
             });
 
             features.push({
                 code: 'type',
-                value: faker.random.arrayElement(data.ddr)
+                value: faker.random.arrayElement(support.ddr)
             });
 
             features.push({

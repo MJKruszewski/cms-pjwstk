@@ -1,6 +1,11 @@
+import {driveFixture} from "@apiFixture/drive.fixture";
+import {caseFixture} from "@apiFixture/case.fixure";
+import {powerFixture} from "@apiFixture/power.fixture";
 import {motherboardFixture} from "@apiFixture/motherboards.fixture";
 import {cpuFixture} from "@apiFixture/cpu.fixture";
 import {gpuFixture} from "@apiFixture/gpu.fixture";
+import {ramFixture} from "@apiFixture/ram.fixture";
+import {newsFixture} from "@apiFixture/news.fixture";
 import {connectToDatabase} from "@apiMiddleware/mongo.middleware";
 import {
     NEWS_COLLECTION,
@@ -8,8 +13,6 @@ import {
     PRODUCTS_COLLECTION,
     SHIPPING_METHODS_COLLECTION
 } from "@apiRepository/collections.config";
-import {newsFixture} from "@apiFixture/news.fixture";
-import {ramFixture} from "@apiFixture/ram.fixture";
 import {shippingMethodsFixture} from "@apiFixture/shipping-methods.fixture";
 
 export async function provide(): Promise<Function[]> {
@@ -26,6 +29,9 @@ export async function provide(): Promise<Function[]> {
         gpuFixture,
         shippingMethodsFixture,
         ramFixture,
+        driveFixture,
+        caseFixture,
+        powerFixture,
         newsFixture,
     ]
 }

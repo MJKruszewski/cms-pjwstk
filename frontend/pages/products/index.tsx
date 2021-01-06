@@ -27,6 +27,7 @@ const initialSplitedArray: SplitedArrayType = {
   [typeof ProductTypeEnum.GPU]: [] as Product[],
   [typeof ProductTypeEnum.POWER]: [] as Product[],
   [typeof ProductTypeEnum.STORAGE]: [] as Product[],
+  [typeof ProductTypeEnum.CASE]: [] as Product[],
 };
 
 const Products: FC = () => {
