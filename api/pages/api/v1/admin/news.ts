@@ -1,5 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import NewsRepository from "@apiRepository/news.repository";
+import {getPagination} from "@apiMiddleware/pagination.middleware";
+import {mapMongoId} from "@apiMiddleware/mongo.middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'OPTIONS') return res.status(200).json({});
@@ -16,5 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 const get = async (req: NextApiRequest, res: NextApiResponse, newsRepository: NewsRepository) => {
-    res.status(200).json(await newsRepository.findAll())
+    const news = await newsRepository.findAll(getPagination(req));
+    res.setHeader('Content-Range', await newsRepository.count());
+
+    res.status(200).json(await news.map(mapMongoId))
 };

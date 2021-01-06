@@ -2,6 +2,7 @@ import * as React from "react";
 import {Admin, Resource, ListGuesser} from 'react-admin';
 import {DataProvider, Identifier, GetListResult, Record, CreateParams, DeleteParams, GetListParams, UpdateResult, DeleteManyParams, GetManyParams, CreateResult, GetOneResult, DeleteResult, GetManyReferenceParams, GetOneParams, UpdateParams, UpdateManyParams} from 'ra-core';
 import { createHashHistory } from 'history';
+import simpleRestProvider from 'ra-data-simple-rest';
 
 const dataProvider: DataProvider = {
     create: async <RecordType extends Record = Record>(p1: string, p2: CreateParams): Promise<CreateResult<RecordType>> => ({
@@ -48,8 +49,11 @@ const dataProvider: DataProvider = {
 };
 const history = createHashHistory();
 
-const App = () => <Admin dataProvider={dataProvider} history={history}>
-    <Resource name="users" list={ListGuesser} />
+const App = () => <Admin dataProvider={simpleRestProvider(`${process.env.API_HOST}/api/v1/admin`)} history={history}>
+    <Resource name="news" list={ListGuesser} />
+    <Resource name="orders" list={ListGuesser} />
+    <Resource name="products" list={ListGuesser} />
+    <Resource name="configurations" list={ListGuesser} />
 </Admin>;
 
 export default App;

@@ -18,3 +18,12 @@ export const connectToDatabase = async (): Promise<Db> => {
 
     return cached.db(process.env.DB_NAME);
 };
+
+export const mapMongoId = res => {
+    // @ts-ignore
+    res.id = res._id;
+    // @ts-ignore
+    delete res._id;
+
+    return res;
+};

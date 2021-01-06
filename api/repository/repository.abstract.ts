@@ -1,4 +1,4 @@
-import {Collection, InsertOneWriteOpResult, OptionalId, WithId} from "mongodb";
+import {Collection, InsertOneWriteOpResult, OptionalId, WithId, FindOneOptions} from "mongodb";
 
 export default abstract class RepositoryAbstract<T> {
 
@@ -7,8 +7,12 @@ export default abstract class RepositoryAbstract<T> {
     ) {
     }
 
-    public async findAll(): Promise<T[]> {
-        return this.collection.find({}).toArray();
+    public async findAll(options ?: FindOneOptions<any>): Promise<T[]> {
+        return this.collection.find({}, options).toArray();
+    }
+
+    public async count(): Promise<number> {
+        return this.collection.countDocuments({});
     }
 
     async findOne(id): Promise<WithId<T>> {

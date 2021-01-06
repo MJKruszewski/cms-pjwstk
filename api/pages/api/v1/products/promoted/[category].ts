@@ -3,6 +3,8 @@ import ProductsRepository from "@apiRepository/products.repository";
 import {ProductTypeEnum} from "@apiDomain/product.domain";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method === 'OPTIONS') return res.status(200).json({});
+
     const productsRepository: ProductsRepository = await ProductsRepository.build();
 
     if (req.method === 'PUT') {
