@@ -1,5 +1,5 @@
-import {PcConfigurationDto} from '../../../api/domain/configuration.domain';
-import {OrderDto} from '../../../api/domain/order.domain';
+import {PcConfigurationDto} from '@frontendDto/configuration.dto';
+import {OrderDto} from '@frontendDto/order.dto';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {createGenericSlice, GenericState} from '@frontendStore/genericDataSlice';
 

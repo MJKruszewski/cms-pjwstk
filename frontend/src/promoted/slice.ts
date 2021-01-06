@@ -1,4 +1,4 @@
-import {Product} from '../../../api/domain/product.domain';
+import {Product} from '@frontendDto/product.dto';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {createGenericSlice, GenericState} from '@frontendStore/genericDataSlice';
 

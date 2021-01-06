@@ -1,4 +1,4 @@
-import {OrderDto} from '../../../api/domain/order.domain';
+import {OrderDto} from '@frontendDto/order.dto';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, takeEvery} from 'redux-saga/effects';
 import {failure, postPayment, postPaymentFinished, request, success} from './slice';

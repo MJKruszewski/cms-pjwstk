@@ -1,4 +1,4 @@
-import {PcConfigurationDto} from '../../../api/domain/configuration.domain';
+import {PcConfigurationDto} from '@frontendDto/configuration.dto';
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, takeEvery} from 'redux-saga/effects';
 import {failure, postConfiguration, postConfigurationFinished, request, success} from './slice';

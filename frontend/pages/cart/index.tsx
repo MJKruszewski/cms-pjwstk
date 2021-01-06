@@ -1,4 +1,4 @@
-import {PcConfigurationDto} from '../../../api/domain/configuration.domain';
+import {PcConfigurationDto} from '@frontendDto/configuration.dto';
 import {postPayment, request} from '@frontendSrc/cart/slice';
 import {GenericState} from '@frontendStore/genericDataSlice';
 import {RootState, useAppDispatch} from '@frontendStore/rootStore';
@@ -7,7 +7,7 @@ import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
 import {useSelector} from 'react-redux';
 import {Alert, Table, Tag, Typography} from "antd";
-import {Product} from "../../../api/domain/product.domain";
+import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
 
 const { Paragraph, Text } = Typography;

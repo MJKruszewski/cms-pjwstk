@@ -1,4 +1,4 @@
-import {Product, ProductTypeEnum} from '../../../api/domain/product.domain';
+import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
 import {Button, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
 import React, {FC, useEffect, useState} from 'react'
 import {useSelector} from 'react-redux';

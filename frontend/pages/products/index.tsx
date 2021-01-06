@@ -1,4 +1,4 @@
-import {Product, ProductTypeEnum} from '../../../api/domain/product.domain';
+import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
 import {Card, Carousel, Image, List, Result, Spin, Steps, Tabs, Tag, Typography} from 'antd';
 import React, {CSSProperties, FC, Fragment, useEffect, useState} from 'react'
 import {useSelector} from 'react-redux';

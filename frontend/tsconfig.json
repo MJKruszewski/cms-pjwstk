@@ -21,7 +21,8 @@
     "baseUrl": "./",
     "paths": {
       "@frontendSrc/*": ["src/*"],
-      "@frontendStore/*": ["store/*"]
+      "@frontendStore/*": ["store/*"],
+      "@frontendDto/*": ["dto/*"]
     },
     "typeRoots": [
       "../node_modules/@types"
