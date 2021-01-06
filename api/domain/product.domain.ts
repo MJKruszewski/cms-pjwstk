@@ -41,6 +41,7 @@ export enum ProductTypeEnum {
     GPU = 'gpu',
     POWER = 'power',
     STORAGE = 'storage',
+    CASE = 'case'
 }
 export interface ProductFeature {
     code: ProductFeatureCodeEnum,
