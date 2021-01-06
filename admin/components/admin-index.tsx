@@ -10,6 +10,7 @@ const App = () => <Admin dataProvider={simpleRestProvider(`${process.env.API_HOS
     <Resource name="orders" list={ListGuesser} />
     <Resource name="products" list={ListGuesser} />
     <Resource name="configurations" list={ListGuesser} />
+    <Resource name="shipping-methods" list={ListGuesser} />
 </Admin>;
 
 export default App;
