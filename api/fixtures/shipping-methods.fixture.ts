@@ -1,33 +1,32 @@
-import {News} from "@apiDomain/news.domain";
 import {connectToDatabase} from "@apiMiddleware/mongo.middleware";
-import {NEWS_COLLECTION} from "@apiRepository/collections.config";
+import {SHIPPING_METHODS_COLLECTION} from "@apiRepository/collections.config";
 import {ShippingMethod} from "@apiDomain/shipping-method.domain";
 import * as faker from "faker";
 
-const news: ShippingMethod[] = [
+const shippingMethods: ShippingMethod[] = [
     {
-        cover: 'shippings/todo.jpg',
+        cover: 'shipping-method/ups.png',
         maxItems: faker.random.number({min: 10, max: 20}),
         minItems: faker.random.number({min: 1, max: 3}),
         price: faker.random.float({min: 2, max: 90, precision: 2}).toString(),
         name: 'UPS'
     },
     {
-        cover: 'shippings/todo.jpg',
+        cover: 'shipping-method/dhl.png',
         maxItems: faker.random.number({min: 10, max: 20}),
         minItems: faker.random.number({min: 1, max: 3}),
         price: faker.random.float({min: 2, max: 60, precision: 2}).toString(),
         name: 'DHL'
     },
     {
-        cover: 'shippings/todo.jpg',
+        cover: 'shipping-method/dpd.png',
         maxItems: faker.random.number({min: 10, max: 20}),
         minItems: faker.random.number({min: 1, max: 3}),
         price: faker.random.float({min: 2, max: 60, precision: 2}).toString(),
         name: 'DPD'
     },
     {
-        cover: 'shippings/todo.jpg',
+        cover: 'shipping-method/fedex.png',
         maxItems: faker.random.number({min: 10, max: 20}),
         minItems: faker.random.number({min: 1, max: 3}),
         price: faker.random.float({min: 2, max: 60, precision: 2}).toString(),
@@ -37,11 +36,6 @@ const news: ShippingMethod[] = [
 
 export async function shippingMethodsFixture() {
     const db = await connectToDatabase();
-    const collection = await db.collection(NEWS_COLLECTION);
-
-    for (let i = 0; i < 5; i++) {
-        news.forEach(item => {
-            collection.insertOne({...item});
-        })
-    }
+    const collection = await db.collection(SHIPPING_METHODS_COLLECTION);
+    collection.insertMany(shippingMethods);
 }
