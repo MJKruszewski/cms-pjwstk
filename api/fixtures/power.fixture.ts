@@ -1,6 +1,7 @@
 import * as faker from 'faker';
-import {ProductFeatureCodeEnum, ProductTypeEnum} from "@domain/product.domain";
-import {FixturesService} from "@fixture/fixtures.service";
+import {ProductTypeEnum} from "@apiDomain/product.domain";
+import {FixturesService} from "@apiFixture/fixtures.service";
+
 
 interface Power {
     certificate: string[]

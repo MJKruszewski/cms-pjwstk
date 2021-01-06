@@ -1,8 +1,7 @@
-import {connectToDatabase} from "@middleware/mongo.middleware";
 import * as faker from 'faker';
-import {ProductFeatureCodeEnum, ProductTypeEnum} from "@domain/product.domain";
-import {PRODUCTS_COLLECTION} from "@repository/collections.config";
-import {FixturesService} from "@fixture/fixtures.service";
+import {ProductTypeEnum} from "@apiDomain/product.domain";
+import {FixturesService} from "@apiFixture/fixtures.service";
+
 
 interface Case {
     type: string[]
