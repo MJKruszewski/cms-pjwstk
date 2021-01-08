@@ -1,14 +1,14 @@
-import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
-import {Card, Carousel, Image, List, Result, Spin, Steps, Tabs, Tag, Typography} from 'antd';
-import React, {CSSProperties, FC, Fragment, useEffect, useState} from 'react'
-import {useSelector} from 'react-redux';
-import {request} from 'src/products/slice';
-import {GenericState} from 'store/genericDataSlice';
-import {RootState, useAppDispatch} from 'store/rootStore';
-import {v4 as uuidv4} from 'uuid';
+import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
+import { Card, Carousel, Image, List, Result, Spin, Steps, Tabs, Tag, Typography } from 'antd';
+import React, { CSSProperties, FC, Fragment, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { request } from 'src/products/slice';
+import { GenericState } from 'store/genericDataSlice';
+import { RootState, useAppDispatch } from 'store/rootStore';
+import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import {useRouter} from 'next/dist/client/router';
-import {EllipsisOutlined, ShoppingCartOutlined} from '@ant-design/icons';
+import { useRouter } from 'next/dist/client/router';
+import { EllipsisOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 const { Step } = Steps;
 const { TabPane } = Tabs;
@@ -54,10 +54,6 @@ const Products: FC = () => {
     splitProductArray(data);
   }, [data]);
 
-  useEffect(() => {
-    console.log(selectedProducts)
-  }, [selectedProducts]);
-
   const splitProductArray = (dataToSplit: Product[]) => {
     let splited: SplitedArrayType = {} as SplitedArrayType;
     dataToSplit.map((product, index) => splited[product.type]
@@ -72,7 +68,7 @@ const Products: FC = () => {
     : Object.keys(splitedArrayByType)
       .map((key: string) => ({
         title: key,
-        content: splitedArrayByType[key]
+        content: splitedArrayByType[key] as Product[]
       }));
 
   const handleItemCartClicked = (item: Product) => {
@@ -87,7 +83,7 @@ const Products: FC = () => {
 
   const ProducerTag: FC<{ item: Product }> = ({ item }) => {
     const producerFeature = item.features.filter(feature => feature.code === 'producer').pop();
-    
+
     return (
       <Tag color={randomColor({ luminosity: 'dark', seed: producerFeature.value })} >
         <Text strong>
@@ -98,7 +94,7 @@ const Products: FC = () => {
   };
 
   const PriceTag: FC<{ price: string }> = ({ price }) => {
-    
+
     return (
       <Fragment>
         <Tag color={randomColor({ luminosity: 'dark', hue: 'red', seed: 'price' })} className='price-tag' >
@@ -121,7 +117,7 @@ const Products: FC = () => {
     return (
       <div style={style}>
         <div style={{ position: 'absolute' }}>
-          <Image width='256px' height='185px' style={{height: '185px', maxHeight: '185px', minHeight: '185px' }} src={item.images[0].src} />
+          <Image width='256px' height='185px' style={{ height: '185px', maxHeight: '185px', minHeight: '185px' }} src={item.images[0].src} />
         </div>
         <div style={{
           position: 'absolute',
@@ -130,7 +126,7 @@ const Products: FC = () => {
           <ProducerTag item={item} />
         </div>
         <div style={{ visibility: 'hidden' }}>
-          <Image width='256px' height='185px' style={{height: '185px', maxHeight: '185px', minHeight: '185px' }} src={item.images[0].src} />
+          <Image width='256px' height='185px' style={{ height: '185px', maxHeight: '185px', minHeight: '185px' }} src={item.images[0].src} />
         </div>
         <div style={{
           right: -8,
@@ -162,7 +158,7 @@ const Products: FC = () => {
       </div>
     )
   };
-  
+
 
   const ListHeader: FC<{ stepIndex: number }> = ({ stepIndex }) => {
     const contentToDisplay = promoted && promoted.length > 0 ? promoted : (steps[stepIndex]?.content.slice(0, 9) || []);
@@ -172,7 +168,7 @@ const Products: FC = () => {
         <Carousel autoplay dotPosition='bottom' dots={{ className: 'dot-class' }}>
           {/* TODO: fix dots opacity - less loader ? */}
           {
-            contentToDisplay.map(item => <CarouselItem item={item} />)
+            contentToDisplay.map((item, index) => <CarouselItem key={`${item.name}-${index}`} item={item} />)
           }
         </Carousel>
         <style jsx>

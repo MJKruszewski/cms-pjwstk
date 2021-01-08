@@ -1,10 +1,11 @@
 import rootReducer from './rootReducer';
-import {applyMiddleware, createStore} from '@reduxjs/toolkit';
-import {createWrapper, HYDRATE} from 'next-redux-wrapper';
-import {useDispatch} from 'react-redux';
+import { applyMiddleware, createStore } from '@reduxjs/toolkit';
+import { createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { useDispatch } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import productsSaga from '@frontendSrc/products/saga';
 import cartSaga from '@frontendSrc/cart/saga';
+import newsSaga from '@frontendSrc/news/saga';
 import counterSaga from "@frontendStore/counterSaga";
 
 const bindMiddleware = (...middleware: any) => {
@@ -33,6 +34,7 @@ const store = createStore(reducer, bindMiddleware(sagaMiddleware));
 sagaMiddleware.run(counterSaga);
 sagaMiddleware.run(productsSaga);
 sagaMiddleware.run(cartSaga);
+sagaMiddleware.run(newsSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch
