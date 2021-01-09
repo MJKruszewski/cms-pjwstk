@@ -59,7 +59,7 @@ const Cart: FC = () => {
   };
 
   useEffect(() => {
-    if (!data) {
+    if (!data || !data.components) {
       return;
     }
     setProducts(data.components);
