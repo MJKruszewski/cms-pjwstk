@@ -6,9 +6,10 @@ import React, {FC, useEffect, useState} from 'react'
 import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
 import {useSelector} from 'react-redux';
-import {Alert, Table, Tag, Typography} from "antd";
+import {Alert, Button, Form, Input, Table, Tag, Typography} from "antd";
 import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
+import {UserForm} from "@frontendSrc/cart/user-form";
 
 const { Paragraph, Text } = Typography;
 
@@ -45,6 +46,12 @@ const Cart: FC = () => {
 
     router.push('/success-page');
   };
+
+  const onSubmit = (values: unknown): void => {
+    console.log(values);
+  };
+
+
   const createColorPalleteForTags = (dataToSplit: Product[]) => {
     let newPallete: Record<string, string> = {};
     dataToSplit.forEach(product =>
@@ -116,6 +123,8 @@ const Cart: FC = () => {
           title={() => <b>Cart</b>}
           footer={() => <div style={{display: 'inline'}}>Total price: <b>{totalAmount.toFixed(2) + ' PLN'}</b></div> }
       />
+
+      <UserForm onSubmit={onSubmit}/>
 
       {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
       <div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>
