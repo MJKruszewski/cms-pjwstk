@@ -73,9 +73,9 @@ const supports: Motherboard[] = [
 ];
 
 const motherBoardImages = [
-    'motherboard1.png',
-    'motherboard2.png',
-    'motherboard3.png',
+    'products/motherboard1.png',
+    'products/motherboard2.png',
+    'products/motherboard3.png',
 ];
 
 export async function motherboardFixture() {

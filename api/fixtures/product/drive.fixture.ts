@@ -22,8 +22,8 @@ const support: Drive =
     };
 
 const driveImages = [
-    'drive1.png',
-    'drive2.png'
+    'products/drive1.png',
+    'products/drive2.png'
 ];
 
 export async function driveFixture() {

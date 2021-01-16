@@ -55,10 +55,10 @@ const supports: Processor[] = [
 ];
 
 const cpuImages = [
-    'cpu1.png',
-    'cpu2.png',
-    'cpu3.png',
-    'cpu4.png',
+    'products/cpu1.png',
+    'products/cpu2.png',
+    'products/cpu3.png',
+    'products/cpu4.png',
 ];
 
 export async function cpuFixture() {

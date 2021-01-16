@@ -22,8 +22,8 @@ const support: Case =
     };
 
 const caseImages = [
-    'case1.png',
-    'case2.png'
+    'products/case1.png',
+    'products/case2.png'
 ];
 
 export async function caseFixture() {

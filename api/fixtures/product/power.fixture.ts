@@ -23,8 +23,8 @@ const supports: Power =
     };
 
 const powerImages = [
-    'power1.png',
-    'power2.png'
+    'products/power1.png',
+    'products/power2.png'
 ];
 
 export async function powerFixture() {

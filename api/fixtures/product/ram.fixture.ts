@@ -22,8 +22,8 @@ const support: Ram =
     };
 
 const ramImages = [
-    'ram1.png',
-    'ram2.png'
+    'products/ram1.png',
+    'products/ram2.png'
 ];
 
 export async function ramFixture() {

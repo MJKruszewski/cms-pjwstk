@@ -62,9 +62,9 @@ const supports: Gpu[] = [
 ];
 
 const gpuImages = [
-    'gpu1.png',
-    'gpu2.png',
-    'gpu3.png',
+    'products/gpu1.png',
+    'products/gpu2.png',
+    'products/gpu3.png',
 ];
 
 export async function gpuFixture() {
