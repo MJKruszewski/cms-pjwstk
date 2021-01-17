@@ -6,6 +6,7 @@ import {wrapper} from 'store/rootStore';
 // import 'antd/dist/antd.css';
 import 'antd/dist/antd.dark.css';
 // import 'antd/dist/antd.compact.css';
+import { CookiesProvider } from 'react-cookie';
 
 const _App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
@@ -13,7 +14,9 @@ const _App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
       <Layout style={{ minHeight: '100vh' }}>
         <SiderMenu />
         <Layout style={{ padding: '24px' }}>
-          <Component {...pageProps} />
+            <CookiesProvider>
+                <Component {...pageProps} />
+            </CookiesProvider>
         </Layout>
       </Layout>
     </Fragment>

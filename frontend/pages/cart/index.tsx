@@ -1,39 +1,39 @@
 import {PcConfigurationDto} from '@frontendDto/configuration.dto';
-import {postPayment, request} from '@frontendSrc/cart/slice';
+import {getCart, postPayment} from '@frontendSrc/cart/slice';
 import {GenericState} from '@frontendStore/genericDataSlice';
 import {RootState, useAppDispatch} from '@frontendStore/rootStore';
 import React, {FC, useEffect, useState} from 'react'
 import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
 import {useSelector} from 'react-redux';
-import {Alert, Button, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
+import {Alert, Button, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
 import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
-import {UserForm} from "@frontendSrc/cart/user-form";
+import {EditOutlined, MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
+import {CartDto} from "@frontendDto/cart.dto";
+import {useCookies} from "react-cookie";
+import {v4 as uuidv4} from 'uuid';
 
 const {Paragraph, Text} = Typography;
 
 const Cart: FC = () => {
-    const {data, status, error} = useSelector<RootState, GenericState<PcConfigurationDto>>(state => state.cart);
+    const {data, status, error} = useSelector<RootState, GenericState<CartDto>>(state => state.cart);
     const dispatch = useAppDispatch();
     const router = useRouter();
 
     const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({});
     const [products, setProducts] = useState<Product[]>([]);
     const [totalAmount, setTotalAmount] = useState<number>(0.00);
-
-    let configurationId = '50a59999-3092-4850-bd46-4ccf6d3875a8';
-
-    if (router.query.configurationId) {
-        if (Array.isArray(router.query.configurationId)) {
-            configurationId = router.query.configurationId.pop();
-        } else {
-            configurationId = router.query.configurationId;
-        }
-    }
+    const [cookie, setCookie] = useCookies(['cartId'])
 
     useEffect(() => {
-        dispatch(request(configurationId))
+        //PW lookinj
+        //react się zesrał i nawet cookies nie potrafi trzymać
+        if (!cookie.cartId) {
+            setCookie('cartId', uuidv4());
+        }
+
+        dispatch(getCart(cookie.cartId))
     }, []);
 
     const onSuccess = (details, paymentData) => {
@@ -66,19 +66,25 @@ const Cart: FC = () => {
     };
 
     useEffect(() => {
-        if (!data || !data.components) {
+        if (!data || !data.products || !data.configurations) {
             return;
         }
-        setProducts(data.components);
+        let localProducts = Array.of(...data.products);
+
+        data.configurations.forEach(config => {
+            localProducts = Array.of(...localProducts, ...data.components)
+        })
+
+        setProducts(localProducts);
 
         let total = 0;
-        data.components.forEach((product) => {
+        data.products.forEach((product) => {
             total += parseFloat(product.price.base);
         });
 
         setTotalAmount(total);
 
-        createColorPalleteForTags(data.components)
+        createColorPalleteForTags(products)
     }, [data]);
 
     const onCancel = (data) => {
@@ -135,7 +141,94 @@ const Cart: FC = () => {
 
             <br/>
             <br/>
-            <UserForm onSubmit={onSubmit}/>
+            <Card title={'Shipping address'} style={{marginBottom: '40px', marginTop: '40px'}}>
+                <Form layout="vertical">
+                    <Row gutter={16}>
+                        <Col span={6}>
+                            <Form.Item name="name"
+                                       label="Imię"
+                                       rules={[{required: true, message: 'Imię jest wymagane'}]}>
+                                <Input prefix={<UserOutlined className="site-form-item-icon"/>}
+                                       placeholder="Roman"/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item name="surname"
+                                       label="Nazwisko"
+                                       rules={[{required: true, message: 'Nazwisko jest wymagane'}]}>
+                                <Input prefix={<UserOutlined
+                                    className="site-form-item-icon"/>}
+                                       placeholder="Zawadzki"/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item name="email"
+                                       label="Email"
+                                       rules={[{required: true, message: 'Email jest wymagany'}]}>
+                                <Input prefix={<MailOutlined className="site-form-item-icon"/>}
+                                       placeholder="romanzawadzki@mail.com"/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item name="address1"
+                                       label="Adres 1"
+                                       rules={[{required: true, message: 'Adres jest wymagany'}]}>
+                                <Input prefix={<EditOutlined
+                                    className="site-form-item-icon"/>}
+                                       placeholder="Jaśminowa 9"/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={6}>
+                            <Form.Item name="address2"
+                                       label="Adres 2">
+                                <Input prefix={<EditOutlined className="site-form-item-icon"/>}
+                                       placeholder="m. 32"/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item name="city"
+                                       label="Miasto"
+                                       rules={[{required: true, message: 'Miasto jest wymagane'}]}>
+                                <Input prefix={<EditOutlined className="site-form-item-icon"/>}
+                                       placeholder="Warszawa"/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item name="post-code"
+                                       label="Kod pocztowy"
+                                       rules={[{required: true, message: 'Kod Pocztowy jest wymagany'}]}>
+                                <Input prefix={<EditOutlined className="site-form-item-icon"/>}
+                                       placeholder="00-000"/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item name="Country"
+                                       label="Kraj"
+                                       rules={[{required: true, message: 'Kraj jest wymagany'}]}>
+                                <Input prefix={<EditOutlined className="site-form-item-icon"/>}
+                                       placeholder="Polska"/>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={6}>
+                            <Form.Item name="phone"
+                                       label="Numer telefonu"
+                                       rules={[{required: true, message: 'Numer telefonu jest wymagany'}]}>
+                                <Input prefix={<PhoneOutlined className="site-form-item-icon"/>}
+                                       placeholder="888 888 888"/>
+                            </Form.Item>
+                        </Col>
+                        <Col></Col>
+                        <Col></Col>
+                        <Col></Col>
+                    </Row>
+
+                </Form>
+            </Card>
+
             <br/>
             <br/>
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}

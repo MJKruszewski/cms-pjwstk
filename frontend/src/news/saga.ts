@@ -23,10 +23,6 @@ function* fetchNewsSaga() {
 
 function* saga() {
     yield takeEvery(request.type, fetchNewsSaga);
-    // Nie wiem, nie znam się, szkoda mi na to czasu,
-    // na tych dziwnych utrudnieniach generujących mase roboty, może ktoś naprawi,
-    // za moich czasów robiło się zwykłego Geta w client a nie jakieś hudu vodoo dzikie wężę
-    // yield takeEvery(request.type, fetchProductsSaga);
 }
 
 export default saga;

@@ -1,4 +1,4 @@
-import {BuildOutlined, HomeOutlined, ShoppingCartOutlined} from '@ant-design/icons';
+import {BuildOutlined, DesktopOutlined, HomeOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import {Image, Menu} from 'antd';
 import {useRouter} from 'next/dist/client/router';
 import React, {FunctionComponent, useEffect, useState} from 'react';
@@ -37,7 +37,7 @@ const SiderMenu: FunctionComponent = () => {
                 <Menu.Item
                     key='/configurations/create'
                     style={{}}
-                    icon={<BuildOutlined/>}
+                    icon={<DesktopOutlined />}
                 >
                     {'Configure PC'}
                 </Menu.Item>

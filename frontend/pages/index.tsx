@@ -3,12 +3,20 @@ import {useSelector} from 'react-redux';
 import {GenericState} from 'store/genericDataSlice';
 import {RootState, useAppDispatch} from 'store/rootStore';
 import {request} from 'src/news/slice';
+import {request as productsRequest} from 'src/products/slice';
+import {request as promotedRequest} from 'src/promoted/slice';
 import {News} from '@frontendDto/news.dto';
 import {Card, Carousel, Image, List, PageHeader, Result, Spin, Steps, Tabs, Tag, Typography} from 'antd';
 import {Product, ProductTypeEnum} from "@frontendDto/product.dto";
 import {EllipsisOutlined, ShoppingCartOutlined} from "@ant-design/icons";
 import randomColor from 'randomcolor';
 import {useRouter} from "next/dist/client/router";
+import {postConfiguration} from "@frontendSrc/products/slice";
+import {v4 as uuidv4} from 'uuid';
+import { useCookies } from "react-cookie"
+import { Button, notification } from 'antd';
+import {CartDto} from "@frontendDto/cart.dto";
+import { getCart, putCart } from '@frontendSrc/cart/slice';
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -34,14 +42,24 @@ const initialSplitedArray: SplitedArrayType = {
 const Home: FC = () => {
     const {data, status, error} = useSelector<RootState, GenericState<News[]>>(state => state.news);
     const productData = useSelector<RootState, GenericState<Product[]>>(state => state.products);
+    const cartData = useSelector<RootState, GenericState<CartDto[]>>(state => state.cart);
 
     const dispatch = useAppDispatch();
     const [splitedArrayByType, setSplitedArrayByType] = useState<SplitedArrayType>(initialSplitedArray);
     const [promoted, setPromoted] = useState<Product[]>([]);
     const router = useRouter();
+    const [currentUuid, setCurrentUuid] = useState<string>('');
+    const [cookie, setCookie] = useCookies(['cartId'])
+
 
     useEffect(() => {
         dispatch(request());
+        dispatch(productsRequest());
+        setCurrentUuid(uuidv4());
+
+        if (!cookie.cartId) {
+            setCookie('cartId', uuidv4());
+        }
     }, [])
 
     useEffect(() => {
@@ -78,8 +96,41 @@ const Home: FC = () => {
     };
 
     const handleItemCartClicked = (item: Product) => {
-        // TODO: implement cart functionallity on front
-        console.log('cart', item)
+        //PW do ogarnięcia react jest zjebany
+        let productIds = [];
+        let configurationIds = [];
+        // let productIds = cartData?.data?.productIds;
+        // let configurationIds = cartData?.data?.configurationIds;
+
+        if (!productIds || !Array.isArray(productIds)) {
+            productIds = [];
+        }
+
+        if (!configurationIds || !Array.isArray(configurationIds)) {
+            configurationIds = [];
+        }
+
+        configurationIds.map(id => {
+            return {
+                _id: id,
+            }
+        })
+
+        productIds.map(id => {
+            return {
+                _id: id,
+            }
+        })
+
+        dispatch(putCart({
+            externalId: currentUuid,
+            products: Array.of(...productIds, item),
+            configurations: Array.of(...configurationIds),
+        }));
+
+        notification.open({
+            message: 'Product added to cart',
+        });
     };
 
     if (status === 'loading') {
