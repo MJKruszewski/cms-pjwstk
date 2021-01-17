@@ -3,13 +3,15 @@ export interface ProductStock {
     sold: number,
     all: number,
 }
+
 export interface ProductPrice {
     base: string,
 }
+
 export interface Product {
     name: string,
     description: string,
-    promoted ?: boolean,
+    promoted?: boolean,
     images: Image[]
     price: ProductPrice,
     stock: ProductStock,
@@ -17,9 +19,11 @@ export interface Product {
     features: ProductFeature[],
     requirements: ProductRequirement[],
 }
+
 export interface Image {
     src: string;
 }
+
 export enum ProductFeatureCodeEnum {
     PCI = 'pci',
     HDMI_PORT = 'hdmiPorts',
@@ -34,6 +38,7 @@ export enum ProductFeatureCodeEnum {
     MEMORY_TYPE = 'memoryType',
     MEMORY_SIZE = 'memorySize',
 }
+
 export enum ProductTypeEnum {
     MOTHERBOARD = 'motherboard',
     CPU = 'processor',
@@ -43,10 +48,12 @@ export enum ProductTypeEnum {
     STORAGE = 'storage',
     CASE = 'case'
 }
+
 export interface ProductFeature {
     code: ProductFeatureCodeEnum,
     value: string,
 }
+
 export interface ProductRequirement {
     code: ProductFeatureCodeEnum,
     value: string,

@@ -6,138 +6,155 @@ import React, {FC, useEffect, useState} from 'react'
 import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
 import {useSelector} from 'react-redux';
-import {Alert, Button, Form, Input, Table, Tag, Typography} from "antd";
+import {Alert, Button, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
 import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
 import {UserForm} from "@frontendSrc/cart/user-form";
 
-const { Paragraph, Text } = Typography;
+const {Paragraph, Text} = Typography;
 
 const Cart: FC = () => {
-  const { data, status, error } = useSelector<RootState, GenericState<PcConfigurationDto>>(state => state.cart);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+    const {data, status, error} = useSelector<RootState, GenericState<PcConfigurationDto>>(state => state.cart);
+    const dispatch = useAppDispatch();
+    const router = useRouter();
 
-  const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({});
-  const [products, setProducts] = useState<Product[]>([]);
-  const [totalAmount, setTotalAmount] = useState<number>(0.00);
+    const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({});
+    const [products, setProducts] = useState<Product[]>([]);
+    const [totalAmount, setTotalAmount] = useState<number>(0.00);
 
-  let configurationId = '50a59999-3092-4850-bd46-4ccf6d3875a8';
+    let configurationId = '50a59999-3092-4850-bd46-4ccf6d3875a8';
 
-  if (router.query.configurationId) {
-      if(Array.isArray(router.query.configurationId)) {
-        configurationId = router.query.configurationId.pop();
-      } else {
-        configurationId = router.query.configurationId;
-      }
-  }
-
-  useEffect(() => {
-    dispatch(request(configurationId))
-  }, []);
-
-  const onSuccess = (details, paymentData) => {
-    dispatch(postPayment({
-      email: details.payer.email_address,
-      orderId: paymentData.orderID,
-      //todo PAWELEK NAPRAW やめてください
-      configurations: [data]
-    }));
-
-    router.push('/success-page');
-  };
-
-  const onSubmit = (values: unknown): void => {
-    console.log(values);
-  };
-
-
-  const createColorPalleteForTags = (dataToSplit: Product[]) => {
-    let newPallete: Record<string, string> = {};
-    dataToSplit.forEach(product =>
-        product.features.forEach(feature =>
-            !newPallete[feature.value]
-                ? newPallete[feature.value] = randomColor({ luminosity: 'dark' })
-                : newPallete[feature.value] = newPallete[feature.value]
-        )
-    );
-
-    setTagsPallete(newPallete)
-  };
-
-  useEffect(() => {
-    if (!data || !data.components) {
-      return;
+    if (router.query.configurationId) {
+        if (Array.isArray(router.query.configurationId)) {
+            configurationId = router.query.configurationId.pop();
+        } else {
+            configurationId = router.query.configurationId;
+        }
     }
-    setProducts(data.components);
 
-    let total = 0;
-    data.components.forEach((product) => {
-      total += parseFloat(product.price.base);
-    });
+    useEffect(() => {
+        dispatch(request(configurationId))
+    }, []);
 
-    setTotalAmount(total);
+    const onSuccess = (details, paymentData) => {
+        dispatch(postPayment({
+            email: details.payer.email_address,
+            orderId: paymentData.orderID,
+            //todo PAWELEK NAPRAW やめてください
+            configurations: [data]
+        }));
 
-    createColorPalleteForTags(data.components)
-  }, [data]);
+        router.push('/success-page');
+    };
 
-  const onCancel = (data) => {
-    console.log('The payment was cancelled!', data);
-  };
-  const onError = (err) => {
-    console.log("Error!", err);
-  };
-  const currency = 'USD';
-
-  const url = "https://www.paypal.com/sdk/js?client-id=Ab5D6N705DjZlueiajxmh3jWYoxRTRozHPo0BO8CTu3q1ojliJo22u62GxVKdIhPN9T41DLk6ySS_LLf";
-  const renderFeatures = (features: Product['features']) => {
-    return features.map((feature, index) => (
-        <Tag color={tagsPallete[feature.value] || randomColor()} key={`${feature.code}-${index}`}>
-          <Text strong>
-            {feature.value}
-          </Text>
-        </Tag>
-    ))
-  };
-  const columns = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN" },
-    { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures },
-  ];
+    const onSubmit = (values: unknown): void => {
+        console.log(values);
+    };
 
 
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'auto'
-    }}>
-      <script src={url} />
-      <Alert message="Remember, adding product to cart does not means it is reserved for you!" type="info" style={{marginBottom: '25px'}}/>
-      <Table
-          pagination={false}
-          columns={columns}
-          dataSource={products}
-          loading={status === 'loading'}
-          scroll={{ y: 250 }}
-          title={() => <b>Cart</b>}
-          footer={() => <div style={{display: 'inline'}}>Total price: <b>{totalAmount.toFixed(2) + ' PLN'}</b></div> }
-      />
+    const createColorPalleteForTags = (dataToSplit: Product[]) => {
+        let newPallete: Record<string, string> = {};
+        dataToSplit.forEach(product =>
+            product.features.forEach(feature =>
+                !newPallete[feature.value]
+                    ? newPallete[feature.value] = randomColor({luminosity: 'dark'})
+                    : newPallete[feature.value] = newPallete[feature.value]
+            )
+        );
 
-      <UserForm onSubmit={onSubmit}/>
+        setTagsPallete(newPallete)
+    };
 
-      {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
-      <div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>
-        <PayPalButton
-            amount={totalAmount}
-            currency={currency}
-            // shippingPreference="SET_PROVIDED_ADDRESS" // default is "GET_FROM_FILE"
-            onSuccess={onSuccess}
-            onError={onError}
-        />
-      </div>
-    </div>
-  )
+    useEffect(() => {
+        if (!data || !data.components) {
+            return;
+        }
+        setProducts(data.components);
+
+        let total = 0;
+        data.components.forEach((product) => {
+            total += parseFloat(product.price.base);
+        });
+
+        setTotalAmount(total);
+
+        createColorPalleteForTags(data.components)
+    }, [data]);
+
+    const onCancel = (data) => {
+        console.log('The payment was cancelled!', data);
+    };
+    const onError = (err) => {
+        console.log("Error!", err);
+    };
+    const currency = 'USD';
+
+    const url = "https://www.paypal.com/sdk/js?client-id=Ab5D6N705DjZlueiajxmh3jWYoxRTRozHPo0BO8CTu3q1ojliJo22u62GxVKdIhPN9T41DLk6ySS_LLf";
+    const renderFeatures = (features: Product['features']) => {
+        return features.map((feature, index) => (
+            <Tag color={tagsPallete[feature.value] || randomColor()} key={`${feature.code}-${index}`}>
+                <Text strong>
+                    {feature.value}
+                </Text>
+            </Tag>
+        ))
+    };
+    const columns = [
+        {title: 'Name', dataIndex: 'name', key: 'name'},
+        {title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN"},
+        {title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures},
+    ];
+
+
+    return (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto'
+        }}>
+            <PageHeader
+                className="site-page-header"
+                onBack={() => router.back()}
+                title="Cart"
+                subTitle=""
+            />
+
+            <script src={url}/>
+            <Alert message="Remember, adding product to cart does not means it is reserved for you!" type="info"
+                   style={{marginBottom: '25px'}}/>
+            <Table
+                pagination={false}
+                columns={columns}
+                dataSource={products}
+                loading={status === 'loading'}
+                scroll={{y: 250}}
+                title={() => <b>Cart</b>}
+                footer={() => <div style={{display: 'inline'}}>Total price: <b>{totalAmount.toFixed(2) + ' PLN'}</b>
+                </div>}
+            />
+
+            <br/>
+            <br/>
+            <UserForm onSubmit={onSubmit}/>
+            <br/>
+            <br/>
+            {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
+            {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}
+            {/*  */}
+            {/*</div>*/}
+            <Row align={'middle'} justify={'center'}>
+                <Col span={6}>
+                    <PayPalButton
+                        amount={totalAmount}
+                        currency={currency}
+                        // shippingPreference="SET_PROVIDED_ADDRESS" // default is "GET_FROM_FILE"
+                        onSuccess={onSuccess}
+                        onError={onError}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
 };
 
 export default Cart

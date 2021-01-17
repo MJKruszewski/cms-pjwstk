@@ -1,5 +1,5 @@
 import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
-import {Button, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
+import {Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
 import React, {FC, useEffect, useState} from 'react'
 import {useSelector} from 'react-redux';
 import {postConfiguration, request} from 'src/products/slice';
@@ -178,6 +178,13 @@ const Products: FC = () => {
       flexDirection: 'column',
       overflow: 'auto'
     }}>
+      <PageHeader
+          className="site-page-header"
+          onBack={() => router.back()}
+          title="Configure PC"
+          subTitle=""
+      />
+
       <Steps current={currentStep} style={{marginBottom: '25px'}}>
         {steps.map(item => (
           <Step key={item.title} title={item.title} />
