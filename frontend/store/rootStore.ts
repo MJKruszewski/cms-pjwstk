@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 import productsSaga from '@frontendSrc/products/saga';
 import cartSaga from '@frontendSrc/cart/saga';
 import newsSaga from '@frontendSrc/news/saga';
+import shipmentMethodsSaga from "@frontendSrc/shipping-methods/saga";
 import counterSaga from "@frontendStore/counterSaga";
 
 const bindMiddleware = (...middleware: any) => {
@@ -35,6 +36,7 @@ sagaMiddleware.run(counterSaga);
 sagaMiddleware.run(productsSaga);
 sagaMiddleware.run(cartSaga);
 sagaMiddleware.run(newsSaga);
+sagaMiddleware.run(shipmentMethodsSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch

@@ -6,15 +6,16 @@ import React, {FC, useEffect, useState} from 'react'
 import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
 import {useSelector} from 'react-redux';
-import {Alert, Button, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
+import {Alert, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
 import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
 import {EditOutlined, MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 import {CartDto} from "@frontendDto/cart.dto";
 import {useCookies} from "react-cookie";
 import {v4 as uuidv4} from 'uuid';
+import {ShippingMethods} from "@frontendSrc/cart/shipping-methods";
 
-const {Paragraph, Text} = Typography;
+const {Text} = Typography;
 
 const Cart: FC = () => {
     const {data, status, error} = useSelector<RootState, GenericState<CartDto>>(state => state.cart);
@@ -231,6 +232,7 @@ const Cart: FC = () => {
 
             <br/>
             <br/>
+            <ShippingMethods onSubmit={onSubmit}/>
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
             {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}
             {/*  */}
