@@ -58,12 +58,17 @@ const Home: FC = () => {
   useEffect(() => {
     dispatch(request());
     dispatch(productsRequest());
-    setCurrentUuid(uuidv4());
-
-    if (!cookie.cartId) {
-      setCookie('cartId', uuidv4());
-    }
+    setCurrentUuid(cookie.cartId || uuidv4());
   }, [])
+
+  useEffect(() => {
+    if (!cookie.cartId) {
+      const now: Date = new Date();
+      now.setDate(now.getDate() + 7)
+      const expires = now
+      setCookie('cartId', currentUuid, { expires });
+    }
+  }, [currentUuid])
 
   useEffect(() => {
     if (!productData.data) {

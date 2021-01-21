@@ -1,27 +1,27 @@
-import {PcConfigurationDto} from '@frontendDto/configuration.dto';
-import {getCart, postPayment} from '@frontendSrc/cart/slice';
-import {GenericState} from '@frontendStore/genericDataSlice';
-import {RootState, useAppDispatch} from '@frontendStore/rootStore';
-import React, {FC, useEffect, useState} from 'react'
-import {PayPalButton} from 'react-paypal-button-v2';
+import { PcConfigurationDto } from '@frontendDto/configuration.dto';
+import { getCart, postPayment } from '@frontendSrc/cart/slice';
+import { GenericState } from '@frontendStore/genericDataSlice';
+import { RootState, useAppDispatch } from '@frontendStore/rootStore';
+import React, { FC, useEffect, useState } from 'react'
+import { PayPalButton } from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
-import {useSelector} from 'react-redux';
-import {Alert, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
-import {Product} from "@frontendDto/product.dto";
-import {useRouter} from "next/router";
-import {EditOutlined, MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
-import {CartDto} from "@frontendDto/cart.dto";
-import {useCookies} from "react-cookie";
-import {v4 as uuidv4} from 'uuid';
-import {ShippingMethods} from "@frontendSrc/cart/shipping-methods";
-import {UserForm} from "@frontendSrc/cart/user-form";
-import {User} from "@frontendDto/user.dto";
-import {ShippingMethod} from "@frontendDto/shipping-method.dto";
+import { useSelector } from 'react-redux';
+import { Alert, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography } from "antd";
+import { Product } from "@frontendDto/product.dto";
+import { useRouter } from "next/router";
+import { EditOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import { CartDto } from "@frontendDto/cart.dto";
+import { useCookies } from "react-cookie";
+import { v4 as uuidv4 } from 'uuid';
+import { ShippingMethods } from "@frontendSrc/cart/shipping-methods";
+import { UserForm } from "@frontendSrc/cart/user-form";
+import { User } from "@frontendDto/user.dto";
+import { ShippingMethod } from "@frontendDto/shipping-method.dto";
 
-const {Text} = Typography;
+const { Text } = Typography;
 
 const Cart: FC = () => {
-    const {data, status, error} = useSelector<RootState, GenericState<CartDto>>(state => state.cart);
+    const { data, status, error } = useSelector<RootState, GenericState<CartDto>>(state => state.cart);
     const dispatch = useAppDispatch();
     const router = useRouter();
 
@@ -33,6 +33,7 @@ const Cart: FC = () => {
     const [cookie, setCookie] = useCookies(['cartId'])
 
     useEffect(() => {
+        console.log('>>> cookie', cookie)
         //PW lookinj
         //react się zesrał i nawet cookies nie potrafi trzymać
         if (!cookie.cartId) {
@@ -67,7 +68,7 @@ const Cart: FC = () => {
         dataToSplit.forEach(product =>
             product.features.forEach(feature =>
                 !newPallete[feature.value]
-                    ? newPallete[feature.value] = randomColor({luminosity: 'dark'})
+                    ? newPallete[feature.value] = randomColor({ luminosity: 'dark' })
                     : newPallete[feature.value] = newPallete[feature.value]
             )
         );
@@ -116,9 +117,9 @@ const Cart: FC = () => {
         ))
     };
     const columns = [
-        {title: 'Name', dataIndex: 'name', key: 'name'},
-        {title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN"},
-        {title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures},
+        { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN" },
+        { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures },
     ];
 
 
@@ -135,23 +136,23 @@ const Cart: FC = () => {
                 subTitle=""
             />
 
-            <script src={url}/>
+            <script src={url} />
             <Alert message="Remember, adding product to cart does not means it is reserved for you!" type="info"
-                   style={{marginBottom: '25px'}}/>
+                style={{ marginBottom: '25px' }} />
             <Table
                 pagination={false}
                 columns={columns}
                 dataSource={products}
                 loading={status === 'loading'}
-                scroll={{y: 250}}
+                scroll={{ y: 250 }}
                 title={() => <b>Cart</b>}
-                footer={() => <div style={{display: 'inline'}}>Total price: <b>{totalAmount.toFixed(2) + ' PLN'}</b>
+                footer={() => <div style={{ display: 'inline' }}>Total price: <b>{totalAmount.toFixed(2) + ' PLN'}</b>
                 </div>}
             />
 
-            <div style={{display: 'flex'}}>
-                <UserForm onSubmit={onUserFormSubmit}/>
-                <ShippingMethods onSubmit={onShippingMethodsSubmit}/>
+            <div style={{ display: 'flex' }}>
+                <UserForm onSubmit={onUserFormSubmit} />
+                <ShippingMethods onSubmit={onShippingMethodsSubmit} />
             </div>
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
             {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}

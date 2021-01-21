@@ -1,10 +1,10 @@
-import {OrderDto} from '@frontendDto/order.dto';
-import {PayloadAction} from '@reduxjs/toolkit';
-import {put, takeEvery} from 'redux-saga/effects';
-import {failure, getCart, postPayment, postPaymentFinished, putCart, request, success} from './slice';
-import {CartDto} from "@frontendDto/cart.dto";
+import { OrderDto } from '@frontendDto/order.dto';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { put, takeEvery } from 'redux-saga/effects';
+import { failure, getCart, postPayment, postPaymentFinished, putCart, request, success } from './slice';
+import { CartDto } from "@frontendDto/cart.dto";
 
-function* fetchConfigurationSaga({payload}: PayloadAction<string>) {
+function* fetchConfigurationSaga({ payload }: PayloadAction<string>) {
     try {
         //TODO IN CART CAN BE MANY CONFIGURATIONS
         const response = yield fetch(`${process.env.API_HOST}/api/v1/configurations/${payload}`);
@@ -15,7 +15,7 @@ function* fetchConfigurationSaga({payload}: PayloadAction<string>) {
     }
 }
 
-function* fetchCartSaga({payload}: PayloadAction<string>) {
+function* fetchCartSaga({ payload }: PayloadAction<string>) {
     try {
         const response = yield fetch(`${process.env.API_HOST}/api/v1/carts/${payload}`);
         const data = yield response.json();
@@ -25,24 +25,24 @@ function* fetchCartSaga({payload}: PayloadAction<string>) {
     }
 }
 
-function* putCartSaga({payload}: PayloadAction<CartDto>) {
+function* putCartSaga({ payload }: PayloadAction<CartDto>) {
     try {
         const response = yield fetch(`${process.env.API_HOST}/api/v1/carts/${payload.externalId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            }
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
         );
         const data = yield response.json();
-        yield(put(success(data)))
+        yield (put(success(data)))
     } catch (error) {
         yield put(failure(error))
     }
 }
 
-function* postPaymentSaga({payload}: PayloadAction<OrderDto>) {
+function* postPaymentSaga({ payload }: PayloadAction<OrderDto>) {
     try {
         const response = yield fetch(`${process.env.API_HOST}/api/v1/orders`, {
             method: 'POST',
@@ -52,7 +52,7 @@ function* postPaymentSaga({payload}: PayloadAction<OrderDto>) {
             body: JSON.stringify(payload)
         });
         const data = yield response.json();
-        yield(put(postPaymentFinished(true)))
+        yield (put(postPaymentFinished(true)))
     } catch (error) {
         yield put(postPaymentFinished(false))
     }

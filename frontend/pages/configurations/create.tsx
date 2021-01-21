@@ -1,13 +1,14 @@
-import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
-import {Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
-import React, {FC, useEffect, useState} from 'react'
-import {useSelector} from 'react-redux';
-import {postConfiguration, request} from 'src/products/slice';
-import {GenericState} from 'store/genericDataSlice';
-import {RootState, useAppDispatch} from 'store/rootStore';
-import {v4 as uuidv4} from 'uuid';
+import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
+import { Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography } from 'antd';
+import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { postConfiguration, request } from 'src/products/slice';
+import { GenericState } from 'store/genericDataSlice';
+import { RootState, useAppDispatch } from 'store/rootStore';
+import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import {useRouter} from 'next/dist/client/router';
+import { useRouter } from 'next/dist/client/router';
+import { useCookies } from 'react-cookie';
 
 const { Step } = Steps;
 const { Paragraph, Text } = Typography;
@@ -37,11 +38,21 @@ const Products: FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<Record<ProductTypeEnum, Product>>({} as Record<ProductTypeEnum, Product>);
   const [currentUuid, setCurrentUuid] = useState<string>('');
   const [buttonLock, setButtonLock] = useState<boolean>(true);
+  const [cookie, setCookie] = useCookies(['cartId'])
 
   useEffect(() => {
     dispatch(request());
-    setCurrentUuid(uuidv4())
+    setCurrentUuid(cookie.cartId || uuidv4())
   }, []);
+
+  useEffect(() => {
+    if (!cookie.cartId) {
+      const now: Date = new Date();
+      now.setDate(now.getDate() + 7)
+      const expires = now
+      setCookie('cartId', currentUuid, { expires });
+    }
+  }, [currentUuid])
 
   useEffect(() => {
     if (!data) {
@@ -62,7 +73,7 @@ const Products: FC = () => {
     );
     setSplitedArrayByType(splited)
   };
-  
+
   const next = () => {
     setButtonLock(true);
     return setCurrentStep(currentStep + 1);
@@ -92,9 +103,10 @@ const Products: FC = () => {
   const steps = !splitedArrayByType
     ? []
     : Object.keys(splitedArrayByType)
-      .map((key: string) => ({
+      .map((key: string, index: number) => ({
         title: key,
-        content: splitedArrayByType[key]
+        content: splitedArrayByType[key],
+        status: index === 0 ? 'process' : 'wait'
       }));
 
   const renderFeatures = (features: Product['features']) => {
@@ -112,7 +124,7 @@ const Products: FC = () => {
     { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN" },
     { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures },
   ];
-  
+
   const rowSelection = {
     onChange: (_selectedRowKeys, selectedRows) => {
       setButtonLock(false);
@@ -133,12 +145,12 @@ const Products: FC = () => {
       margin: '12px'
     }}>
       {currentStep < steps.length - 1 && (
-        <Button type="primary" onClick={() => next()} style={{float: 'right'}} disabled={buttonLock}>
+        <Button type="primary" onClick={() => next()} style={{ float: 'right' }} disabled={buttonLock}>
           Next
         </Button>
       )}
       {currentStep === steps.length - 1 && (
-        <Button type="primary" onClick={submit} style={{float: 'right'}} disabled={buttonLock}>
+        <Button type="primary" onClick={submit} style={{ float: 'right' }} disabled={buttonLock}>
           Add to cart
         </Button>
       )}
@@ -179,29 +191,37 @@ const Products: FC = () => {
       overflow: 'auto'
     }}>
       <PageHeader
-          className="site-page-header"
-          onBack={() => router.back()}
-          title="Configure PC"
-          subTitle=""
+        className="site-page-header"
+        onBack={() => router.back()}
+        title="Configure PC"
+        subTitle=""
       />
 
-      <Steps current={currentStep} style={{marginBottom: '25px'}}>
-        {steps.map(item => (
-          <Step key={item.title} title={item.title} />
-        ))}
-      </Steps>
-
-      <div className="steps-content">
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Steps
+          current={currentStep}
+          style={{ marginBottom: '24px' }}
+          direction='horizontal'
+          // @ts-ignore
+          status={steps[currentStep].status}
+        >
+          {steps.map(item => (
+            <Step key={item.title} title={item.title} description={item?.desc} />
+          ))}
+        </Steps>
         <Table
           pagination={false}
           columns={columns}
           expandable={{
-            expandedRowRender: record => <div style={{display: 'inline'}}>
-              <div style={{display: 'inline'}}>
+            expandedRowRender: record => <div style={{ display: 'inline' }}>
+              <div style={{ display: 'inline' }}>
                 {record.images.map(img => <img src={window.location.origin + "/" + img.src} width={'300px'} />)}
               </div>
 
-              <br/>
+              <br />
               <p style={{ margin: 0 }}>{record.description}</p>
             </div>
           }}
