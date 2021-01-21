@@ -64,7 +64,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     </Col>
                     <Col span={12}>
                         <Form.Item name="phone"
-                                   label="Telephone number:"
+                                   label="Phone number:"
                                    rules={[{required: true, message: 'Phone number is required'}]}>
                             <Input prefix={<PhoneOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -124,7 +124,9 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     </Col>
                 </Row>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary"
+                            disabled={isDisabled}
+                            htmlType="submit">
                         Submit
                     </Button>
                 </Form.Item>

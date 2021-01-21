@@ -1,5 +1,5 @@
 import React, {FC, Fragment, useEffect, useState} from "react";
-import {Button, Card, Checkbox, Form, Select} from "antd";
+import {Button, Card, Checkbox, Form, Input, Select} from "antd";
 import {RootState, useAppDispatch} from "@frontendStore/rootStore";
 import {GenericState} from "@frontendStore/genericDataSlice";
 import {useSelector} from 'react-redux';
@@ -81,6 +81,7 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                                 marginTop: '1em',
                             }}>{"Shipping price:"} {shippingMethod.price} {"PLN"}</h1>
                             <Button onClick={onFinish}
+                                    disabled={isDisabled}
                                     style={{marginTop: '1em'}}
                                     type="primary">
                                 Submit

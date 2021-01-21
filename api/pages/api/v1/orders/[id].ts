@@ -59,7 +59,8 @@ const get = async (req: NextApiRequest, res: NextApiResponse, orderRepository: O
         _id: order._id,
         orderId: order.externalOrder.id,
         configurations: configurations,
-        email: order.email,
+        user: order.user,
+        shippingMethod: order.shippingMethod
     };
 
     res.status(200).json(response)

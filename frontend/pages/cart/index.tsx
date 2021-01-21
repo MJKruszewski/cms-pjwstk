@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { Alert, Button, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography } from "antd";
 import { Product } from "@frontendDto/product.dto";
 import { useRouter } from "next/router";
-import { EditOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import { CartDto } from "@frontendDto/cart.dto";
 import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from 'uuid';
@@ -48,7 +47,6 @@ const Cart: FC = () => {
             user: userData,
             shippingMethod: shippingMethod,
             orderId: paymentData.orderID,
-            //todo PAWELEK NAPRAW やめてください
             configurations: [data]
         }));
 
@@ -69,10 +67,9 @@ const Cart: FC = () => {
             dispatch(postPayment({
                 user: userData,
                 shippingMethod: shippingMethod,
-                orderId: '1',
+                orderId: 'sb',
                 configurations: [data]
             }))
-            console.log(products);
             router.push('/success-page');
         }
     };
@@ -179,6 +176,7 @@ const Cart: FC = () => {
                     </Button>
                 </Col>
             </Row>
+
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
             {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}
             {/*  */}

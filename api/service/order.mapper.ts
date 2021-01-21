@@ -9,7 +9,8 @@ export class OrderMapper {
         });
 
         return {
-            email: order.email,
+            user: order.user,
+            shippingMethod: order.shippingMethod,
             externalOrder: payment,
             configurations: ids,
         };

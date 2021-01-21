@@ -19,8 +19,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 const post = async (req: NextApiRequest, res: NextApiResponse, orderRepository: OrderRepository, paypalRepository: PaypalRepository) => {
     const order: OrderDto = req.body;
-    const externalOrder = await paypalRepository.getOrder(order.orderId);
-    const result = await orderRepository.insertOne(OrderMapper.map(order, externalOrder.result));
+    // const externalOrder = await paypalRepository.getOrder(order.orderId);
+    // const result = await orderRepository.insertOne(OrderMapper.map(order, externalOrder));
+    const result = await orderRepository.insertOne(OrderMapper.map(order, null));
 
     //TODO - logic for decrementing products amount when payment is completed
 

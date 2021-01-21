@@ -1,14 +1,18 @@
 import {WithId} from "mongodb";
 import {PcConfigurationDto} from "@apiDomain/configuration.domain";
+import {User} from "../../frontend/dto/user.dto";
+import {ShippingMethod} from "../../frontend/dto/shipping-method.dto";
 
 export interface OrderDto {
-    email: string;
+    user: User;
+    shippingMethod: ShippingMethod;
     orderId: string;
     configurations: WithId<PcConfigurationDto>[];
 }
 
 export interface Order {
-    email: string;
+    user: User;
+    shippingMethod: ShippingMethod;
     externalOrder: OrderDetails & PaymentDetails;
     configurations: string[];
 }
