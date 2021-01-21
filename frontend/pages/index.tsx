@@ -389,7 +389,7 @@ const Home: FC = () => {
       </Card>
 
       <Drawer
-        title={drawerItem?.name}
+        title={drawerItem?.name || drawerNews?.title}
         placement="right"
         closable={false}
         onClose={handleDrawerClose}
@@ -435,7 +435,6 @@ const Home: FC = () => {
               height: '100%'
             }}>
               <Image src={drawerNews.cover} />
-              <Title level={3}>{drawerNews.title}</Title>
               <Title level={4}>{drawerNews.summary}</Title>
               <div dangerouslySetInnerHTML={{ __html: drawerNews.content }}></div>
             </div>
