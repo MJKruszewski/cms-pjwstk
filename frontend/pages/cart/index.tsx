@@ -15,6 +15,7 @@ import {useCookies} from "react-cookie";
 import {v4 as uuidv4} from 'uuid';
 import {ShippingMethods} from "@frontendSrc/cart/shipping-methods";
 import {UserForm} from "@frontendSrc/cart/user-form";
+import {User} from "@frontendDto/user.dto";
 
 const {Text} = Typography;
 
@@ -26,6 +27,7 @@ const Cart: FC = () => {
     const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({});
     const [products, setProducts] = useState<Product[]>([]);
     const [totalAmount, setTotalAmount] = useState<number>(0.00);
+    const [userData, setUserData] = useState<User>(null)
     const [cookie, setCookie] = useCookies(['cartId'])
 
     useEffect(() => {
@@ -49,8 +51,8 @@ const Cart: FC = () => {
         router.push('/success-page');
     };
 
-    const onSubmit = (values: unknown): void => {
-        console.log(values);
+    const onFormSubmit = (values: User): void => {
+        setUserData(values);
     };
 
 
@@ -142,8 +144,8 @@ const Cart: FC = () => {
             />
 
             <div style={{display: 'flex'}}>
-                <UserForm onSubmit={onSubmit}/>
-                <ShippingMethods onSubmit={onSubmit}/>
+                <UserForm onSubmit={onFormSubmit}/>
+                <ShippingMethods onSubmit={onFormSubmit}/>
             </div>
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
             {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}
