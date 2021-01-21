@@ -75,7 +75,7 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     shippingMethod && (
                         <Fragment>
                             <div>
-                                <img style={{marginTop: '1em'}} width='100px' src={shippingMethod.cover}/>
+                                <img style={{marginTop: '2em'}} height='50px' src={shippingMethod.cover}/>
                             </div>
                             <h1 style={{
                                 marginTop: '1em',

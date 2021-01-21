@@ -34,7 +34,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     <Col span={12}>
                         <Form.Item name="name"
                                    label="Name:"
-                                   rules={[{required: true, message: 'Imię jest wymagane'}]}>
+                                   rules={[{required: true, message: 'Name is required'}]}>
                             <Input prefix={<UserOutlined
                                 className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -44,7 +44,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     <Col span={12}>
                         <Form.Item name="surname"
                                    label="Surname:"
-                                   rules={[{required: true, message: 'Nazwisko jest wymagane'}]}>
+                                   rules={[{required: true, message: 'Surname is required'}]}>
                             <Input prefix={<UserOutlined
                                 className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -56,7 +56,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     <Col span={12}>
                         <Form.Item name="email"
                                    label="Email:"
-                                   rules={[{required: true, message: 'Email jest wymagany'}]}>
+                                   rules={[{required: true, message: 'Email is required'}]}>
                             <Input prefix={<MailOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="romanzawadzki@mail.com"/>
@@ -65,7 +65,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     <Col span={12}>
                         <Form.Item name="phone"
                                    label="Telephone number:"
-                                   rules={[{required: true, message: 'Numer telefonu jest wymagany'}]}>
+                                   rules={[{required: true, message: 'Phone number is required'}]}>
                             <Input prefix={<PhoneOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="888 888 888"/>
@@ -75,8 +75,8 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                 <Row gutter={12}>
                     <Col span={24}>
                         <Form.Item name="address1"
-                                   label="Adres 1"
-                                   rules={[{required: true, message: 'Adres jest wymagany'}]}>
+                                   label="Address 1"
+                                   rules={[{required: true, message: 'address  is required'}]}>
                             <Input prefix={<EditOutlined
                                 className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -87,7 +87,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                 <Row gutter={12}>
                     <Col span={24}>
                         <Form.Item name="address2"
-                                   label="Adres 2">
+                                   label="Address 2">
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="m. 32"/>
@@ -97,8 +97,8 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                 <Row gutter={12}>
                     <Col span={8}>
                         <Form.Item name="city"
-                                   label="Miasto"
-                                   rules={[{required: true, message: 'Miasto jest wymagane'}]}>
+                                   label="City"
+                                   rules={[{required: true, message: 'City is required'}]}>
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="Warszawa"/>
@@ -106,8 +106,8 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     </Col>
                     <Col span={6}>
                         <Form.Item name="postCode"
-                                   label="Kod pocztowy"
-                                   rules={[{required: true, message: 'Kod Pocztowy jest wymagany'}]}>
+                                   label="Post code"
+                                   rules={[{required: true, message: 'Post code is required'}]}>
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="00-000"/>
@@ -115,8 +115,8 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                     </Col>
                     <Col span={10}>
                         <Form.Item name="country"
-                                   label="Kraj"
-                                   rules={[{required: true, message: 'Kraj jest wymagany'}]}>
+                                   label="Country"
+                                   rules={[{required: true, message: 'Country is required'}]}>
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="Polska"/>

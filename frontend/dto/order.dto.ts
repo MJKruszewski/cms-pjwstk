@@ -1,8 +1,11 @@
 import {WithId} from "mongodb";
 import {PcConfigurationDto} from "@frontendDto/configuration.dto";
+import {User} from "@frontendDto/user.dto";
+import {ShippingMethod} from "@frontendDto/shipping-method.dto";
 
 export interface OrderDto {
-    email: string;
+    user: User;
+    shippingMethod: ShippingMethod;
     orderId: string;
     configurations: WithId<PcConfigurationDto>[];
 }
