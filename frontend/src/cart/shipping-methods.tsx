@@ -1,13 +1,14 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
-import { Checkbox, Select } from "antd";
-import { RootState, useAppDispatch } from "@frontendStore/rootStore";
-import { GenericState } from "@frontendStore/genericDataSlice";
-import { useSelector } from 'react-redux';
-import { ShippingMethod } from "@frontendDto/shipping-method.dto";
-import { request } from "@frontendSrc/shipping-methods/slice";
+import React, {FC, Fragment, useEffect, useState} from "react";
+import {Card, Checkbox, Select} from "antd";
+import {RootState, useAppDispatch} from "@frontendStore/rootStore";
+import {GenericState} from "@frontendStore/genericDataSlice";
+import {useSelector} from 'react-redux';
+import {ShippingMethod} from "@frontendDto/shipping-method.dto";
+import {request} from "@frontendSrc/shipping-methods/slice";
 
 const styles = {
-    margin: '4em',
+    margin: '5em',
+    width: '30%',
 };
 
 interface OnChangeHandler {
@@ -18,9 +19,13 @@ interface MyInputProps {
     onSubmit: OnChangeHandler;
 }
 
-export const ShippingMethods: FC<MyInputProps> = ({ onSubmit }: MyInputProps) => {
+export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
 
-    const { data, status, error } = useSelector<RootState, GenericState<ShippingMethod[]>>(state => state.shippingMethods);
+    const {
+        data,
+        status,
+        error
+    } = useSelector<RootState, GenericState<ShippingMethod[]>>(state => state.shippingMethods);
     const dispatch = useAppDispatch();
     const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(null)
 
@@ -45,23 +50,25 @@ export const ShippingMethods: FC<MyInputProps> = ({ onSubmit }: MyInputProps) =>
     };
 
     return (
-        <div style={styles}>
-            <h1>Sposób dostawy</h1>
-            <Select
-                style={{ width: '100%' }}
-                defaultValue={'DHL'}
-                onChange={onChange}>
-                {getOptions(data)}
-            </Select>
-            {
-                shippingMethod && (
-                    <Fragment>
-                        <h1 style={{ margin: '4em, 0' }}>Cena Wysyłki: {shippingMethod.price}</h1>
-                        <img height='200px' src={shippingMethod.cover} />
-                    </Fragment>
-                )
-            }
-        </div>
+        <Card title={'Shipping method'}
+              style={styles}>
+            <div>
+                <Select
+                    style={{width: '100%'}}
+                    defaultValue={'DHL'}
+                    onChange={onChange}>
+                    {getOptions(data)}
+                </Select>
+                {
+                    shippingMethod && (
+                        <Fragment>
+                            <h1 style={{marginTop: '1em', display: 'block'}}>{"Shipping price:"} {shippingMethod.price} {"PLN"}</h1>
+                            <img style={{marginTop: '1em'}} width='100px' src={shippingMethod.cover}/>
+                        </Fragment>
+                    )
+                }
+            </div>
+        </Card>
     );
 }
 
