@@ -2,11 +2,11 @@ import {PcConfigurationDto} from '@frontendDto/configuration.dto';
 import {getCart, postPayment} from '@frontendSrc/cart/slice';
 import {GenericState} from '@frontendStore/genericDataSlice';
 import {RootState, useAppDispatch} from '@frontendStore/rootStore';
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, Fragment, useEffect, useState} from 'react'
 import {PayPalButton} from 'react-paypal-button-v2';
 import randomColor from 'randomcolor';
 import {useSelector} from 'react-redux';
-import {Alert, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
+import {Alert, Button, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
 import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
 import {EditOutlined, MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
@@ -59,7 +59,13 @@ const Cart: FC = () => {
 
     const onShippingMethodsSubmit = (shippingMethod: ShippingMethod): void => {
         setShippingMethod(shippingMethod);
-        console.log(shippingMethod);
+    };
+
+    const onFinalizationSubmit = (): void => {
+
+        if (products.length > 0 && shippingMethod && userData) {
+            console.log(products);
+        }
     };
 
     const createColorPalleteForTags = (dataToSplit: Product[]) => {
@@ -153,6 +159,16 @@ const Cart: FC = () => {
                 <UserForm onSubmit={onUserFormSubmit}/>
                 <ShippingMethods onSubmit={onShippingMethodsSubmit}/>
             </div>
+
+            <Row align={'middle'} justify={'center'}>
+                <Col span={6}>
+                    <Button onClick={onFinalizationSubmit}
+                            style={{marginBottom: '1em'}}
+                            type="primary">
+                        Finalize without payment
+                    </Button>
+                </Col>
+            </Row>
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
             {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}
             {/*  */}
