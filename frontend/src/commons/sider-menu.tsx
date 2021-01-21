@@ -23,7 +23,7 @@ const SiderMenu: FunctionComponent = () => {
             selectedKeys={selectedKeys}
             onSelect={handleMenuItemClicked}
         >
-            <Image src={'logoqwe.png'} height={'46px'}/>
+            <img src={'/logoqwe.png'} height={'46px'}/>
             {
                 <Menu.Item
                     key='/'
