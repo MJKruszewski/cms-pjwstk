@@ -16,6 +16,7 @@ import {v4 as uuidv4} from 'uuid';
 import {ShippingMethods} from "@frontendSrc/cart/shipping-methods";
 import {UserForm} from "@frontendSrc/cart/user-form";
 import {User} from "@frontendDto/user.dto";
+import {ShippingMethod} from "@frontendDto/shipping-method.dto";
 
 const {Text} = Typography;
 
@@ -28,6 +29,7 @@ const Cart: FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [totalAmount, setTotalAmount] = useState<number>(0.00);
     const [userData, setUserData] = useState<User>(null)
+    const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(null)
     const [cookie, setCookie] = useCookies(['cartId'])
 
     useEffect(() => {
@@ -51,10 +53,14 @@ const Cart: FC = () => {
         router.push('/success-page');
     };
 
-    const onFormSubmit = (values: User): void => {
-        setUserData(values);
+    const onUserFormSubmit = (user: User): void => {
+        setUserData(user);
     };
 
+    const onShippingMethodsSubmit = (shippingMethod: ShippingMethod): void => {
+        setShippingMethod(shippingMethod);
+        console.log(shippingMethod);
+    };
 
     const createColorPalleteForTags = (dataToSplit: Product[]) => {
         let newPallete: Record<string, string> = {};
@@ -144,8 +150,8 @@ const Cart: FC = () => {
             />
 
             <div style={{display: 'flex'}}>
-                <UserForm onSubmit={onFormSubmit}/>
-                <ShippingMethods onSubmit={onFormSubmit}/>
+                <UserForm onSubmit={onUserFormSubmit}/>
+                <ShippingMethods onSubmit={onShippingMethodsSubmit}/>
             </div>
             {/* <PaypalExpressBtn client={client} currency={currency} total={total} onError={onError} onSuccess={onSuccess} onCancel={onCancel} /> */}
             {/*<div style={{width: '50%', margin: '0 auto', marginTop: '60px'}}>*/}

@@ -1,5 +1,5 @@
 import React, {FC, Fragment, useEffect, useState} from "react";
-import {Card, Checkbox, Select} from "antd";
+import {Button, Card, Checkbox, Form, Select} from "antd";
 import {RootState, useAppDispatch} from "@frontendStore/rootStore";
 import {GenericState} from "@frontendStore/genericDataSlice";
 import {useSelector} from 'react-redux';
@@ -7,7 +7,9 @@ import {ShippingMethod} from "@frontendDto/shipping-method.dto";
 import {request} from "@frontendSrc/shipping-methods/slice";
 
 const styles = {
-    margin: '5em',
+    marginBottom: '5em',
+    marginRight: '5em',
+    marginTop: '5em',
     width: '30%',
 };
 
@@ -28,6 +30,7 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
     } = useSelector<RootState, GenericState<ShippingMethod[]>>(state => state.shippingMethods);
     const dispatch = useAppDispatch();
     const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(null)
+    const [isDisabled, setIsDisabled] = useState<boolean>(false)
 
     useEffect(() => {
         dispatch(request());
@@ -49,6 +52,14 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
         setShippingMethod(method)
     };
 
+    const onFinish = (): void => {
+        setIsDisabled(true);
+        if (shippingMethod !== undefined) {
+            onSubmit(shippingMethod);
+            return
+        }
+    };
+
     return (
         <Card title={'Shipping method'}
               style={styles}>
@@ -56,14 +67,24 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                 <Select
                     style={{width: '100%'}}
                     defaultValue={'DHL'}
-                    onChange={onChange}>
+                    onChange={onChange}
+                    disabled={isDisabled}>
                     {getOptions(data)}
                 </Select>
                 {
                     shippingMethod && (
                         <Fragment>
-                            <h1 style={{marginTop: '1em', display: 'block'}}>{"Shipping price:"} {shippingMethod.price} {"PLN"}</h1>
-                            <img style={{marginTop: '1em'}} width='100px' src={shippingMethod.cover}/>
+                            <div>
+                                <img style={{marginTop: '1em'}} width='100px' src={shippingMethod.cover}/>
+                            </div>
+                            <h1 style={{
+                                marginTop: '1em',
+                            }}>{"Shipping price:"} {shippingMethod.price} {"PLN"}</h1>
+                            <Button onClick={onFinish}
+                                    style={{marginTop: '1em'}}
+                                    type="primary">
+                                Submit
+                            </Button>
                         </Fragment>
                     )
                 }
