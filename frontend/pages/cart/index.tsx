@@ -9,7 +9,6 @@ import {useSelector} from 'react-redux';
 import {Alert, Button, Card, Col, Form, Input, PageHeader, Row, Table, Tag, Typography} from "antd";
 import {Product} from "@frontendDto/product.dto";
 import {useRouter} from "next/router";
-import {EditOutlined, MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 import {CartDto} from "@frontendDto/cart.dto";
 import {useCookies} from "react-cookie";
 import {v4 as uuidv4} from 'uuid';
@@ -44,7 +43,8 @@ const Cart: FC = () => {
 
     const onSuccess = (details, paymentData) => {
         dispatch(postPayment({
-            email: details.payer.email_address,
+            user: userData,
+            shippingMethod: shippingMethod,
             orderId: paymentData.orderID,
             //todo PAWELEK NAPRAW やめてください
             configurations: [data]
@@ -64,7 +64,14 @@ const Cart: FC = () => {
     const onFinalizationSubmit = (): void => {
 
         if (products.length > 0 && shippingMethod && userData) {
+            dispatch(postPayment({
+                user: userData,
+                shippingMethod: shippingMethod,
+                orderId: '1',
+                configurations: [data]
+            }))
             console.log(products);
+            router.push('/success-page');
         }
     };
 
@@ -145,6 +152,7 @@ const Cart: FC = () => {
             <Alert message="Remember, adding product to cart does not means it is reserved for you!" type="info"
                    style={{marginBottom: '25px'}}/>
             <Table
+                style={{marginLeft: '5em', marginRight: '5em'}}
                 pagination={false}
                 columns={columns}
                 dataSource={products}
