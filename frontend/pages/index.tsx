@@ -113,7 +113,7 @@ const Home: FC = () => {
   }
 
   const handleItemCartClicked = (item: Product) => {
-    //PW do ogarnięcia react jest zjebany
+    //PW do ogarnięcia react jest zjebany - sagi są zjebane, geta się nie da zrobić
     let productIds = [];
     let configurationIds = [];
     // let productIds = cartData?.data?.productIds;
