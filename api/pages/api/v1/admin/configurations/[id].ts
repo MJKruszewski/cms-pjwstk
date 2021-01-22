@@ -5,6 +5,7 @@ import {ConfigurationMapper} from "@apiService/configuration.mapper";
 import {WithId} from "mongodb";
 import ProductsRepository from "@apiRepository/products.repository";
 import {Types} from "mongoose";
+import {mapMongoId} from "@apiMiddleware/mongo.middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'OPTIONS') return res.status(200).json({});
@@ -59,5 +60,5 @@ const get = async (req: NextApiRequest, res: NextApiResponse, configurationRepos
         components: components,
     };
 
-    res.status(200).json(response)
+    res.status(200).json(await mapMongoId(response))
 };

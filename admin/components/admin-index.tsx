@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Admin, ListGuesser, Resource} from 'react-admin';
+import {Admin, ListGuesser, Resource, ShowGuesser} from 'react-admin';
 import {createHashHistory} from 'history';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { AuthProvider } from 'react-admin';
@@ -52,12 +52,12 @@ const authProvider: AuthProvider = {
 const history = createHashHistory();
 
 const App = () => <Admin authProvider={authProvider} dataProvider={simpleRestProvider(`${process.env.API_HOST}/api/v1/admin`)} history={history}>
-    <Resource name="news" list={ListGuesser} />
-    <Resource name="orders" list={ListGuesser} />
-    {/*<Resource name="carts" list={ListGuesser} />*/}
-    <Resource name="products" list={ListGuesser} />
-    <Resource name="configurations" list={ListGuesser} />
-    <Resource name="shipping-methods" list={ListGuesser} />
+    <Resource name="news" list={ListGuesser} edit={ShowGuesser}/>
+    <Resource name="orders" list={ListGuesser}/>
+    <Resource name="carts" list={ListGuesser} edit={ShowGuesser}/>
+    <Resource name="products" list={ListGuesser} edit={ShowGuesser}/>
+    <Resource name="configurations" list={ListGuesser} edit={ShowGuesser}/>
+    <Resource name="shipping-methods" list={ListGuesser} edit={ShowGuesser}/>
 </Admin>;
 
 export default App;

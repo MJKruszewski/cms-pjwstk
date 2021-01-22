@@ -6,6 +6,7 @@ import ProductsRepository from "@apiRepository/products.repository";
 import OrderRepository from "@apiRepository/order.repository";
 import {OrderDto} from "@apiDomain/order.domain";
 import {Types} from "mongoose";
+import {mapMongoId} from "@apiMiddleware/mongo.middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'OPTIONS') return res.status(200).json({});
@@ -59,8 +60,9 @@ const get = async (req: NextApiRequest, res: NextApiResponse, orderRepository: O
         _id: order._id,
         orderId: order.externalOrder.id,
         configurations: configurations,
-        email: order.email,
+        user: order.user,
+        shippingMethod: order.shippingMethod
     };
 
-    res.status(200).json(response)
+    res.status(200).json(await mapMongoId(response))
 };

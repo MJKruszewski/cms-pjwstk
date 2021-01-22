@@ -6,6 +6,8 @@ import {CartDto} from "@apiDomain/cart.domain";
 import CartsRepository from "@apiRepository/carts.repository";
 import {CartMapper} from "@apiService/cart.mapper";
 import {mapMongoId} from "@apiMiddleware/mongo.middleware";
+import {Schema, Types} from "mongoose";
+import {getPagination} from "@apiMiddleware/pagination.middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'OPTIONS') return res.status(200).json({});
@@ -28,8 +30,22 @@ const post = async (req: NextApiRequest, res: NextApiResponse, cartsRepository: 
     res.status(201).json(result.ops.pop());
 };
 const get = async (req: NextApiRequest, res: NextApiResponse, cartsRepository: CartsRepository) => {
-    res.setHeader('Content-Range', await cartsRepository.count());
+    // @ts-ignore
+    const filter: { id: string[] } = JSON.parse(req.query.filter);
 
-    const carts = await cartsRepository.findAll();
-    res.status(200).json(await carts.map(mapMongoId))
+    if (req.query.filter && filter.id) {
+        const ids = filter.id.map(item => Types.ObjectId(item));
+        const newVar = await cartsRepository.findByFilter({_id: {$in: ids}});
+        res.status(200).json(await newVar.map(mapMongoId));
+
+        return;
+    }
+
+    const carts = await cartsRepository.findAll(getPagination(req));
+    res.setHeader('Content-Range', await cartsRepository.count());
+    res.status(200).json(await carts.map(mapMongoId).map(item => {
+        delete item.externalId
+
+        return item;
+    }))
 };

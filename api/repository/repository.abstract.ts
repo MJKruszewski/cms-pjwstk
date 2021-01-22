@@ -1,4 +1,5 @@
 import {Collection, InsertOneWriteOpResult, OptionalId, WithId, FindOneOptions} from "mongodb";
+import {FilterQuery, Document} from "mongoose";
 
 export default abstract class RepositoryAbstract<T> {
 
@@ -9,6 +10,11 @@ export default abstract class RepositoryAbstract<T> {
 
     public async findAll(options ?: FindOneOptions<any>): Promise<T[]> {
         return this.collection.find({}, options).toArray();
+    }
+
+    public async findByFilter(filter: FilterQuery<T>, options ?: FindOneOptions<any>): Promise<T[]> {
+        // @ts-ignore
+        return this.collection.find(filter, options).toArray();
     }
 
     public async count(): Promise<number> {
