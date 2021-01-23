@@ -113,41 +113,66 @@ const Home: FC = () => {
   }
 
   const handleItemCartClicked = (item: Product) => {
-    //PW do ogarnięcia react jest zjebany - sagi są zjebane, geta się nie da zrobić
     let productIds = [];
     let configurationIds = [];
-    // let productIds = cartData?.data?.productIds;
-    // let configurationIds = cartData?.data?.configurationIds;
 
-    if (!productIds || !Array.isArray(productIds)) {
-      productIds = [];
-    }
+      const request = new Request(`${process.env.API_HOST}/api/v1/carts/${currentUuid}`, {
+          method: 'GET',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+      });
 
-    if (!configurationIds || !Array.isArray(configurationIds)) {
-      configurationIds = [];
-    }
+      fetch(request)
+          .then(response => {
+              if (response.status < 200 || response.status >= 300) {
+                  return;
+              }
 
-    configurationIds.map(id => {
-      return {
-        _id: id,
-      }
-    })
+              response.json().then((resp) => {
+                  // @ts-ignore
+                  resp.products.forEach(item => {
+                      if(item._id) {
+                          productIds.push(item._id);
+                      }
+                  });
+                  // @ts-ignore
+                  resp.configurations.forEach(item => {
+                      if(item._id) {
+                          configurationIds.push(item._id);
+                      }
+                  });
 
-    productIds.map(id => {
-      return {
-        _id: id,
-      }
-    })
+                  if (!productIds || !Array.isArray(productIds)) {
+                      productIds = [];
+                  }
 
-    dispatch(putCart({
-      externalId: currentUuid,
-      products: Array.of(...productIds, item),
-      configurations: Array.of(...configurationIds),
-    }));
+                  if (!configurationIds || !Array.isArray(configurationIds)) {
+                      configurationIds = [];
+                  }
 
-    notification.open({
-      message: 'Product added to cart',
-    });
+                  configurationIds = configurationIds.map(id => {
+                      return {
+                          _id: id,
+                      }
+                  })
+
+                  productIds = productIds.map(id => {
+                      return {
+                          _id: id,
+                      }
+                  })
+
+                  dispatch(putCart({
+                      externalId: currentUuid,
+                      products: Array.of(...productIds, item),
+                      configurations: Array.of(...configurationIds),
+                  }));
+
+                  notification.open({
+                      message: 'Product added to cart',
+                  });
+              })
+          })
+          .catch(() => {});
   };
 
   if (status === 'loading') {
