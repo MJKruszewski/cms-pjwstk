@@ -13,15 +13,12 @@ const styles = {
     width: '30%',
 };
 
-interface OnChangeHandler {
-    (e): void;
-}
-
 interface MyInputProps {
-    onSubmit: OnChangeHandler;
+    shippingMethod: any;
+    setShippingMethod: any;
 }
 
-export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
+export const ShippingMethods: FC<MyInputProps> = ({shippingMethod, setShippingMethod}: MyInputProps) => {
 
     const {
         data,
@@ -29,8 +26,6 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
         error
     } = useSelector<RootState, GenericState<ShippingMethod[]>>(state => state.shippingMethods);
     const dispatch = useAppDispatch();
-    const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(null)
-    const [isDisabled, setIsDisabled] = useState<boolean>(false)
 
     useEffect(() => {
         dispatch(request());
@@ -52,14 +47,6 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
         setShippingMethod(method)
     };
 
-    const onFinish = (): void => {
-        setIsDisabled(true);
-        if (shippingMethod !== undefined) {
-            onSubmit(shippingMethod);
-            return
-        }
-    };
-
     return (
         <Card title={'Shipping method'}
               style={styles}>
@@ -67,8 +54,7 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                 <Select
                     style={{width: '100%'}}
                     defaultValue={'DHL'}
-                    onChange={onChange}
-                    disabled={isDisabled}>
+                    onChange={onChange}>
                     {getOptions(data)}
                 </Select>
                 {
@@ -80,12 +66,6 @@ export const ShippingMethods: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                             <h1 style={{
                                 marginTop: '1em',
                             }}>{"Shipping price:"} {shippingMethod.price} {"PLN"}</h1>
-                            <Button onClick={onFinish}
-                                    disabled={isDisabled}
-                                    style={{marginTop: '1em'}}
-                                    type="primary">
-                                Submit
-                            </Button>
                         </Fragment>
                     )
                 }

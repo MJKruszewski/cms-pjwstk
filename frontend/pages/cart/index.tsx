@@ -23,6 +23,7 @@ const Cart: FC = () => {
     const { data, status, error } = useSelector<RootState, GenericState<CartDto>>(state => state.cart);
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const [userForm] =  Form.useForm();
 
     const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({});
     const [products, setProducts] = useState<Product[]>([]);
@@ -55,15 +56,13 @@ const Cart: FC = () => {
 
     const onUserFormSubmit = (user: User): void => {
         setUserData(user);
-    };
-
-    const onShippingMethodsSubmit = (shippingMethod: ShippingMethod): void => {
-        setShippingMethod(shippingMethod);
+        console.log(user);
     };
 
     const onFinalizationSubmit = (): void => {
+        userForm.submit();
 
-        if (products.length > 0 && shippingMethod && userData) {
+        if (products.length > 0  && userData) {
             dispatch(postPayment({
                 user: userData,
                 shippingMethod: shippingMethod,
@@ -163,14 +162,14 @@ const Cart: FC = () => {
             />
 
             <div style={{ display: 'flex' }}>
-                <UserForm onSubmit={onUserFormSubmit} />
-                <ShippingMethods onSubmit={onShippingMethodsSubmit} />
+                <UserForm userForm={userForm} onSubmit={onUserFormSubmit} />
+                <ShippingMethods shippingMethod={shippingMethod} setShippingMethod={setShippingMethod} />
             </div>
 
             <Row align={'middle'} justify={'center'}>
                 <Col span={6}>
                     <Button onClick={onFinalizationSubmit}
-                            style={{marginBottom: '1em'}}
+                            style={{marginBottom: '1em', width: '300px', height: '40px'}}
                             type="primary">
                         Finalize without payment
                     </Button>

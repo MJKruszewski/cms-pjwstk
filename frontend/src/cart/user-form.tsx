@@ -8,26 +8,26 @@ const styles = {
 };
 
 interface OnChangeHandler {
-    (e): void;
+    (e): void
 }
 
 interface MyInputProps {
-    onSubmit: OnChangeHandler;
+    onSubmit: OnChangeHandler,
+    userForm: any
 }
 
-export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
+export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) => {
 
-    const [isDisabled, setIsDisabled] = useState<boolean>(false)
+    const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-    const [form] = Form.useForm();
     const onFinish = (): void => {
-        onSubmit(form.getFieldsValue());
+        onSubmit(userForm.getFieldsValue());
         setIsDisabled(true);
     };
     return (
         <Card title={'Shipping address'}
               style={styles}>
-            <Form form={form}
+            <Form form={userForm}
                   layout="vertical"
                   onFinish={onFinish}>
                 <Row gutter={12}>
@@ -123,13 +123,6 @@ export const UserForm: FC<MyInputProps> = ({onSubmit}: MyInputProps) => {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Form.Item>
-                    <Button type="primary"
-                            disabled={isDisabled}
-                            htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
             </Form>
         </Card>
     );
