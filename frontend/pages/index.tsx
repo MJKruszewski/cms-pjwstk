@@ -32,6 +32,7 @@ import {v4 as uuidv4} from 'uuid';
 import {useCookies} from 'react-cookie';
 import {CartDto} from '@frontendDto/cart.dto';
 import {putCart} from '@frontendSrc/cart/slice';
+import { renderFeatures } from './configurations/create';
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -338,18 +339,11 @@ const Home: FC = () => {
     );
   }
 
-  const renderFeatures = (features: Product['features']) => {
+  const renderDrawerFeatures = (features: Product['features']) => {
     if (!features) {
       return <Paragraph type='secondary'>none</Paragraph>;
     }
-    return features.map((feature, index) => (
-            <Tag color={randomColor({ seed: feature.value, luminosity: 'dark' })} key={`${feature.code}-${index}`}
-                 style={{ marginRight: '8px' }}>
-                <Text strong>
-                    {feature.value}
-                </Text>
-            </Tag>
-    ));
+    return renderFeatures(features)
   };
 
   const ProducerTag: FC<{ item: Product }> = ({ item }) => {
@@ -646,11 +640,11 @@ const Home: FC = () => {
                             <Paragraph>{drawerItem.description}</Paragraph>
                             <Title level={4}>Features</Title>
                             <div style={{ display: 'flex', flexDirection: 'row', margin: '6px 12px 12px' }}>
-                                {renderFeatures(drawerItem.features)}
+                                {renderDrawerFeatures(drawerItem.features)}
                             </div>
                             <Title level={4}>Requirements</Title>
                             <div style={{ display: 'flex', flexDirection: 'row', margin: '6px 12px 12px' }}>
-                                {renderFeatures(drawerItem.requirements)}
+                                {renderDrawerFeatures(drawerItem.requirements)}
                             </div>
                             <Button type='primary' size='large' style={{ width: '100%', marginTop: 'auto' }}
                                     onClick={() => handleItemCartClicked(drawerItem)}>Add to cart</Button>

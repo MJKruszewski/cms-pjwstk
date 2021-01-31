@@ -28,6 +28,25 @@ const initialSplitedArray: SplitedArrayType = {
   [typeof ProductTypeEnum.CASE]: [] as Product[]
 };
 
+export const getUniqueFeatures = (features: Product['features']) => features.filter((thing, index) => {
+  const _thing = JSON.stringify(thing);
+  return index === features.findIndex(obj => {
+    return JSON.stringify(obj) === _thing;
+  });
+});
+
+export const renderFeatures = (features: Product['features']) => {
+  const uniqueArray = getUniqueFeatures(features)
+
+  return uniqueArray.map((feature, index) => (
+    <Tag color={randomColor({ seed: feature.value, luminosity: 'dark' })} key={`${feature.code}-${index}`} style={{ marginRight: '8px', marginBottom: '8px' }}>
+      <Text strong>
+        {feature.value}
+      </Text>
+    </Tag>
+  ))
+};
+
 const Products: FC = () => {
   const { data, status, error } = useSelector<RootState, GenericState<Product[]>>(state => state.products);
   const dispatch = useAppDispatch();
@@ -39,6 +58,7 @@ const Products: FC = () => {
   const [currentUuid, setCurrentUuid] = useState<string>('');
   const [buttonLock, setButtonLock] = useState<boolean>(true);
   const [cookie, setCookie] = useCookies(['cartId']);
+  const [currentlySelectedKey, setCurrentlySelectedKey] = useState<number>()
 
   useEffect(() => {
     dispatch(request());
@@ -62,8 +82,32 @@ const Products: FC = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(selectedProducts);
-  }, [selectedProducts]);
+    const step = steps[currentStep]
+    let sumOfElementsBefore = 0;
+    for (let index = 0; index < currentStep; index++) {
+      sumOfElementsBefore += steps[index].content.length;
+    }
+    const selectedProduct = step.content[currentlySelectedKey - sumOfElementsBefore] as Product
+
+    if (!selectedProduct) {
+      const defaultProduct = steps[currentStep].content[0] as Product;
+      defaultProduct && setSelectedProducts({
+        ...selectedProducts,
+        [defaultProduct.type]: undefined
+      });
+      return;
+    }
+    const newSelectedProducts = {
+      ...selectedProducts,
+      [selectedProduct.type]: selectedProduct
+    }
+
+    setSelectedProducts(newSelectedProducts);
+  }, [currentlySelectedKey])
+
+  // useEffect(() => {
+  //   console.log('!!! selectedProducts', selectedProducts)
+  // }, [selectedProducts])
 
   const splitProductArray = (dataToSplit: Product[]) => {
     const splited: SplitedArrayType = {} as SplitedArrayType;
@@ -74,14 +118,6 @@ const Products: FC = () => {
     setSplitedArrayByType(splited);
   };
 
-  const next = () => {
-    setButtonLock(true);
-    return setCurrentStep(currentStep + 1);
-  };
-  const prev = () => {
-    setButtonLock(true);
-    return setCurrentStep(currentStep - 1);
-  };
   const submit = () => {
     setButtonLock(true);
     const components = Object.keys(selectedProducts).map(key => selectedProducts[key]);
@@ -102,64 +138,64 @@ const Products: FC = () => {
   const steps = !splitedArrayByType
     ? []
     : Object.keys(splitedArrayByType)
-      .map((key: string, index: number) => ({
+      .map((key: string) => ({
         title: key,
         content: splitedArrayByType[key],
-        status: index === 0 ? 'process' : 'wait'
+        filters: getUniqueFeatures(splitedArrayByType[key].map(product => product.features).flat())
       }));
 
-  const renderFeatures = (features: Product['features']) => {
-    return features.map((feature, index) => (
-      <Tag color={randomColor({ seed: feature.value, luminosity: 'dark' })} key={`${feature.code}-${index}`} style={{ marginRight: '8px' }}>
-        <Text strong>
-          {feature.value}
-        </Text>
-      </Tag>
-    ));
-  };
-
+  const getFilters = () => steps[currentStep].filters.map(filter => ({ text: filter.value, value: JSON.stringify(filter) }))
+  // const handleOnFilter = (value, record) => console.log('@@@ onFilter', value, record)
+  const handleOnFilter = (value, record) => record.features.findIndex(feature => JSON.stringify(feature) === value) >= 0
+  
   const columns = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + ' PLN' },
-    { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures }
+    { title: '', dataIndex: 'images', key: 'image', render: images => <img src={`/${images[0].src}`} height='120px' /> },
+    { title: 'Name', dataIndex: 'name', key: 'name', sorter: (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 },
+    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + ' PLN', sorter: (a, b) => Number(a.price.base) - Number(b.price.base) },
+    { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures, filters: getFilters(), onFilter: handleOnFilter, }
   ];
 
   const rowSelection = {
     onChange: (_selectedRowKeys, selectedRows) => {
-      setButtonLock(false);
-
       setSelectedProducts({
         ...selectedProducts,
         [selectedRows[0].type]: selectedRows[0]
       });
     },
-    getCheckboxProps: record => ({
-      name: record.name
-    }),
-    type: 'radio' as const
+    type: 'radio' as const,
+    hideSelectAll: true,
+    preserveSelectedRowKeys: true,
+    selectedRowKeys: [currentlySelectedKey]
   };
 
-  const stepActions = (
-    <div style={{
-      margin: '12px'
-    }}>
-      {currentStep < steps.length - 1 && (
-        <Button type="primary" onClick={() => next()} style={{ float: 'right' }} disabled={buttonLock}>
-          Next
-        </Button>
-      )}
-      {currentStep === steps.length - 1 && (
-        <Button type="primary" onClick={submit} style={{ float: 'right' }} disabled={buttonLock}>
-          Add to cart
-        </Button>
-      )}
-      {currentStep > 0 && (
-        <Button style={{ margin: '0 8px', float: 'left' }} onClick={() => prev()}>
-          Previous
-        </Button>
-      )}
-    </div>
-  );
+  const getStepStatus = (index: number) => {
+    const step = steps[index]
+    const hasProperty = selectedProducts.hasOwnProperty(step.title);
+    const hasSelestedItem = !!selectedProducts[step.title]
+
+    if (currentStep === index) return 'process'
+
+    return hasSelestedItem
+      ? 'finish'
+      : hasProperty
+        ? 'error'
+        : 'wait'
+  }
+
+  const getStepDesc = (index: number) => {
+    const step = steps[index]
+    const hasProperty = selectedProducts.hasOwnProperty(step.title);
+    const hasSelectedItem = !!selectedProducts[step.title]
+    const selectedItem = selectedProducts[step.title] as Product
+
+    if (currentStep === index) return 'choosing... ' + (selectedItem?.name || '')
+
+    return !hasProperty
+      ? 'waiting...'
+      : !hasSelectedItem
+        ? 'empty slot'
+        : selectedItem.name
+  }
 
   if (status === 'loading') {
     return <Spin />;
@@ -198,40 +234,66 @@ const Products: FC = () => {
 
       <div style={{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'row-reverse',
+        justifyContent: 'center',
+        height: '85vh'
       }}>
-        <Steps
-          current={currentStep}
-          style={{ marginBottom: '24px' }}
-          direction='horizontal'
-          // @ts-ignore
-          status={steps[currentStep].status}
-        >
-          {steps.map(item => (
-              // @ts-ignore
-              <Step key={item.title} title={item.title} description={item?.desc} />
-          ))}
-        </Steps>
-        <Table
-          pagination={false}
-          columns={columns}
-          expandable={{
-            expandedRowRender: record => <div style={{ display: 'inline' }}>
-              <div style={{ display: 'inline' }}>
-                {record.images.map(img => <img src={window.location.origin + '/' + img.src} width={'300px'} />)}
-              </div>
-
-              <br />
-              <p style={{ margin: 0 }}>{record.description}</p>
-            </div>
-          }}
-          dataSource={steps[currentStep].content}
-          loading={status === 'loading'}
-          scroll={{ y: 650 }}
-          rowSelection={rowSelection}
-        />
+        <div style={{
+          margin: '24px',
+          maxWidth: '25vw',
+          height: '83vh',
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'column'
+        }}>
+          <Steps
+            current={currentStep}
+            direction='vertical'
+            onChange={(current) => setCurrentStep(current)}
+            style={{
+              height: '80vh'
+            }}
+          >
+            {steps.map((item, index) => (
+              <Step key={item.title} title={item.title.toUpperCase()} description={getStepDesc(index)} status={getStepStatus(index)} />
+            ))}
+          </Steps>
+          <Button
+            type='primary'
+            size='large'
+            disabled={Object.keys(selectedProducts).length !== steps.length}
+            style={{
+              marginTop: 'auto'
+            }}
+            onClick={submit}
+          >
+            Add configuration to cart
+          </Button>
+        </div>
+        <div style={{
+          maxWidth: '75vw'
+        }}>
+          <Table
+            pagination={false}
+            columns={columns}
+            expandable={{
+              expandedRowRender: record => (
+                <div style={{ display: 'inline' }}>
+                  <p style={{ margin: 0 }}>{record.description}</p>
+                </div>
+              )
+            }}
+            onRow={(r) => ({
+              onClick: () => currentlySelectedKey !== r.key ? setCurrentlySelectedKey(r.key) : setCurrentlySelectedKey(-1),
+            })}
+            dataSource={steps[currentStep].content}
+            loading={status === 'loading'}
+            scroll={{ y: 1050 }}
+            rowSelection={rowSelection}
+          />
+        </div>
       </div>
-      {stepActions}
+      {/* {stepActions} */}
     </div>
   );
 };

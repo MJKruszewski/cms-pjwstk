@@ -15,6 +15,7 @@ import { UserForm } from '@frontendSrc/cart/user-form';
 import { User } from '@frontendDto/user.dto';
 import { ShippingMethod } from '@frontendDto/shipping-method.dto';
 import { DeleteOutlined } from '@ant-design/icons';
+import { renderFeatures } from 'pages/configurations/create';
 
 const { Text } = Typography;
 
@@ -107,15 +108,6 @@ const Cart: FC = () => {
     createColorPalleteForTags(products);
   }, [data]);
 
-  const renderFeatures = (features: Product['features']) => {
-    return features.map((feature, index) => (
-            <Tag color={tagsPallete[feature.value] || randomColor()} key={`${feature.code}-${index}`}>
-                <Text strong>
-                    {feature.value}
-                </Text>
-            </Tag>
-    ));
-  };
   const removeProductFromCart = (product: Product) => {
     let productIds = [];
     let configurationIds = [];
