@@ -1,36 +1,42 @@
-import React, { CSSProperties, FC, Fragment, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { GenericState } from 'store/genericDataSlice';
-import { RootState, useAppDispatch } from 'store/rootStore';
-import { request } from 'src/news/slice';
-import { request as productsRequest } from 'src/products/slice';
-import { News } from '@frontendDto/news.dto';
+import React, {CSSProperties, FC, Fragment, useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
+import {GenericState} from 'store/genericDataSlice';
+import {RootState, useAppDispatch} from 'store/rootStore';
+import {request} from 'src/news/slice';
+import {request as productsRequest} from 'src/products/slice';
+import {News} from '@frontendDto/news.dto';
 import {
-  Button,
-  Card,
-  Carousel,
-  Drawer,
-  Image,
-  List,
-  notification,
-  PageHeader,
-  Result,
-  Spin,
-  Tabs,
-  Tag,
-  Typography
+    Button,
+    Card,
+    Carousel,
+    Col,
+    Collapse,
+    Drawer,
+    Image,
+    List,
+    notification,
+    PageHeader,
+    Result,
+    Row,
+    Select,
+    Spin,
+    Tabs,
+    Tag,
+    Typography
 } from 'antd';
-import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
+import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
 import {HeartFilled, HeartOutlined, ProfileOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import randomColor from 'randomcolor';
-import { useRouter } from 'next/dist/client/router';
-import { v4 as uuidv4 } from 'uuid';
-import { useCookies } from 'react-cookie';
-import { CartDto } from '@frontendDto/cart.dto';
-import { putCart } from '@frontendSrc/cart/slice';
+import {useRouter} from 'next/dist/client/router';
+import {v4 as uuidv4} from 'uuid';
+import {useCookies} from 'react-cookie';
+import {CartDto} from '@frontendDto/cart.dto';
+import {putCart} from '@frontendSrc/cart/slice';
 
+const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const { Paragraph, Text, Title } = Typography;
+const { Option } = Select;
 
 type SplitedArrayType = {
     [key in keyof ProductTypeEnum]: Product[];
@@ -61,6 +67,7 @@ const Home: FC = () => {
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [drawerItem, setDrawerItem] = useState<Product>(null);
   const [drawerNews, setDrawerNews] = useState<News>(null);
+  const [filters, setFilters] = useState<any>({});
 
   useEffect(() => {
     dispatch(request());
@@ -83,6 +90,14 @@ const Home: FC = () => {
     }
     splitProductArray(productData.data);
   }, [productData]);
+
+  const originalSteps = !splitedArrayByType
+    ? []
+    : Object.keys(splitedArrayByType)
+      .map((key: string) => ({
+        title: key,
+        content: splitedArrayByType[key] as Product[]
+      }));
 
   const steps = !splitedArrayByType
     ? []
@@ -135,61 +150,95 @@ const Home: FC = () => {
   };
 
   const handleWishlist = (item: Product) => {
-      let tmp = [];
-      const now: Date = new Date();
-      now.setDate(now.getDate() + 90);
-      const expires = now;
+    let tmp = [];
+    const now: Date = new Date();
+    now.setDate(now.getDate() + 90);
+    const expires = now;
 
-      if (cookie.wishListed) {
-          tmp = cookie.wishListed;
-      }
+    if (cookie.wishListed) {
+      tmp = cookie.wishListed;
+    }
 
-      // @ts-ignore
-      tmp.push(item._id)
+    // @ts-ignore
+    tmp.push(item._id);
 
-      setCookie('wishListed', tmp, {expires: expires})
+    setCookie('wishListed', tmp, { expires: expires });
 
-      notification.open({
-          message: 'Product added to wishlist'
-      });
+    notification.open({
+      message: 'Product added to wishlist'
+    });
+  };
+
+  const handleFilters = (item, key, stepIndex) => {
+      //idk how to handle this react is broken -> PW
+      // const tmpFilters = {};
+      // let tmp = originalSteps[stepIndex]?.content || []
+      //
+      // tmpFilters[key] = item;
+      // setFilters({
+      //     ...filters,
+      //     ...tmpFilters
+      // })
+      //
+      // Object.keys(filters).forEach(key => {
+      //     tmp.forEach((prod, prodKey) => {
+      //         let present = false;
+      //
+      //         prod.features.forEach(feat => {
+      //             if (filters[key].includes(feat.value)) {
+      //                 present = true;
+      //             }
+      //         })
+      //
+      //         if (present) {
+      //             return;
+      //         }
+      //
+      //         delete tmp[prodKey];
+      //     })
+      // })
+      //
+      // tmp = tmp.filter(i => i !== null && i !== undefined);
+      // console.log('tmp', tmp)
+      // steps[stepIndex].content = tmp;
   };
 
   const removeWishlist = (item: Product) => {
-      let tmp = [];
-      const now: Date = new Date();
-      now.setDate(now.getDate() + 90);
-      const expires = now;
+    let tmp = [];
+    const now: Date = new Date();
+    now.setDate(now.getDate() + 90);
+    const expires = now;
 
-      if (cookie.wishListed) {
-          tmp = cookie.wishListed;
-      }
+    if (cookie.wishListed) {
+      tmp = cookie.wishListed;
+    }
 
-      // @ts-ignore
-      tmp = tmp.filter((i) => item._id !== i)
+    // @ts-ignore
+    tmp = tmp.filter((i) => item._id !== i);
 
-      setCookie('wishListed', tmp, {expires: expires})
+    setCookie('wishListed', tmp, { expires: expires });
 
-      notification.open({
-          message: 'Product removed from wishlist'
-      });
+    notification.open({
+      message: 'Product removed from wishlist'
+    });
   };
   const wishlistItemPresent = (item: Product) => {
-      let tmp = [];
+    let tmp = [];
 
-      if (cookie.wishListed) {
-          tmp = cookie.wishListed;
+    if (cookie.wishListed) {
+      tmp = cookie.wishListed;
+    }
+
+    for (let i1 = 0; i1 < tmp.length; i1++) {
+      const i = tmp[i1];
+
+      // @ts-ignore
+      if (item._id === i) {
+        return true;
       }
+    }
 
-      for (let i1 = 0; i1 < tmp.length; i1++){
-          let i = tmp[i1];
-
-          // @ts-ignore
-          if (item._id === i) {
-              return true;
-          }
-      }
-
-      return false;
+    return false;
   };
 
   const handleItemCartClicked = (item: Product) => {
@@ -210,9 +259,9 @@ const Home: FC = () => {
             configurations: Array.of(...configurationIds)
           }));
 
-            notification.open({
-                message: 'Product added to cart'
-            });
+          notification.open({
+            message: 'Product added to cart'
+          });
 
           return;
         }
@@ -358,13 +407,14 @@ const Home: FC = () => {
     const contentToDisplay = promo && promo.length > 0 ? promo : (steps[stepIndex]?.content.slice(0, 9) || []);
 
     return (
+        <div>
             <div style={{
-              height: '20vh',
-              display: 'flex',
-              justifyContent: 'center',
-              flexDirection: 'column',
-              border: '2px dashed gold',
-              borderRadius: '6px'
+                height: '20vh',
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                border: '2px dashed gold',
+                borderRadius: '6px'
             }}>
                 <Text strong ellipsis
                       style={{ alignSelf: 'center', color: 'gold', marginBlock: '6px' }}>{'PROMOTED PRODUCTS'}</Text>
@@ -385,6 +435,7 @@ const Home: FC = () => {
                     }
                 </style>
             </div>
+        </div>
     );
   };
 
@@ -434,7 +485,7 @@ const Home: FC = () => {
   );
 
   const StepContent: FC<{ stepIndex: number, promo?: object[] | undefined | null }> = ({ stepIndex, promo }) => (
-        <List
+      <List
             grid={{
               gutter: 16,
               xs: 1,
@@ -444,7 +495,6 @@ const Home: FC = () => {
               xl: 5,
               xxl: 6
             }}
-            header={<ListHeader stepIndex={stepIndex} promo={promo}/>}
             dataSource={steps[stepIndex]?.content || []}
             renderItem={(item: Product) => (
                 <List.Item>
@@ -453,6 +503,57 @@ const Home: FC = () => {
             )}
         />
   );
+
+  const FilterList: FC<{ stepIndex: number }> = ({ stepIndex }) => {
+      const items = steps[stepIndex]?.content || [];
+      const tmp: any = {};
+      let duplicates = [];
+
+      items.forEach(item => {
+          item.features.forEach(feature => {
+              if(tmp[feature.code] === undefined || tmp[feature.code] === null) {
+                  tmp[feature.code] = []
+              }
+
+              if (duplicates.includes(feature.value)) {
+                return;
+              }
+
+              tmp[feature.code].push(<Option key={feature.code + uuidv4() + feature.value} value={feature.value}>{feature.value}</Option>);
+              tmp[feature.code] = tmp[feature.code].filter((value, index, self) => self.indexOf(value) === index);
+
+              duplicates.push(feature.value);
+          })
+      })
+
+      return (
+          <Collapse ghost>
+              <Panel style={{fontWeight: 'bold'}} header="Filters" key={1}>
+                  <Row gutter={16} align={'middle'} justify={'start'}>
+                      {
+                          Object.keys(tmp).map(key => (
+                              <Col span={4}>
+                                  <Title level={5}>{key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}: </Title>
+                                  <Select
+                                      mode="multiple"
+                                      allowClear
+                                      style={{width: '100%'}}
+                                      placeholder="Please select"
+                                      defaultValue={[]}
+                                      onChange={(item) => handleFilters(item, key, stepIndex)}
+                                  >
+                                      {
+                                          tmp[key]
+                                      }
+                                  </Select>
+                              </Col>
+                          ))
+                      }
+                  </Row>
+              </Panel>
+          </Collapse>
+      );
+  };
 
   return (
         <div>
@@ -506,6 +607,8 @@ const Home: FC = () => {
                         // stepsRender
                         steps.map((item, index) => (
                             <TabPane tab={item.title.charAt(0).toUpperCase() + item.title.slice(1)} key={item.title}>
+                                <ListHeader stepIndex={index}/>
+                                <FilterList stepIndex={index} />
                                 <StepContent stepIndex={index} />
                             </TabPane>
                         ))

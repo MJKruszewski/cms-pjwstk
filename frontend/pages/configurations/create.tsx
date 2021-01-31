@@ -1,14 +1,14 @@
-import {Product, ProductTypeEnum} from '@frontendDto/product.dto';
-import {Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
-import React, {FC, useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {postConfiguration, request} from 'src/products/slice';
-import {GenericState} from 'store/genericDataSlice';
-import {RootState, useAppDispatch} from 'store/rootStore';
-import {v4 as uuidv4} from 'uuid';
+import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
+import { Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography } from 'antd';
+import React, { FC, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { postConfiguration, request } from 'src/products/slice';
+import { GenericState } from 'store/genericDataSlice';
+import { RootState, useAppDispatch } from 'store/rootStore';
+import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import {useRouter} from 'next/dist/client/router';
-import {useCookies} from 'react-cookie';
+import { useRouter } from 'next/dist/client/router';
+import { useCookies } from 'react-cookie';
 
 const { Step } = Steps;
 const { Paragraph, Text } = Typography;

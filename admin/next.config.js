@@ -1,5 +1,5 @@
 module.exports = {
-    env: {
-        'API_HOST': 'http://localhost:6969',
-    },
-}
+  env: {
+    API_HOST: 'http://localhost:6969'
+  }
+};

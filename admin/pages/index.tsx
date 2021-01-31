@@ -1,13 +1,13 @@
-import * as React from "react";
-import dynamic from 'next/dynamic'
-import {FC} from "react";
+import * as React from 'react';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
 
 const DynamicComponentWithNoSSR = dynamic(() => import('../components/admin-index'), {
-    ssr: false
+  ssr: false
 });
 
 const App: FC = () => {
-    return (<DynamicComponentWithNoSSR />)
+  return (<DynamicComponentWithNoSSR />);
 };
 
 export default App;

@@ -1,20 +1,20 @@
-import {getCart, postPayment, putCart} from '@frontendSrc/cart/slice';
-import {GenericState} from '@frontendStore/genericDataSlice';
-import {RootState, useAppDispatch} from '@frontendStore/rootStore';
-import React, {FC, useEffect, useState} from 'react';
+import { getCart, postPayment, putCart } from '@frontendSrc/cart/slice';
+import { GenericState } from '@frontendStore/genericDataSlice';
+import { RootState, useAppDispatch } from '@frontendStore/rootStore';
+import React, { FC, useEffect, useState } from 'react';
 import randomColor from 'randomcolor';
-import {useSelector} from 'react-redux';
-import {Alert, Button, Col, Form, notification, PageHeader, Row, Table, Tag, Typography} from 'antd';
-import {Product} from '@frontendDto/product.dto';
-import {useRouter} from 'next/router';
-import {CartDto} from '@frontendDto/cart.dto';
-import {useCookies} from 'react-cookie';
-import {v4 as uuidv4} from 'uuid';
-import {ShippingMethods} from '@frontendSrc/cart/shipping-methods';
-import {UserForm} from '@frontendSrc/cart/user-form';
-import {User} from '@frontendDto/user.dto';
-import {ShippingMethod} from '@frontendDto/shipping-method.dto';
-import {DeleteOutlined} from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { Alert, Button, Col, Form, notification, PageHeader, Row, Table, Tag, Typography } from 'antd';
+import { Product } from '@frontendDto/product.dto';
+import { useRouter } from 'next/router';
+import { CartDto } from '@frontendDto/cart.dto';
+import { useCookies } from 'react-cookie';
+import { v4 as uuidv4 } from 'uuid';
+import { ShippingMethods } from '@frontendSrc/cart/shipping-methods';
+import { UserForm } from '@frontendSrc/cart/user-form';
+import { User } from '@frontendDto/user.dto';
+import { ShippingMethod } from '@frontendDto/shipping-method.dto';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -62,11 +62,11 @@ const Cart: FC = () => {
       now.setDate(now.getDate() + 7);
       const expires = now;
       setCookie('cartId', uuidv4(), { expires });
-        dispatch(putCart({
-            externalId: cookie.cartId,
-            products: [],
-            configurations: []
-        }));
+      dispatch(putCart({
+        externalId: cookie.cartId,
+        products: [],
+        configurations: []
+      }));
 
       router.push('/success-page');
     }
@@ -234,11 +234,6 @@ const Cart: FC = () => {
                 <ShippingMethods shippingMethod={shippingMethod} setShippingMethod={setShippingMethod} />
             </div>
 
-            <Row align={'middle'} justify={'center'}>
-                <Col span={6}>
-
-                </Col>
-            </Row>
             <Row align={'middle'} justify={'center'}>
                 <Col span={6} style={{ textAlign: 'center' }}>
                     <Button onClick={onFinalizationSubmit}
