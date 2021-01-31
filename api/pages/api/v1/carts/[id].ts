@@ -58,7 +58,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse, cartsRepository: C
     return;
   }
 
-  for (const tmpId of cart.productIds) {
+  for (let tmpId of cart.productIds) {
     const items = await productsRepository.findOne(Types.ObjectId(tmpId));
 
     if (items === null) {
@@ -67,9 +67,8 @@ const get = async (req: NextApiRequest, res: NextApiResponse, cartsRepository: C
 
     products.push(items);
   }
-  for (const tmpId of cart.configurationIds) {
+  for (let tmpId of cart.configurationIds) {
     const configuration = await configurationRepository.findOne(Types.ObjectId(tmpId));
-
     if (configuration === null) {
       continue;
     }

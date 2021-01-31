@@ -1,5 +1,5 @@
 import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
-import { Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography } from 'antd';
+import {Button, notification, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { postConfiguration, request } from 'src/products/slice';
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { useRouter } from 'next/dist/client/router';
 import { useCookies } from 'react-cookie';
+import {putCart} from "@frontendSrc/cart/slice";
 
 const { Step } = Steps;
 const { Paragraph, Text } = Typography;
@@ -28,12 +29,19 @@ const initialSplitedArray: SplitedArrayType = {
   [typeof ProductTypeEnum.CASE]: [] as Product[]
 };
 
-export const getUniqueFeatures = (features: Product['features']) => features.filter((thing, index) => {
-  const _thing = JSON.stringify(thing);
-  return index === features.findIndex(obj => {
-    return JSON.stringify(obj) === _thing;
+export const getUniqueFeatures = (features: any) => {
+  if (features === undefined) {
+    return [];
+  }
+
+  return features.filter((thing, index) => {
+    const _thing = JSON.stringify(thing);
+
+    return index === features.findIndex(obj => {
+      return JSON.stringify(obj) === _thing;
+    });
   });
-});
+};
 
 export const renderFeatures = (features: Product['features']) => {
   const uniqueArray = getUniqueFeatures(features)
@@ -121,19 +129,102 @@ const Products: FC = () => {
   const submit = () => {
     setButtonLock(true);
     const components = Object.keys(selectedProducts).map(key => selectedProducts[key]);
+    const externalId = uuidv4();
 
-    // todo obsluga dodawania wielu konfiguracji na stack
-    const response = dispatch(postConfiguration({
-      externalId: currentUuid,
-      components
-    }));
-
-    router.push({
-      pathname: '/cart',
-      // todo array
-      query: { configurationId: currentUuid }
-    });
+    fetch(`${process.env.API_HOST}/api/v1/configurations`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        externalId: externalId,
+        components: components
+      })
+    }).then(response => {
+      response.json().then(json => {
+        handleItemCartClicked(json._id);
+      }).catch(() => {})
+    }).catch(() => {})
   };
+
+  const handleItemCartClicked = (externalId) => {
+    let productIds = [];
+    let configurationIds = [];
+
+    const request = new Request(`${process.env.API_HOST}/api/v1/carts/${cookie.cartId}`, {
+      method: 'GET',
+      headers: new Headers({ 'Content-Type': 'application/json' })
+    });
+
+    fetch(request)
+        .then(response => {
+          if (response.status < 200 || response.status >= 300) {
+            dispatch(putCart({
+              externalId: cookie.cartId,
+              products: Array.of(...productIds),
+              configurations: Array.of(...configurationIds, {_id: externalId})
+            }));
+
+            notification.open({
+              message: 'Product added to cart'
+            });
+
+            return;
+          }
+
+          response.json().then((resp) => {
+            // @ts-ignore
+            resp.products.forEach(item => {
+              if (item._id) {
+                productIds.push(item._id);
+              }
+            });
+            // @ts-ignore
+            resp.configurations.forEach(item => {
+              if (item._id) {
+                configurationIds.push(item._id);
+              }
+            });
+
+            if (!productIds || !Array.isArray(productIds)) {
+              productIds = [];
+            }
+
+            if (!configurationIds || !Array.isArray(configurationIds)) {
+              configurationIds = [];
+            }
+
+            configurationIds = configurationIds.map(id => {
+              return {
+                _id: id
+              };
+            });
+
+            productIds = productIds.map(id => {
+              return {
+                _id: id
+              };
+            });
+
+            dispatch(putCart({
+              externalId: cookie.cartId,
+              products: Array.of(...productIds),
+              configurations: Array.of(...configurationIds, {_id: externalId})
+            }));
+
+            notification.open({
+              message: 'Product added to cart'
+            });
+
+            router.push({
+              pathname: '/cart'
+            });
+          });
+        })
+        .catch(() => {
+        });
+  };
+
 
   const steps = !splitedArrayByType
     ? []

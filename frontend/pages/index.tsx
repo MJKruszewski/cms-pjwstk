@@ -138,8 +138,6 @@ const Home: FC = () => {
   };
 
   const handleItemMoreClicked = (item: Product) => {
-    // TODO: implement right drawer with product details and similiar products at the bottom
-    // console.log('more', item)
     setDrawerItem(item);
     setDrawerVisible(true);
   };
@@ -321,7 +319,6 @@ const Home: FC = () => {
   }
 
   if (status === 'error') {
-    console.log(status, data);
     return (
             <Result
                 status="error"

@@ -16,6 +16,7 @@ import { User } from '@frontendDto/user.dto';
 import { ShippingMethod } from '@frontendDto/shipping-method.dto';
 import { DeleteOutlined } from '@ant-design/icons';
 import { renderFeatures } from 'pages/configurations/create';
+import {PcConfigurationDto} from "@frontendDto/configuration.dto";
 
 const { Text } = Typography;
 
@@ -27,6 +28,7 @@ const Cart: FC = () => {
 
   const [tagsPallete, setTagsPallete] = useState<Record<string, string>>({});
   const [products, setProducts] = useState<Product[]>([]);
+  const [configurations, setConfigurations] = useState<object[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0.00);
   const [userData, setUserData] = useState<User>(null);
   const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(null);
@@ -40,12 +42,11 @@ const Cart: FC = () => {
       setCookie('cartId', uuidv4(), { expires });
     }
 
-    dispatch(getCart(cookie.cartId));
-  }, []);
+    const p = dispatch(getCart(cookie.cartId));
+    }, []);
 
   const onUserFormSubmit = (user: User): void => {
     setUserData(user);
-    console.log(user);
   };
 
   const onFinalizationSubmit = (): void => {
@@ -90,25 +91,40 @@ const Cart: FC = () => {
     if (!data || !data.products || !data.configurations) {
       return;
     }
+    const confs = [];
     let localProducts = Array.of(...data.products);
+    let allTotal = 0;
 
-    data.configurations.forEach(config => {
-      localProducts = Array.of(...localProducts, ...data.components);
-    });
 
+    data.configurations.forEach((conf, key) => {
+      let total = 0;
+
+      conf.components.forEach(comp => {
+        total += parseFloat(comp.price.base);
+      })
+
+      allTotal += total;
+      confs.push({
+        ...conf,
+        name: 'Configuration ' + key,
+        price: {base: total},
+        features: [],
+        key: 'conf-' + key
+      })
+    })
+    setConfigurations(confs);
     setProducts(localProducts);
 
-    let total = 0;
     data.products.forEach((product) => {
-      total += parseFloat(product.price.base);
+      allTotal += parseFloat(product.price.base);
     });
 
-    setTotalAmount(total);
+    setTotalAmount(allTotal);
 
     createColorPalleteForTags(products);
   }, [data]);
 
-  const removeProductFromCart = (product: Product) => {
+  const removeProductFromCart = (product: Product|PcConfigurationDto) => {
     let productIds = [];
     let configurationIds = [];
 
@@ -169,6 +185,16 @@ const Cart: FC = () => {
           }
           productIds = productIds.filter((item) => item !== null && item !== undefined);
 
+          for (let key = 0; key < configurationIds.length; key++) {
+            const item = configurationIds[key];
+            // @ts-ignore
+            if (item._id === product?._id) {
+              delete configurationIds[key];
+              break;
+            }
+          }
+          configurationIds = configurationIds.filter((item) => item !== null && item !== undefined);
+
           dispatch(putCart({
             externalId: cookie.cartId,
             products: Array.of(...productIds),
@@ -184,13 +210,18 @@ const Cart: FC = () => {
       })
       .catch(() => {});
   };
-  const renderActions = (product: Product) => {
+  const renderActions = (product: any) => {
     return <DeleteOutlined style={{ color: 'red' }} onClick={() => removeProductFromCart(product)} />;
   };
   const columns = [
     { title: '', width: 35, key: 'actions', render: renderActions },
     { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + ' PLN' },
+    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price && price.base ? price.base : 0).toFixed(2) + ' PLN' },
+    { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures }
+  ];
+  const columns2 = [
+    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price && price.base ? price.base : 0).toFixed(2) + ' PLN' },
     { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures }
   ];
 
@@ -213,9 +244,24 @@ const Cart: FC = () => {
                 style={{ marginLeft: '5em', marginRight: '5em' }}
                 pagination={false}
                 columns={columns}
-                dataSource={products}
+                expandable={{
+                  expandedRowRender: record => {
+                    return <Table
+                        style={{ marginLeft: '1em' }}
+                        pagination={false}
+                        columns={columns2}
+                        // @ts-ignore
+                        dataSource={record.components}
+                        loading={status === 'loading'}
+                    />
+                  },
+                  // @ts-ignore
+                  rowExpandable: record => record.components !== undefined,
+                }}
+                // @ts-ignore
+                dataSource={Array.of(...products, ...configurations)}
                 loading={status === 'loading'}
-                scroll={{ y: 250 }}
+                scroll={{ y: 350 }}
                 title={() => <b>Cart</b>}
                 footer={() => <div style={{ display: 'inline' }}>Total price: <b>{totalAmount.toFixed(2) + ' PLN'}</b>
                 </div>}
