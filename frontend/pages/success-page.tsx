@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
-import { Result, Typography } from 'antd';
-
-const { Paragraph, Text } = Typography;
+import { Result } from 'antd';
 
 const SuccessPage: FC = () => {
   return (

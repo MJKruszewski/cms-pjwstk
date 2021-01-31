@@ -1,22 +1,20 @@
-import { PcConfigurationDto } from '@frontendDto/configuration.dto';
-import { getCart, postPayment, putCart } from '@frontendSrc/cart/slice';
-import { GenericState } from '@frontendStore/genericDataSlice';
-import { RootState, useAppDispatch } from '@frontendStore/rootStore';
-import React, { FC, useEffect, useState } from 'react';
-import { PayPalButton } from 'react-paypal-button-v2';
+import {getCart, postPayment, putCart} from '@frontendSrc/cart/slice';
+import {GenericState} from '@frontendStore/genericDataSlice';
+import {RootState, useAppDispatch} from '@frontendStore/rootStore';
+import React, {FC, useEffect, useState} from 'react';
 import randomColor from 'randomcolor';
-import { useSelector } from 'react-redux';
-import { Alert, Button, Card, Col, Form, Input, notification, PageHeader, Row, Table, Tag, Typography } from 'antd';
-import { Product } from '@frontendDto/product.dto';
-import { useRouter } from 'next/router';
-import { CartDto } from '@frontendDto/cart.dto';
-import { useCookies } from 'react-cookie';
-import { v4 as uuidv4 } from 'uuid';
-import { ShippingMethods } from '@frontendSrc/cart/shipping-methods';
-import { UserForm } from '@frontendSrc/cart/user-form';
-import { User } from '@frontendDto/user.dto';
-import { ShippingMethod } from '@frontendDto/shipping-method.dto';
-import { DeleteOutlined } from '@ant-design/icons';
+import {useSelector} from 'react-redux';
+import {Alert, Button, Col, Form, notification, PageHeader, Row, Table, Tag, Typography} from 'antd';
+import {Product} from '@frontendDto/product.dto';
+import {useRouter} from 'next/router';
+import {CartDto} from '@frontendDto/cart.dto';
+import {useCookies} from 'react-cookie';
+import {v4 as uuidv4} from 'uuid';
+import {ShippingMethods} from '@frontendSrc/cart/shipping-methods';
+import {UserForm} from '@frontendSrc/cart/user-form';
+import {User} from '@frontendDto/user.dto';
+import {ShippingMethod} from '@frontendDto/shipping-method.dto';
+import {DeleteOutlined} from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -44,17 +42,6 @@ const Cart: FC = () => {
     dispatch(getCart(cookie.cartId));
   }, []);
 
-  const onSuccess = (details, paymentData) => {
-    dispatch(postPayment({
-      user: userData,
-      shippingMethod: shippingMethod,
-      orderId: paymentData.orderID,
-      configurations: [data]
-    }));
-
-    router.push('/success-page');
-  };
-
   const onUserFormSubmit = (user: User): void => {
     setUserData(user);
     console.log(user);
@@ -70,6 +57,17 @@ const Cart: FC = () => {
         orderId: 'sb',
         configurations: [data]
       }));
+
+      const now: Date = new Date();
+      now.setDate(now.getDate() + 7);
+      const expires = now;
+      setCookie('cartId', uuidv4(), { expires });
+        dispatch(putCart({
+            externalId: cookie.cartId,
+            products: [],
+            configurations: []
+        }));
+
       router.push('/success-page');
     }
   };

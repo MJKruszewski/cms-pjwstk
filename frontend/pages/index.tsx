@@ -16,13 +16,12 @@ import {
   PageHeader,
   Result,
   Spin,
-  Steps,
   Tabs,
   Tag,
   Typography
 } from 'antd';
 import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
-import { HeartOutlined, ProfileOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import {HeartFilled, HeartOutlined, ProfileOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import randomColor from 'randomcolor';
 import { useRouter } from 'next/dist/client/router';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,9 +29,7 @@ import { useCookies } from 'react-cookie';
 import { CartDto } from '@frontendDto/cart.dto';
 import { putCart } from '@frontendSrc/cart/slice';
 
-const { Step } = Steps;
 const { TabPane } = Tabs;
-const { Meta } = Card;
 const { Paragraph, Text, Title } = Typography;
 
 type SplitedArrayType = {
@@ -60,7 +57,7 @@ const Home: FC = () => {
   const [stepsRender, setStepsRender] = useState<JSX.Element[]>();
   const router = useRouter();
   const [currentUuid, setCurrentUuid] = useState<string>('');
-  const [cookie, setCookie] = useCookies(['cartId']);
+  const [cookie, setCookie] = useCookies(['cartId', 'wishListed']);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [drawerItem, setDrawerItem] = useState<Product>(null);
   const [drawerNews, setDrawerNews] = useState<News>(null);
@@ -138,7 +135,61 @@ const Home: FC = () => {
   };
 
   const handleWishlist = (item: Product) => {
+      let tmp = [];
+      const now: Date = new Date();
+      now.setDate(now.getDate() + 90);
+      const expires = now;
 
+      if (cookie.wishListed) {
+          tmp = cookie.wishListed;
+      }
+
+      // @ts-ignore
+      tmp.push(item._id)
+
+      setCookie('wishListed', tmp, {expires: expires})
+
+      notification.open({
+          message: 'Product added to wishlist'
+      });
+  };
+
+  const removeWishlist = (item: Product) => {
+      let tmp = [];
+      const now: Date = new Date();
+      now.setDate(now.getDate() + 90);
+      const expires = now;
+
+      if (cookie.wishListed) {
+          tmp = cookie.wishListed;
+      }
+
+      // @ts-ignore
+      tmp = tmp.filter((i) => item._id !== i)
+
+      setCookie('wishListed', tmp, {expires: expires})
+
+      notification.open({
+          message: 'Product removed from wishlist'
+      });
+  };
+  const wishlistItemPresent = (item: Product) => {
+      let tmp = [];
+
+      if (cookie.wishListed) {
+          tmp = cookie.wishListed;
+      }
+
+      for (let i1 = 0; i1 < tmp.length; i1++){
+          let i = tmp[i1];
+
+          // @ts-ignore
+          if (item._id === i) {
+              return true;
+          }
+      }
+
+      return false;
   };
 
   const handleItemCartClicked = (item: Product) => {
@@ -158,6 +209,10 @@ const Home: FC = () => {
             products: Array.of(...productIds, item),
             configurations: Array.of(...configurationIds)
           }));
+
+            notification.open({
+                message: 'Product added to cart'
+            });
 
           return;
         }
@@ -365,7 +420,7 @@ const Home: FC = () => {
             actions={[
                 <ShoppingCartOutlined key="cart" onClick={() => handleItemCartClicked(item)}/>,
                 <ProfileOutlined key="ellipsis" onClick={() => handleItemMoreClicked(item)}/>,
-                <HeartOutlined key="ellipsis" onClick={() => handleWishlist(item)}/>
+                wishlistItemPresent(item) ? <HeartFilled key="ellipsis" onClick={() => removeWishlist(item)}/> : <HeartOutlined key="ellipsis" onClick={() => handleWishlist(item)}/>
             ]}
         >
             <div style={{
@@ -450,7 +505,7 @@ const Home: FC = () => {
                         // PW TO FIX
                         // stepsRender
                         steps.map((item, index) => (
-                            <TabPane tab={item.title} key={item.title}>
+                            <TabPane tab={item.title.charAt(0).toUpperCase() + item.title.slice(1)} key={item.title}>
                                 <StepContent stepIndex={index} />
                             </TabPane>
                         ))
