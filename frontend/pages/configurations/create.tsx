@@ -1,6 +1,6 @@
 import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
 import { Button, PageHeader, Result, Spin, Steps, Table, Tag, Typography } from 'antd';
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { postConfiguration, request } from 'src/products/slice';
 import { GenericState } from 'store/genericDataSlice';
@@ -25,7 +25,7 @@ const initialSplitedArray: SplitedArrayType = {
   [typeof ProductTypeEnum.GPU]: [] as Product[],
   [typeof ProductTypeEnum.POWER]: [] as Product[],
   [typeof ProductTypeEnum.STORAGE]: [] as Product[],
-  [typeof ProductTypeEnum.CASE]: [] as Product[],
+  [typeof ProductTypeEnum.CASE]: [] as Product[]
 };
 
 const Products: FC = () => {
@@ -38,21 +38,21 @@ const Products: FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<Record<ProductTypeEnum, Product>>({} as Record<ProductTypeEnum, Product>);
   const [currentUuid, setCurrentUuid] = useState<string>('');
   const [buttonLock, setButtonLock] = useState<boolean>(true);
-  const [cookie, setCookie] = useCookies(['cartId'])
+  const [cookie, setCookie] = useCookies(['cartId']);
 
   useEffect(() => {
     dispatch(request());
-    setCurrentUuid(cookie.cartId || uuidv4())
+    setCurrentUuid(cookie.cartId || uuidv4());
   }, []);
 
   useEffect(() => {
     if (!cookie.cartId) {
       const now: Date = new Date();
-      now.setDate(now.getDate() + 7)
-      const expires = now
+      now.setDate(now.getDate() + 7);
+      const expires = now;
       setCookie('cartId', currentUuid, { expires });
     }
-  }, [currentUuid])
+  }, [currentUuid]);
 
   useEffect(() => {
     if (!data) {
@@ -62,16 +62,16 @@ const Products: FC = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(selectedProducts)
+    console.log(selectedProducts);
   }, [selectedProducts]);
 
   const splitProductArray = (dataToSplit: Product[]) => {
-    let splited: SplitedArrayType = {} as SplitedArrayType;
+    const splited: SplitedArrayType = {} as SplitedArrayType;
     dataToSplit.map((product, index) => splited[product.type]
       ? splited[product.type] = [...splited[product.type], { key: index, ...product }]
       : splited[product.type] = [{ key: index, ...product }]
     );
-    setSplitedArrayByType(splited)
+    setSplitedArrayByType(splited);
   };
 
   const next = () => {
@@ -86,7 +86,7 @@ const Products: FC = () => {
     setButtonLock(true);
     const components = Object.keys(selectedProducts).map(key => selectedProducts[key]);
 
-    //todo obsluga dodawania wielu konfiguracji na stack
+    // todo obsluga dodawania wielu konfiguracji na stack
     const response = dispatch(postConfiguration({
       externalId: currentUuid,
       components
@@ -94,11 +94,10 @@ const Products: FC = () => {
 
     router.push({
       pathname: '/cart',
-      //todo array
-      query: { configurationId: currentUuid },
+      // todo array
+      query: { configurationId: currentUuid }
     });
   };
-
 
   const steps = !splitedArrayByType
     ? []
@@ -116,13 +115,13 @@ const Products: FC = () => {
           {feature.value}
         </Text>
       </Tag>
-    ))
+    ));
   };
 
   const columns = [
     { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + " PLN" },
-    { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures },
+    { title: 'Price', dataIndex: 'price', key: 'price', render: price => parseFloat(price.base).toFixed(2) + ' PLN' },
+    { title: 'Features', dataIndex: 'features', key: 'features', render: renderFeatures }
   ];
 
   const rowSelection = {
@@ -132,10 +131,10 @@ const Products: FC = () => {
       setSelectedProducts({
         ...selectedProducts,
         [selectedRows[0].type]: selectedRows[0]
-      })
+      });
     },
     getCheckboxProps: record => ({
-      name: record.name,
+      name: record.name
     }),
     type: 'radio' as const
   };
@@ -163,7 +162,7 @@ const Products: FC = () => {
   );
 
   if (status === 'loading') {
-    return <Spin />
+    return <Spin />;
   }
 
   if (status === 'error' || steps[currentStep] === undefined) {
@@ -181,7 +180,7 @@ const Products: FC = () => {
           )
         }
       </Result>
-    )
+    );
   }
 
   return (
@@ -209,7 +208,8 @@ const Products: FC = () => {
           status={steps[currentStep].status}
         >
           {steps.map(item => (
-            <Step key={item.title} title={item.title} description={item?.desc} />
+              // @ts-ignore
+              <Step key={item.title} title={item.title} description={item?.desc} />
           ))}
         </Steps>
         <Table
@@ -218,7 +218,7 @@ const Products: FC = () => {
           expandable={{
             expandedRowRender: record => <div style={{ display: 'inline' }}>
               <div style={{ display: 'inline' }}>
-                {record.images.map(img => <img src={window.location.origin + "/" + img.src} width={'300px'} />)}
+                {record.images.map(img => <img src={window.location.origin + '/' + img.src} width={'300px'} />)}
               </div>
 
               <br />
@@ -233,7 +233,7 @@ const Products: FC = () => {
       </div>
       {stepActions}
     </div>
-  )
+  );
 };
 
-export default Products
+export default Products;

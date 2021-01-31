@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit';
 
 export interface GenericState<T> {
   data?: T;
@@ -21,7 +21,7 @@ export const createGenericSlice = <T, Reducers extends SliceCaseReducers<Generic
     reducers: {
       request: (state) => ({
         ...state,
-        status: 'loading',
+        status: 'loading'
       }),
       success: (state: GenericState<T>, action: PayloadAction<T>) => ({
         ...state,

@@ -6,8 +6,8 @@ import createSagaMiddleware from 'redux-saga';
 import productsSaga from '@frontendSrc/products/saga';
 import cartSaga from '@frontendSrc/cart/saga';
 import newsSaga from '@frontendSrc/news/saga';
-import shipmentMethodsSaga from "@frontendSrc/shipping-methods/saga";
-import counterSaga from "@frontendStore/counterSaga";
+import shipmentMethodsSaga from '@frontendSrc/shipping-methods/saga';
+import counterSaga from '@frontendStore/counterSaga';
 
 const bindMiddleware = (...middleware: any) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -21,7 +21,7 @@ const reducer = (state, action) => {
   if (action.type === HYDRATE) {
     const nextState = {
       ...state, // use previous state
-      ...action.payload, // apply delta from hydration
+      ...action.payload // apply delta from hydration
     };
     return nextState;
   } else {

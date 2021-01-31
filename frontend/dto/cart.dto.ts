@@ -1,7 +1,6 @@
-import {Product} from "@frontendDto/product.dto";
-import {PcConfigurationDto} from "@frontendDto/configuration.dto";
-import {WithId} from "mongodb";
-
+import { Product } from '@frontendDto/product.dto';
+import { PcConfigurationDto } from '@frontendDto/configuration.dto';
+import { WithId } from 'mongodb';
 
 export interface Cart {
     externalId: string,
@@ -10,7 +9,7 @@ export interface Cart {
 }
 
 export interface CartDto {
-    externalId: string, //generated on front, stored in local storage or cookie
+    externalId: string, // generated on front, stored in local storage or cookie
     products: WithId<Product>[],
     configurations: WithId<PcConfigurationDto>[]
 }

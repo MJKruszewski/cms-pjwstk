@@ -1,6 +1,6 @@
-import {WithId} from "mongodb";
-import {Product} from "@apiDomain/product.domain";
-import {PcConfigurationDto} from "@apiDomain/configuration.domain";
+import { WithId } from 'mongodb';
+import { Product } from '@apiDomain/product.domain';
+import { PcConfigurationDto } from '@apiDomain/configuration.domain';
 
 export interface Cart {
     externalId: string,
@@ -9,7 +9,7 @@ export interface Cart {
 }
 
 export interface CartDto {
-    externalId: string, //generated on front, stored in local storage or cookie
+    externalId: string, // generated on front, stored in local storage or cookie
     products: WithId<Product>[],
     configurations: WithId<PcConfigurationDto>[]
 }

@@ -1,5 +1,5 @@
-import {PayloadAction} from '@reduxjs/toolkit';
-import {createGenericSlice, GenericState} from './genericDataSlice';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { createGenericSlice, GenericState } from './genericDataSlice';
 
 const initialCounterState: GenericState<number> = {
   status: 'idle',
@@ -10,10 +10,10 @@ const wrappedCounterSlice = createGenericSlice({
   name: 'counter',
   initialState: initialCounterState,
   reducers: {
-    increment(state, { payload }: PayloadAction<number>) {
+    increment (state, { payload }: PayloadAction<number>) {
       state.data += payload;
     },
-    decrement(state, { payload }: PayloadAction<number>) {
+    decrement (state, { payload }: PayloadAction<number>) {
       state.data -= payload;
     }
   }

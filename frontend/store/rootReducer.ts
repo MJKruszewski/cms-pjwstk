@@ -1,7 +1,7 @@
-import {combineReducers} from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 import productsReducer from '@frontendSrc/products/slice';
 import cartReducer from '@frontendSrc/cart/slice';
-import counterReducer from "@frontendStore/counterReducer";
+import counterReducer from '@frontendStore/counterReducer';
 import newsReducer from '@frontendSrc/news/slice';
 import promotedReducer from '@frontendSrc/promoted/slice';
 import shippingMethodsReducer from '@frontendSrc/shipping-methods/slice';
@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   news: newsReducer,
   shippingMethods: shippingMethodsReducer,
-  promoted: promotedReducer,
+  promoted: promotedReducer
 });
 
 export default rootReducer;

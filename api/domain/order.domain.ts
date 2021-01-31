@@ -1,7 +1,7 @@
-import {WithId} from "mongodb";
-import {PcConfigurationDto} from "@apiDomain/configuration.domain";
-import {User} from "../../frontend/dto/user.dto";
-import {ShippingMethod} from "../../frontend/dto/shipping-method.dto";
+import { WithId } from 'mongodb';
+import { PcConfigurationDto } from '@apiDomain/configuration.domain';
+import { User } from '../../frontend/dto/user.dto';
+import { ShippingMethod } from '../../frontend/dto/shipping-method.dto';
 
 export interface OrderDto {
     user: User;

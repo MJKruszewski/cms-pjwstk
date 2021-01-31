@@ -1,68 +1,68 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import PcConfigurationsRepository from "@apiRepository/pc-configurations.repository";
-import {PcConfigurationDto} from "@apiDomain/configuration.domain";
-import {WithId} from "mongodb";
-import ProductsRepository from "@apiRepository/products.repository";
-import OrderRepository from "@apiRepository/order.repository";
-import {OrderDto} from "@apiDomain/order.domain";
-import {Types} from "mongoose";
-import {mapMongoId} from "@apiMiddleware/mongo.middleware";
+import { NextApiRequest, NextApiResponse } from 'next';
+import PcConfigurationsRepository from '@apiRepository/pc-configurations.repository';
+import { PcConfigurationDto } from '@apiDomain/configuration.domain';
+import { WithId } from 'mongodb';
+import ProductsRepository from '@apiRepository/products.repository';
+import OrderRepository from '@apiRepository/order.repository';
+import { OrderDto } from '@apiDomain/order.domain';
+import { Types } from 'mongoose';
+import { mapMongoId } from '@apiMiddleware/mongo.middleware';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === 'OPTIONS') return res.status(200).json({});
+  if (req.method === 'OPTIONS') return res.status(200).json({});
 
-    const configurationRepository: PcConfigurationsRepository = await PcConfigurationsRepository.build();
-    const orderRepository: OrderRepository = await OrderRepository.build();
-    const productsRepository: ProductsRepository = await ProductsRepository.build();
+  const configurationRepository: PcConfigurationsRepository = await PcConfigurationsRepository.build();
+  const orderRepository: OrderRepository = await OrderRepository.build();
+  const productsRepository: ProductsRepository = await ProductsRepository.build();
 
-    if (req.method === 'GET') {
-        await get(req, res, orderRepository, configurationRepository, productsRepository);
-    } else {
-        res.status(405).json({code: 'not-supported'});
-    }
-}
+  if (req.method === 'GET') {
+    await get(req, res, orderRepository, configurationRepository, productsRepository);
+  } else {
+    res.status(405).json({ code: 'not-supported' });
+  }
+};
 
 const get = async (req: NextApiRequest, res: NextApiResponse, orderRepository: OrderRepository, configurationRepository: PcConfigurationsRepository, productsRepository: ProductsRepository) => {
-    const {id} = req.query;
+  const { id } = req.query;
 
-    if (id === undefined) {
-        res.status(404).json({code: 'not-found'});
+  if (id === undefined) {
+    res.status(404).json({ code: 'not-found' });
 
-        return;
+    return;
+  }
+
+  const order = await orderRepository.findOne(Types.ObjectId(typeof id === 'string' ? id : id.pop()));
+  let configurations: WithId<PcConfigurationDto>[] = [];
+
+  for (const item of order.configurations) {
+    const configuration = await configurationRepository.findOne(Types.ObjectId(item));
+    let components = [];
+
+    for (const item of configuration.components) {
+      components.push(await productsRepository.findOne(Types.ObjectId(item)));
     }
 
-    const order = await orderRepository.findOne(Types.ObjectId(typeof id === 'string' ? id : id.pop()));
-    let configurations: WithId<PcConfigurationDto>[] = [];
-
-    for (const item of order.configurations) {
-        let configuration = await configurationRepository.findOne(Types.ObjectId(item));
-        let components = [];
-
-        for (const item of configuration.components) {
-            components.push(await productsRepository.findOne(Types.ObjectId(item)));
-        }
-
-        components = components.filter((item) => {
-            return item !== undefined && item !== null;
-        });
-        configurations.push({
-            _id: configuration._id,
-            externalId: configuration.externalId,
-            components: components,
-        });
-    }
-
-    configurations = configurations.filter((item) => {
-        return item !== undefined && item !== null;
+    components = components.filter((item) => {
+      return item !== undefined && item !== null;
     });
+    configurations.push({
+      _id: configuration._id,
+      externalId: configuration.externalId,
+      components: components
+    });
+  }
 
-    const response: WithId<OrderDto> = {
-        _id: order._id,
-        orderId: order.externalOrder.id,
-        configurations: configurations,
-        user: order.user,
-        shippingMethod: order.shippingMethod
-    };
+  configurations = configurations.filter((item) => {
+    return item !== undefined && item !== null;
+  });
 
-    res.status(200).json(await mapMongoId(response))
+  const response: WithId<OrderDto> = {
+    _id: order._id,
+    orderId: order.externalOrder.id,
+    configurations: configurations,
+    user: order.user,
+    shippingMethod: order.shippingMethod
+  };
+
+  res.status(200).json(await mapMongoId(response));
 };

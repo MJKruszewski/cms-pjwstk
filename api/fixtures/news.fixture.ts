@@ -1,26 +1,26 @@
-import {News} from "@apiDomain/news.domain";
-import {connectToDatabase} from "@apiMiddleware/mongo.middleware";
-import {NEWS_COLLECTION} from "@apiRepository/collections.config";
+import { News } from '@apiDomain/news.domain';
+import { connectToDatabase } from '@apiMiddleware/mongo.middleware';
+import { NEWS_COLLECTION } from '@apiRepository/collections.config';
 
 const news: News[] = [
-    {
-        title: 'Promocja na płyty główne Asus TUF GAMING',
-        createdAt: new Date(),
-        cover: 'news/news1.png',
-        summary: 'Obniżamy ceny dwóch płyt głównych - TUF GAMING Z490-PLUS oraz Z490-PLUS WIFI. Skorzystaj z kodu rabatowego!',
-        content: '<b>Jak obniżyć ceny produktów?</b><br/><br/>' +
+  {
+    title: 'Promocja na płyty główne Asus TUF GAMING',
+    createdAt: new Date(),
+    cover: 'news/news1.png',
+    summary: 'Obniżamy ceny dwóch płyt głównych - TUF GAMING Z490-PLUS oraz Z490-PLUS WIFI. Skorzystaj z kodu rabatowego!',
+    content: '<b>Jak obniżyć ceny produktów?</b><br/><br/>' +
             'Wzięcie udziału w akcji promocyjnej jest bardzo proste. Wystarczy dodać do koszyka jedną z wymienionych płyt głównych, a następnie wpisać właściwy kod rabatowy: Z490<br/><br/>' +
             'Dodatkowo, w przypadku zakupu wymienionych płyt obowiązuje darmowa wysyłka. Oba produkty kierowane są przede wszystkim do graczy, którzy chcą złożyć komputer pozwalający na obsługę najnowszych produkcji z segmentu AAA. ' +
             'Płyty główne Asus TUF GAMING wyróżniają się chipsetem Intel Z490 oraz obsługą gniazda procesora Socket 1200. Są więc kompatybilne z układami Intela dziesiątej generacji.<br/><br/>' +
             'Do tego wszystkiego dochodzi obsługa pamięci RAM o częstotliwości do 4800 MHz, możliwość łączenia kart graficznych w systemie 2-Way CrossFireX, a także wiele slotów, portów i złączy.  Z490-PLUS WIFI zapewnia dodatkowo dostęp do anteny WIFI.<br/><br/>' +
             ''
-    },
-    {
-        title: 'Zobacz co oferują karty NVIDIA RTX z serii 30',
-        createdAt: new Date(),
-        cover: 'news/news2.png',
-        summary: 'Chcesz kupić kartę graficzną, która zapewni doskonałe osiąg w grach? Sprawdź, jaki model warto wybrać.',
-        content: '<b>Co robi karta graficzna? Jakie spełnia zadania?</b><br/><br/>' +
+  },
+  {
+    title: 'Zobacz co oferują karty NVIDIA RTX z serii 30',
+    createdAt: new Date(),
+    cover: 'news/news2.png',
+    summary: 'Chcesz kupić kartę graficzną, która zapewni doskonałe osiąg w grach? Sprawdź, jaki model warto wybrać.',
+    content: '<b>Co robi karta graficzna? Jakie spełnia zadania?</b><br/><br/>' +
             'Tak zwani użytkownicy domowy często na pytanie o to, jaką kartę graficzną wybrać, odpowiadają: żadną. Postanawiają ograniczyć się wyłącznie do jednostek zintegrowanych, ponieważ nie zamierzają zajmować się projektowaniem grafiki. To jednak mylne zrozumienie roli tego komponentu.<br/><br/>' +
             'Zgodnie z uproszczoną definicją, karta graficzna, na podstawie instrukcji z procesora, generuje obraz wyświetlany na monitorze. Jak więc można się domyślić, jest niezbędnym elementem komputera. Nie oznacza to jednak, że każdy model okaże się wystarczający. Wiele zależy bowiem od tego, z jakimi programami będzie miała ona do czynienia.<br/><br/>' +
             'W przypadku pracy biurowej, wystarczająca będzie podstawowa, mało wydajna karta graficzna. Wyświetlanie pulpit Windows i okien prostych programów nie jest zbyt wymagające, dlatego nasza maszyna nie będzie potrzebowała dodatkowej pamięci, pochodzącej właśnie z karty. To samo tyczy się obsługi prostych narzędzi multimedialnych. W tym zakresie, jednostki zintegrowane rzeczywiście mogą wystarczyć.<br/><br/>' +
@@ -39,16 +39,16 @@ const news: News[] = [
             '<b>Jakie karty graficzne oferuje NVIDIA?</b><br/><br/>' +
             'Oferta tego producenta jest rozwijana od wielu lat. I choć obecnie na rynku znaleźć można wiele modeli wiekowych, a także jednostki używane, obecnie uwagę należy zwrócić na 4 generacje kart graficznych od Nvidii. Każda z nich oferuje nieco inną wydajność i obsługę innych technologii.<br/><br/>' +
             ''
-    },
+  }
 ];
 
-export async function newsFixture() {
-    const db = await connectToDatabase();
-    const collection = await db.collection(NEWS_COLLECTION);
+export async function newsFixture () {
+  const db = await connectToDatabase();
+  const collection = await db.collection(NEWS_COLLECTION);
 
-    for (let i = 0; i < 5; i++) {
-        news.forEach(item => {
-            collection.insertOne({...item});
-        })
-    }
+  for (let i = 0; i < 5; i++) {
+    news.forEach(item => {
+      collection.insertOne({ ...item });
+    });
+  }
 }

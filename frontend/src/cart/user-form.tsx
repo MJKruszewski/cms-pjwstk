@@ -1,10 +1,10 @@
-import React, {FC, useState} from "react";
-import {Button, Card, Col, Form, Input, Row} from "antd";
-import {EditOutlined, MailOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
+import React, { FC, useState } from 'react';
+import { Card, Col, Form, Input, Row } from 'antd';
+import { EditOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 
 const styles = {
-    width: '70%',
-    margin: '5em',
+  width: '70%',
+  margin: '5em'
 };
 
 interface OnChangeHandler {
@@ -16,15 +16,14 @@ interface MyInputProps {
     userForm: any
 }
 
-export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) => {
+export const UserForm: FC<MyInputProps> = ({ onSubmit, userForm }: MyInputProps) => {
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-    const [isDisabled, setIsDisabled] = useState<boolean>(false);
-
-    const onFinish = (): void => {
-        onSubmit(userForm.getFieldsValue());
-        setIsDisabled(true);
-    };
-    return (
+  const onFinish = (): void => {
+    onSubmit(userForm.getFieldsValue());
+    setIsDisabled(true);
+  };
+  return (
         <Card title={'Shipping address'}
               style={styles}>
             <Form form={userForm}
@@ -34,7 +33,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={12}>
                         <Form.Item name="name"
                                    label="Name:"
-                                   rules={[{required: true, message: 'Name is required'}]}>
+                                   rules={[{ required: true, message: 'Name is required' }]}>
                             <Input prefix={<UserOutlined
                                 className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -44,7 +43,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={12}>
                         <Form.Item name="surname"
                                    label="Surname:"
-                                   rules={[{required: true, message: 'Surname is required'}]}>
+                                   rules={[{ required: true, message: 'Surname is required' }]}>
                             <Input prefix={<UserOutlined
                                 className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -56,7 +55,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={12}>
                         <Form.Item name="email"
                                    label="Email:"
-                                   rules={[{required: true, message: 'Email is required'}]}>
+                                   rules={[{ required: true, message: 'Email is required' }]}>
                             <Input prefix={<MailOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="romanzawadzki@mail.com"/>
@@ -65,7 +64,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={12}>
                         <Form.Item name="phone"
                                    label="Phone number:"
-                                   rules={[{required: true, message: 'Phone number is required'}]}>
+                                   rules={[{ required: true, message: 'Phone number is required' }]}>
                             <Input prefix={<PhoneOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="888 888 888"/>
@@ -76,7 +75,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={24}>
                         <Form.Item name="address1"
                                    label="Address 1"
-                                   rules={[{required: true, message: 'address  is required'}]}>
+                                   rules={[{ required: true, message: 'address  is required' }]}>
                             <Input prefix={<EditOutlined
                                 className="site-form-item-icon"/>}
                                    disabled={isDisabled}
@@ -98,7 +97,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={8}>
                         <Form.Item name="city"
                                    label="City"
-                                   rules={[{required: true, message: 'City is required'}]}>
+                                   rules={[{ required: true, message: 'City is required' }]}>
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="Warszawa"/>
@@ -107,7 +106,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={6}>
                         <Form.Item name="postCode"
                                    label="Post code"
-                                   rules={[{required: true, message: 'Post code is required'}]}>
+                                   rules={[{ required: true, message: 'Post code is required' }]}>
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="00-000"/>
@@ -116,7 +115,7 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                     <Col span={10}>
                         <Form.Item name="country"
                                    label="Country"
-                                   rules={[{required: true, message: 'Country is required'}]}>
+                                   rules={[{ required: true, message: 'Country is required' }]}>
                             <Input prefix={<EditOutlined className="site-form-item-icon"/>}
                                    disabled={isDisabled}
                                    placeholder="Polska"/>
@@ -125,5 +124,5 @@ export const UserForm: FC<MyInputProps> = ({onSubmit, userForm}: MyInputProps,) 
                 </Row>
             </Form>
         </Card>
-    );
+  );
 };

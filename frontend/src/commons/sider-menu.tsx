@@ -1,22 +1,22 @@
-import {BuildOutlined, DesktopOutlined, HomeOutlined, ShoppingCartOutlined} from '@ant-design/icons';
-import {Image, Menu} from 'antd';
-import {useRouter} from 'next/dist/client/router';
-import React, {FunctionComponent, useEffect, useState} from 'react';
-import {MenuInfo} from 'rc-menu/lib/interface';
+import { DesktopOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
+import { useRouter } from 'next/dist/client/router';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { MenuInfo } from 'rc-menu/lib/interface';
 
 const SiderMenu: FunctionComponent = () => {
-    const router = useRouter();
-    const [selectedKeys, setSelectedKeys] = useState<string[]>([router.pathname]);
+  const router = useRouter();
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([router.pathname]);
 
-    const handleMenuItemClicked = ({key}: MenuInfo) => {
-        router.push(String(key));
-    };
+  const handleMenuItemClicked = ({ key }: MenuInfo) => {
+    router.push(String(key));
+  };
 
-    useEffect(() => {
-        setSelectedKeys([router.pathname]);
-    }, [router.pathname]);
+  useEffect(() => {
+    setSelectedKeys([router.pathname]);
+  }, [router.pathname]);
 
-    return (
+  return (
         <Menu
             theme="dark"
             mode="horizontal"
@@ -27,7 +27,7 @@ const SiderMenu: FunctionComponent = () => {
             {
                 <Menu.Item
                     key='/'
-                    style={{marginLeft: '30px'}}
+                    style={{ marginLeft: '30px' }}
                     icon={<HomeOutlined/>}
                 >
                     {'Home'}
@@ -46,14 +46,14 @@ const SiderMenu: FunctionComponent = () => {
                 <Menu.Item
                     key='/cart'
                     style={{
-                        fontWeight: 'bold',
-                        float: 'right'
+                      fontWeight: 'bold',
+                      float: 'right'
                     }}
                     icon={<ShoppingCartOutlined/>}
                 >Cart</Menu.Item>
             }
         </Menu>
-    );
+  );
 };
 
 export default SiderMenu;
