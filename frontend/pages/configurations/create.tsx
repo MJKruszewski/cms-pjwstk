@@ -1,5 +1,5 @@
 import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
-import {Button, notification, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
+import {Breadcrumb, Button, notification, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { postConfiguration, request } from 'src/products/slice';
@@ -322,6 +322,15 @@ const Products: FC = () => {
         title="Configure PC"
         subTitle=""
       />
+
+      <Breadcrumb style={{marginBottom: "1em"}}>
+        <Breadcrumb.Item>
+          <a href="/">Home</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="">Configurations</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
 
       <div style={{
         display: 'flex',

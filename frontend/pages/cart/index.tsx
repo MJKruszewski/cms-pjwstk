@@ -4,7 +4,7 @@ import { RootState, useAppDispatch } from '@frontendStore/rootStore';
 import React, { FC, useEffect, useState } from 'react';
 import randomColor from 'randomcolor';
 import { useSelector } from 'react-redux';
-import { Alert, Button, Col, Form, notification, PageHeader, Row, Table, Tag, Typography } from 'antd';
+import {Alert, Breadcrumb, Button, Col, Form, notification, PageHeader, Row, Table, Tag, Typography} from 'antd';
 import { Product } from '@frontendDto/product.dto';
 import { useRouter } from 'next/router';
 import { CartDto } from '@frontendDto/cart.dto';
@@ -237,6 +237,15 @@ const Cart: FC = () => {
                 title="Cart"
                 subTitle=""
             />
+
+          <Breadcrumb style={{marginBottom: "1em"}}>
+            <Breadcrumb.Item>
+              <a href="/">Home</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">Cart</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
 
             <Alert message="Remember, adding product to cart does not means it is reserved for you!" type="info"
                 style={{ marginBottom: '25px' }} />

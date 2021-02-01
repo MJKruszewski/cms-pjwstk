@@ -6,6 +6,7 @@ import {request} from 'src/news/slice';
 import {request as productsRequest} from 'src/products/slice';
 import {News} from '@frontendDto/news.dto';
 import {
+    Breadcrumb,
     Button,
     Card,
     Carousel,
@@ -555,6 +556,12 @@ const Home: FC = () => {
                 title="Home Page"
                 subTitle=""
             />
+
+            <Breadcrumb style={{marginBottom: "1em"}}>
+                <Breadcrumb.Item>
+                    <a href="">Home</a>
+                </Breadcrumb.Item>
+            </Breadcrumb>
 
             <Carousel autoplay>
                 {
