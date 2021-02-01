@@ -12,15 +12,13 @@ interface OnChangeHandler {
 }
 
 interface MyInputProps {
-    onSubmit: OnChangeHandler,
     userForm: any
 }
 
-export const UserForm: FC<MyInputProps> = ({ onSubmit, userForm }: MyInputProps) => {
+export const UserForm: FC<MyInputProps> = ({ userForm }: MyInputProps) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const onFinish = (): void => {
-    onSubmit(userForm.getFieldsValue());
     setIsDisabled(true);
   };
   return (

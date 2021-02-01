@@ -30,7 +30,6 @@ const Cart: FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [configurations, setConfigurations] = useState<object[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0.00);
-  const [userData, setUserData] = useState<User>(null);
   const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(null);
   const [cookie, setCookie] = useCookies(['cartId']);
 
@@ -45,16 +44,13 @@ const Cart: FC = () => {
     const p = dispatch(getCart(cookie.cartId));
     }, []);
 
-  const onUserFormSubmit = (user: User): void => {
-    setUserData(user);
-  };
-
   const onFinalizationSubmit = (): void => {
-    userForm.submit();
 
-    if (products.length > 0 && userData) {
+    const user =  userForm.getFieldsValue();
+
+    if (data.products.length || data.configurations.length && user) {
       dispatch(postPayment({
-        user: userData,
+        user,
         shippingMethod: shippingMethod,
         orderId: 'sb',
         configurations: [data]
@@ -254,16 +250,16 @@ const Cart: FC = () => {
                 pagination={false}
                 columns={columns}
                 expandable={{
-                  expandedRowRender: record => {
-                    return <Table
-                        style={{ marginLeft: '1em' }}
-                        pagination={false}
-                        columns={columns2}
-                        // @ts-ignore
-                        dataSource={record.components}
-                        loading={status === 'loading'}
+                  expandedRowRender: record => (
+                    <Table
+                      style={{ marginLeft: '1em' }}
+                      pagination={false}
+                      columns={columns2}
+                      // @ts-ignore
+                      dataSource={record.components}
+                      loading={status === 'loading'}
                     />
-                  },
+                    ),
                   // @ts-ignore
                   rowExpandable: record => record.components !== undefined,
                 }}
@@ -277,7 +273,7 @@ const Cart: FC = () => {
             />
 
             <div style={{ display: 'flex' }}>
-                <UserForm userForm={userForm} onSubmit={onUserFormSubmit} />
+                <UserForm userForm={userForm} />
                 <ShippingMethods shippingMethod={shippingMethod} setShippingMethod={setShippingMethod} />
             </div>
 

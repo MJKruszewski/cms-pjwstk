@@ -169,6 +169,10 @@ const Products: FC = () => {
               message: 'Product added to cart'
             });
 
+            router.push({
+              pathname: '/cart'
+            });
+
             return;
           }
 
