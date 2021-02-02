@@ -77,6 +77,7 @@ const Home: FC = () => {
     dispatch(request());
     dispatch(productsRequest());
     setCurrentUuid(cookie.cartId || uuidv4());
+    setFilters({})
   }, []);
 
   useEffect(() => {
@@ -496,7 +497,6 @@ const Home: FC = () => {
     const items = originalSteps[stepIndex]?.content || [];
     const tmp: any = {};
     let duplicates = [];
-    console.log('$$$ filters', filters)
 
     items.forEach(item => {
       item.features.forEach(feature => {
@@ -543,6 +543,8 @@ const Home: FC = () => {
       </Collapse>
     );
   };
+  
+  const handleTabChange = (params) => setCurrentContent(steps.find(step => step.title === params).content);
 
   return (
     <div>
@@ -596,7 +598,7 @@ const Home: FC = () => {
       </Carousel>
 
       <Card>
-        <Tabs tabPosition={'left'} defaultActiveKey={steps[0].title} onChange={(params) => setCurrentContent(originalSteps[params].conten)}>
+        <Tabs tabPosition={'left'} defaultActiveKey={steps[0].title} onChange={handleTabChange}>
           {
             // PW TO FIX
             // stepsRender
