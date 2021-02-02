@@ -345,9 +345,9 @@ const Home: FC = () => {
     const producerFeature = item.features.filter(feature => feature.code === 'producer').pop();
 
     return (
-      <Tag color={randomColor({ luminosity: 'dark', seed: producerFeature.value })}>
+      <Tag color={randomColor({ luminosity: 'dark', seed: producerFeature?.value })}>
         <Text strong>
-          {producerFeature.value}
+          {producerFeature?.value}
         </Text>
       </Tag>
     );
@@ -515,28 +515,33 @@ const Home: FC = () => {
       })
     })
 
+
     return (
       <Collapse ghost>
         <Panel style={{ fontWeight: 'bold' }} header="Filters" key={1}>
           <Row gutter={16} align={'middle'} justify={'start'}>
             {
-              Object.keys(tmp).map(key => (
-                <Col span={4} key={`${key}-col`}>
-                  <Title level={5}>{key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}: </Title>
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    style={{ width: '100%' }}
-                    placeholder="Please select"
-                    defaultValue={filters[key]}
-                    onChange={(item) => handleFilters(item, key, stepIndex)}
-                  >
-                    {
-                      tmp[key]
-                    }
-                  </Select>
-                </Col>
-              ))
+              Object.keys(tmp).map(key => {
+                const tmpKey = key.replace(/([a-z])([A-Z])/g, '$1 $2');
+
+                return (
+                    <Col span={4} key={`${key}-col`}>
+                      <Title level={5}>{tmpKey.charAt(0).toUpperCase() + tmpKey.slice(1).toLowerCase()}: </Title>
+                      <Select
+                          mode="multiple"
+                          allowClear
+                          style={{width: '100%'}}
+                          placeholder="Please select"
+                          defaultValue={filters[key]}
+                          onChange={(item) => handleFilters(item, key, stepIndex)}
+                      >
+                        {
+                          tmp[key]
+                        }
+                      </Select>
+                    </Col>
+                );
+              })
             }
           </Row>
         </Panel>

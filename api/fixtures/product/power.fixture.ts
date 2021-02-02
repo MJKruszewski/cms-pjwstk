@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ProductTypeEnum } from '@apiDomain/product.domain';
+import {ProductFeatureCodeEnum, ProductTypeEnum} from '@apiDomain/product.domain';
 import { FixturesService } from '@apiFixture/fixtures.service';
 
 interface Power {
@@ -33,22 +33,22 @@ export async function powerFixture () {
       const features = [];
 
       features.push({
-        code: 'producer',
+        code: ProductFeatureCodeEnum.PRODUCER,
         value: brand
       });
 
       features.push({
-        code: 'standard',
+        code: ProductFeatureCodeEnum.CASE_TYPE,
         value: 'ATX'
       });
 
       features.push({
-        code: 'certificate',
+        code: ProductFeatureCodeEnum.POWER_CERT,
         value: faker.random.arrayElement(supports.certificate)
       });
 
       features.push({
-        code: 'maxmimum power',
+        code: ProductFeatureCodeEnum.POWER_MAX,
         value: faker.random.float({ min: 400, max: 1300, precision: 100 }).toFixed(0).toString() + 'W'
       });
       await FixturesService.insertOneProduct(ProductTypeEnum.POWER, powerImages, features, null);

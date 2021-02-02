@@ -33,6 +33,13 @@ export enum ProductFeatureCodeEnum {
     CORES = 'cores',
     MEMORY_TYPE = 'memoryType',
     MEMORY_SIZE = 'memorySize',
+    CASE_TYPE = 'caseType',
+    DRIVE_INTERFACE = 'driveInterface',
+    CAPACITY = 'capacity',
+    LOAD_SPEED = 'loadSpeed',
+    SAVE_SPEED = 'saveSpeed',
+    POWER_CERT = 'powerCert',
+    POWER_MAX = 'powerMax',
 }
 export enum ProductTypeEnum {
     MOTHERBOARD = 'motherboard',

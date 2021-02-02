@@ -77,11 +77,11 @@ export async function gpuFixture () {
       const features = [];
 
       features.push({
-        code: 'clock',
+        code: ProductFeatureCodeEnum.CLOCK,
         value: faker.random.float({ min: 900, max: 2586, precision: 600 }).toFixed(0).toString() + 'MHz'
       });
       features.push({
-        code: 'producer',
+        code: ProductFeatureCodeEnum.PRODUCER,
         value: faker.random.arrayElement(data.producer)
       });
       const pci = faker.random.arrayElement(data.pci);
