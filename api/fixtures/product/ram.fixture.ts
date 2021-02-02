@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ProductTypeEnum } from '@apiDomain/product.domain';
+import {ProductFeatureCodeEnum, ProductTypeEnum} from '@apiDomain/product.domain';
 import { FixturesService } from '@apiFixture/fixtures.service';
 
 interface Ram {
@@ -33,22 +33,22 @@ export async function ramFixture () {
       const features = [];
 
       features.push({
-        code: 'producer',
+        code: ProductFeatureCodeEnum.PRODUCER,
         value: brand
       });
 
       features.push({
-        code: 'type',
+        code: ProductFeatureCodeEnum.MEMORY_TYPE,
         value: faker.random.arrayElement(support.ddr)
       });
 
       features.push({
-        code: 'capacity',
+        code: ProductFeatureCodeEnum.CAPACITY,
         value: Math.pow(2, faker.random.float({ min: 1, max: 8, precision: 1 })).toFixed(0).toString() + 'Gb'
       });
 
       features.push({
-        code: 'clock',
+        code: ProductFeatureCodeEnum.CLOCK,
         value: faker.random.float({ min: 1200, max: 3600, precision: 400 }).toFixed(0).toString() + 'Hz'
       });
       await FixturesService.insertOneProduct(ProductTypeEnum.RAM, ramImages, features, null);

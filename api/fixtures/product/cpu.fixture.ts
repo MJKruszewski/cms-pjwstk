@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ProductTypeEnum } from '@apiDomain/product.domain';
+import {ProductFeatureCodeEnum, ProductTypeEnum} from '@apiDomain/product.domain';
 import { FixturesService } from '@apiFixture/fixtures.service';
 
 interface Processor {
@@ -73,30 +73,30 @@ export async function cpuFixture () {
       const features = [];
 
       features.push({
-        code: 'clock',
+        code: ProductFeatureCodeEnum.CLOCK,
         value: faker.random.float({ min: 1, max: 5, precision: 1 }).toString() + 'GHz'
       });
       features.push({
-        code: 'cores',
+        code: ProductFeatureCodeEnum.CORES,
         value: faker.random.arrayElement(data.cores)
       });
       features.push({
-        code: 'producer',
+        code: ProductFeatureCodeEnum.PRODUCER,
         value: faker.random.arrayElement(data.producer)
       });
       const socket = faker.random.arrayElement(data.sockets);
       features.push({
-        code: 'socket',
+        code: ProductFeatureCodeEnum.SOCKET,
         value: socket
       });
       features.push({
-        code: 'integratedGraphics',
+        code: ProductFeatureCodeEnum.INTEGRATED_GRAPHICS,
         value: faker.random.boolean() ? '1' : '0'
       });
 
       const requirements = [];
       requirements.push({
-        code: 'socket',
+        code: ProductFeatureCodeEnum.SOCKET,
         value: socket
       });
 

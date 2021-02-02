@@ -15,6 +15,13 @@ enum ProductFeatureCodeEnum {
     CORES = 'cores',
     MEMORY_TYPE = 'memoryType',
     MEMORY_SIZE = 'memorySize',
+    CASE_TYPE = 'caseType',
+    DRIVE_INTERFACE = 'driveInterface',
+    CAPACITY = 'capacity',
+    LOAD_SPEED = 'loadSpeed',
+    SAVE_SPEED = 'saveSpeed',
+    POWER_CERT = 'powerCert',
+    POWER_MAX = 'powerMax',
 }
 enum ProductTypeEnum {
     MOTHERBOARD = 'motherboard',
@@ -83,6 +90,13 @@ export const ProductsCreate = (props) => (
                         {id: ProductFeatureCodeEnum.PROCESSOR, name: 'Processor'},
                         {id: ProductFeatureCodeEnum.PRODUCER, name: 'Producer'},
                         {id: ProductFeatureCodeEnum.SOCKET, name: 'Socket'},
+                        {id: ProductFeatureCodeEnum.CASE_TYPE, name: 'Case type'},
+                        {id: ProductFeatureCodeEnum.DRIVE_INTERFACE, name: 'Drive interface'},
+                        {id: ProductFeatureCodeEnum.CAPACITY, name: 'Capacity'},
+                        {id: ProductFeatureCodeEnum.LOAD_SPEED, name: 'Load speed'},
+                        {id: ProductFeatureCodeEnum.SAVE_SPEED, name: 'Save speed'},
+                        {id: ProductFeatureCodeEnum.POWER_CERT, name: 'Power certificate'},
+                        {id: ProductFeatureCodeEnum.POWER_MAX, name: 'Max power'},
                     ]}/>
                     <TextInput source="value"/>
                 </SimpleFormIterator>
@@ -102,6 +116,13 @@ export const ProductsCreate = (props) => (
                         {id: ProductFeatureCodeEnum.PROCESSOR, name: 'Processor'},
                         {id: ProductFeatureCodeEnum.PRODUCER, name: 'Producer'},
                         {id: ProductFeatureCodeEnum.SOCKET, name: 'Socket'},
+                        {id: ProductFeatureCodeEnum.CASE_TYPE, name: 'Case type'},
+                        {id: ProductFeatureCodeEnum.DRIVE_INTERFACE, name: 'Drive interface'},
+                        {id: ProductFeatureCodeEnum.CAPACITY, name: 'Capacity'},
+                        {id: ProductFeatureCodeEnum.LOAD_SPEED, name: 'Load speed'},
+                        {id: ProductFeatureCodeEnum.SAVE_SPEED, name: 'Save speed'},
+                        {id: ProductFeatureCodeEnum.POWER_CERT, name: 'Power certificate'},
+                        {id: ProductFeatureCodeEnum.POWER_MAX, name: 'Max power'},
                     ]}/>
                     <TextInput source="value"/>
                 </SimpleFormIterator>
@@ -168,6 +189,13 @@ export const ProductsEdit = (props) => (
                         {id: ProductFeatureCodeEnum.PROCESSOR, name: 'Processor'},
                         {id: ProductFeatureCodeEnum.PRODUCER, name: 'Producer'},
                         {id: ProductFeatureCodeEnum.SOCKET, name: 'Socket'},
+                        {id: ProductFeatureCodeEnum.CASE_TYPE, name: 'Case type'},
+                        {id: ProductFeatureCodeEnum.DRIVE_INTERFACE, name: 'Drive interface'},
+                        {id: ProductFeatureCodeEnum.CAPACITY, name: 'Capacity'},
+                        {id: ProductFeatureCodeEnum.LOAD_SPEED, name: 'Load speed'},
+                        {id: ProductFeatureCodeEnum.SAVE_SPEED, name: 'Save speed'},
+                        {id: ProductFeatureCodeEnum.POWER_CERT, name: 'Power certificate'},
+                        {id: ProductFeatureCodeEnum.POWER_MAX, name: 'Max power'},
                     ]}/>
                     <TextInput source="value"/>
                 </SimpleFormIterator>
@@ -187,6 +215,13 @@ export const ProductsEdit = (props) => (
                         {id: ProductFeatureCodeEnum.PROCESSOR, name: 'Processor'},
                         {id: ProductFeatureCodeEnum.PRODUCER, name: 'Producer'},
                         {id: ProductFeatureCodeEnum.SOCKET, name: 'Socket'},
+                        {id: ProductFeatureCodeEnum.CASE_TYPE, name: 'Case type'},
+                        {id: ProductFeatureCodeEnum.DRIVE_INTERFACE, name: 'Drive interface'},
+                        {id: ProductFeatureCodeEnum.CAPACITY, name: 'Capacity'},
+                        {id: ProductFeatureCodeEnum.LOAD_SPEED, name: 'Load speed'},
+                        {id: ProductFeatureCodeEnum.SAVE_SPEED, name: 'Save speed'},
+                        {id: ProductFeatureCodeEnum.POWER_CERT, name: 'Power certificate'},
+                        {id: ProductFeatureCodeEnum.POWER_MAX, name: 'Max power'},
                     ]}/>
                     <TextInput source="value"/>
                 </SimpleFormIterator>

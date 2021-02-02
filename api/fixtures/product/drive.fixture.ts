@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ProductTypeEnum } from '@apiDomain/product.domain';
+import {ProductFeatureCodeEnum, ProductTypeEnum} from '@apiDomain/product.domain';
 import { FixturesService } from '@apiFixture/fixtures.service';
 
 interface Drive {
@@ -32,27 +32,27 @@ export async function driveFixture () {
       const features = [];
 
       features.push({
-        code: 'producer',
+        code: ProductFeatureCodeEnum.PRODUCER,
         value: brand
       });
       const driveInterface = faker.random.arrayElement(support.interface);
       features.push({
-        code: 'interface',
+        code: ProductFeatureCodeEnum.DRIVE_INTERFACE,
         value: driveInterface
       });
 
       features.push({
-        code: 'capacity',
+        code: ProductFeatureCodeEnum.CAPACITY,
         value: Math.pow(2, faker.random.float({ min: 8, max: 12, precision: 1 })).toFixed(0).toString() + 'Gb'
       });
 
       features.push({
-        code: 'load speed',
+        code: ProductFeatureCodeEnum.LOAD_SPEED,
         value: faker.random.float({ min: 400, max: 3000, precision: 100 }).toFixed(0).toString() + 'Mb/s'
       });
 
       features.push({
-        code: 'save speed',
+        code: ProductFeatureCodeEnum.SAVE_SPEED,
         value: faker.random.float({ min: 200, max: 1000, precision: 100 }).toFixed(0).toString() + 'Mb/s'
       });
 

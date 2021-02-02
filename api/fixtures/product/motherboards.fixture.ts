@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ProductTypeEnum } from '@apiDomain/product.domain';
+import {ProductFeatureCodeEnum, ProductTypeEnum} from '@apiDomain/product.domain';
 import { FixturesService } from '@apiFixture/fixtures.service';
 
 interface Motherboard {
@@ -90,30 +90,30 @@ export async function motherboardFixture () {
       const features = [];
 
       features.push({
-        code: 'producer',
+        code: ProductFeatureCodeEnum.PRODUCER,
         value: faker.random.arrayElement(data.producer)
       });
       features.push({
-        code: 'processor',
+        code: ProductFeatureCodeEnum.PROCESSOR,
         value: brand
       });
       features.push({
-        code: 'socket',
+        code: ProductFeatureCodeEnum.SOCKET,
         value: faker.random.arrayElement(data.sockets)
       });
       features.push({
-        code: 'memoryType',
+        code: ProductFeatureCodeEnum.MEMORY_TYPE,
         value: faker.random.arrayElement(data.ddr)
       });
       features.push({
-        code: 'pci',
+        code: ProductFeatureCodeEnum.PCI,
         value: 'PCI-Ex16'
       });
 
       const psiQuantity = faker.random.number({ min: 1, max: 5 });
       for (let i = 0; i < psiQuantity; i++) {
         features.push({
-          code: 'pci',
+          code: ProductFeatureCodeEnum.PCI,
           value: faker.random.arrayElement(data.pci)
         });
       }
