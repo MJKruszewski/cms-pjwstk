@@ -7,6 +7,7 @@ const news: News[] = [
     title: 'Promocja na płyty główne Asus TUF GAMING',
     createdAt: new Date(),
     cover: 'news/news1.png',
+    order: 1,
     summary: 'Obniżamy ceny dwóch płyt głównych - TUF GAMING Z490-PLUS oraz Z490-PLUS WIFI. Skorzystaj z kodu rabatowego!',
     content: '<b>Jak obniżyć ceny produktów?</b><br/><br/>' +
             'Wzięcie udziału w akcji promocyjnej jest bardzo proste. Wystarczy dodać do koszyka jedną z wymienionych płyt głównych, a następnie wpisać właściwy kod rabatowy: Z490<br/><br/>' +
@@ -18,6 +19,7 @@ const news: News[] = [
   {
     title: 'Zobacz co oferują karty NVIDIA RTX z serii 30',
     createdAt: new Date(),
+    order: 2,
     cover: 'news/news2.png',
     summary: 'Chcesz kupić kartę graficzną, która zapewni doskonałe osiąg w grach? Sprawdź, jaki model warto wybrać.',
     content: '<b>Co robi karta graficzna? Jakie spełnia zadania?</b><br/><br/>' +

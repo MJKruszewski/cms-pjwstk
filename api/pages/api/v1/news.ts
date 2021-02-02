@@ -16,5 +16,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const get = async (req: NextApiRequest, res: NextApiResponse, newsRepository: NewsRepository) => {
-  res.status(200).json(await newsRepository.findAll());
+  res.status(200).json(await newsRepository.findAll({sort: {order: -1}}));
 };

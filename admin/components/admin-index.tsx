@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { Admin, ListGuesser, Resource, ShowGuesser, AuthProvider } from 'react-admin';
+import { Admin, ListGuesser, Resource, ShowGuesser, EditGuesser, AuthProvider } from 'react-admin';
 import { createHashHistory } from 'history';
 import simpleRestProvider from 'ra-data-simple-rest';
+import {NewsCreate, NewsEdit} from "./news";
+import {ProductsCreate, ProductsEdit} from "./products";
+import {ShippingCreate, ShippingEdit, ShippingList} from "./shippings";
 
 const authProvider: AuthProvider = {
   checkAuth (params: any): Promise<void> {
@@ -55,12 +58,9 @@ const authProvider: AuthProvider = {
 const history = createHashHistory();
 
 const App = () => <Admin authProvider={authProvider} dataProvider={simpleRestProvider(`${process.env.API_HOST}/api/v1/admin`)} history={history}>
-    <Resource name="news" list={ListGuesser} edit={ShowGuesser}/>
-    <Resource name="orders" list={ListGuesser}/>
-    <Resource name="carts" list={ListGuesser} edit={ShowGuesser}/>
-    <Resource name="products" list={ListGuesser} edit={ShowGuesser}/>
-    <Resource name="configurations" list={ListGuesser} edit={ShowGuesser}/>
-    <Resource name="shipping-methods" list={ListGuesser} edit={ShowGuesser}/>
+    <Resource name="news" list={ListGuesser} create={NewsCreate} edit={NewsEdit}/>
+    <Resource name="products" list={ListGuesser} show={ShowGuesser} edit={ProductsEdit} create={ProductsCreate}/>
+    <Resource name="shipping-methods" list={ShippingList} edit={ShippingEdit} create={ShippingCreate}/>
 </Admin>;
 
 export default App;

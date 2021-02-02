@@ -1,5 +1,14 @@
-import { Collection, FindOneOptions, InsertOneWriteOpResult, OptionalId, WithId } from 'mongodb';
+import {
+  Collection,
+  FindAndModifyWriteOpResultObject,
+  DeleteWriteOpResultObject,
+  FindOneOptions,
+  InsertOneWriteOpResult,
+  OptionalId,
+  WithId
+} from 'mongodb';
 import { FilterQuery } from 'mongoose';
+import {PcConfiguration} from "@apiDomain/configuration.domain";
 
 export default abstract class RepositoryAbstract<T> {
   constructor (
@@ -22,6 +31,14 @@ export default abstract class RepositoryAbstract<T> {
 
   async findOne (id): Promise<WithId<T>> {
     return this.collection.findOne({ _id: id });
+  }
+
+  async deleteOne (id): Promise<DeleteWriteOpResultObject> {
+    return this.collection.deleteOne({ _id: id });
+  }
+
+  async putOne (id, entity: object): Promise<FindAndModifyWriteOpResultObject<T>> {
+    return this.collection.findOneAndReplace({_id: id}, entity);
   }
 
   public async insertOne (entity: OptionalId<T>): Promise<InsertOneWriteOpResult<WithId<T>>> {
