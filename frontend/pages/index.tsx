@@ -508,7 +508,7 @@ const Home: FC = () => {
           return;
         }
 
-        tmp[feature.code].push(<Option key={feature.code + uuidv4() + feature.value} value={feature.value}>{feature.value}</Option>);
+        tmp[feature.code].push(<Option key={feature.code + uuidv4() + feature.value} value={feature.value} >{feature.value}</Option>);
         tmp[feature.code] = tmp[feature.code].filter((value, index, self) => self.indexOf(value) === index);
 
         duplicates.push(feature.value);
@@ -516,7 +516,7 @@ const Home: FC = () => {
     })
 
     return (
-      <Collapse ghost defaultActiveKey={['1']}>
+      <Collapse ghost>
         <Panel style={{ fontWeight: 'bold' }} header="Filters" key={1}>
           <Row gutter={16} align={'middle'} justify={'start'}>
             {

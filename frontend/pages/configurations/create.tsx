@@ -267,11 +267,13 @@ const Products: FC = () => {
     const step = steps[index]
     const hasProperty = selectedProducts.hasOwnProperty(step.title);
     const hasSelestedItem = !!selectedProducts[step.title]
+    const selectedItem = selectedProducts[step.title] as Product
+    const isCompatible = isProductCompatible(selectedItem)
 
-    if (currentStep === index) return 'process'
+    if (currentStep === index) return !hasSelestedItem ? 'process' : isCompatible ? 'process' : 'error'
 
-    return hasSelestedItem
-      ? 'finish'
+    return hasSelestedItem && isProductCompatible(selectedItem)
+      ? 'finish' 
       : hasProperty
         ? 'error'
         : 'wait'
@@ -283,6 +285,8 @@ const Products: FC = () => {
     const hasSelectedItem = !!selectedProducts[step.title]
     const selectedItem = selectedProducts[step.title] as Product
 
+    selectedItem && isProductCompatible(selectedItem)
+
     if (currentStep === index) return 'choosing... ' + (selectedItem?.name || '')
 
     return !hasProperty
@@ -291,6 +295,19 @@ const Products: FC = () => {
         ? 'empty slot'
         : selectedItem.name
   }
+
+  const isProductCompatible = (productToCheck: Product) => {
+    if (!productToCheck?.requirements) {
+      return true;
+    }
+
+    const filteredKeys = Object.keys(selectedProducts).filter(key => key !== productToCheck.type);
+    const filteredRequriements = productToCheck.requirements.filter(requirement => !filteredKeys.some(key => selectedProducts[key].features.map(f => JSON.stringify(f)).includes(JSON.stringify(requirement))))
+    const result = !(filteredRequriements.length > 0)
+
+    return result;
+  }
+  
 
   if (status === 'loading') {
     return <Spin />;
