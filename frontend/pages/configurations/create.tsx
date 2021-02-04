@@ -239,8 +239,22 @@ const Products: FC = () => {
         filters: getUniqueFeatures(splitedArrayByType[key].map(product => product.features).flat())
       }));
 
-  const getFilters = () => steps[currentStep].filters.map(filter => ({ text: filter.value, value: JSON.stringify(filter) }))
-  // const handleOnFilter = (value, record) => console.log('@@@ onFilter', value, record)
+  const getFilters = () => {
+    const groupedFilters =  steps[currentStep].filters.reduce((accumulator, currentValue) => {
+      const accHasCode = Object.keys(accumulator).includes(currentValue['code']);
+
+      if (!accHasCode) {
+        accumulator[currentValue['code']] = []
+      }
+
+      accumulator[currentValue['code']].push({ text: currentValue.value, value: JSON.stringify(currentValue) })
+      
+      return accumulator;
+    }, {})
+
+    return Object.keys(groupedFilters).map(key => ({ text: key, value: key, children: groupedFilters[key] }))
+  }
+  
   const handleOnFilter = (value, record) => record.features.findIndex(feature => JSON.stringify(feature) === value) >= 0
   
   const columns = [
