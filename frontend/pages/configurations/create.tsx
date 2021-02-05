@@ -1,5 +1,5 @@
 import { Product, ProductTypeEnum } from '@frontendDto/product.dto';
-import {Breadcrumb, Button, notification, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
+import {Alert, Breadcrumb, Button, notification, PageHeader, Result, Spin, Steps, Table, Tag, Typography} from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { postConfiguration, request } from 'src/products/slice';
@@ -282,11 +282,13 @@ const Products: FC = () => {
     const hasProperty = selectedProducts.hasOwnProperty(step.title);
     const hasSelestedItem = !!selectedProducts[step.title]
     const selectedItem = selectedProducts[step.title] as Product
-    const isCompatible = isProductCompatible(selectedItem)
+    const [isCompatible] = isProductCompatible(selectedItem)
 
     if (currentStep === index) return !hasSelestedItem ? 'process' : isCompatible ? 'process' : 'error'
 
-    return hasSelestedItem && isProductCompatible(selectedItem)
+    if (!isCompatible) return 'error'
+
+    return hasSelestedItem && isCompatible
       ? 'finish' 
       : hasProperty
         ? 'error'
@@ -298,30 +300,65 @@ const Products: FC = () => {
     const hasProperty = selectedProducts.hasOwnProperty(step.title);
     const hasSelectedItem = !!selectedProducts[step.title]
     const selectedItem = selectedProducts[step.title] as Product
+    const [isCompatible, requriementsNotFullfilled] = isProductCompatible(selectedItem)
+    const isCurrentStep = currentStep === index;
+    const stepSatus = getStepStatus(index);
 
-    selectedItem && isProductCompatible(selectedItem)
+    selectedItem && isCompatible
 
-    if (currentStep === index) return 'choosing... ' + (selectedItem?.name || '')
+    // return 'X'
 
-    return !hasProperty
-      ? 'waiting...'
-      : !hasSelectedItem
-        ? 'empty slot'
-        : selectedItem.name
+    // if (currentStep === index) return 'choosing... ' + (selectedItem?.name || '')
+    // if (!hasProperty && !isCurrentStep) return 'waiting...'
+    // if (!hasSelectedItem && !isCurrentStep) return 'no empty slots allowed'
+    
+    return (
+      <div>
+        {
+          currentStep === index && <Text type={stepSatus === 'error' ? 'danger' : 'secondary'}>choosing... </Text>
+          || !hasProperty && <Text type='secondary'>waiting...</Text>
+          || !hasSelectedItem && <Text type='danger'>no empty slots allowed</Text>
+        }
+        <Text>{selectedItem?.name || ''}</Text>
+        {
+          requriementsNotFullfilled.length > 0 &&
+            <div>
+              <Alert
+                message="Product not compatible"
+                description={`This product requirements are not met in your current configuration.\nRequirements not met: ${requriementsNotFullfilled.map(requirement => `${requirement.code}: ${requirement.value}, `)}`}
+                type="error"
+              />
+            </div>
+        }
+      </div>
+    )
   }
 
-  const isProductCompatible = (productToCheck: Product) => {
+  const isProductCompatible = (productToCheck: Product): [boolean, any[]] => {
     if (!productToCheck?.requirements) {
-      return true;
+      return [true, []];
     }
 
     const filteredKeys = Object.keys(selectedProducts).filter(key => key !== productToCheck.type);
-    const filteredRequriements = productToCheck.requirements.filter(requirement => !filteredKeys.some(key => selectedProducts[key].features.map(f => JSON.stringify(f)).includes(JSON.stringify(requirement))))
+    const filteredRequriements = productToCheck.requirements.filter(requirement => !filteredKeys.some(key => selectedProducts[key]?.features.map(f => JSON.stringify(f)).includes(JSON.stringify(requirement))))
     const result = !(filteredRequriements.length > 0)
+
+    return [result, filteredRequriements];
+  }
+
+  const isConfigurationCompatible = () => {
+    const keys = Object.keys(selectedProducts)
+
+    const result = keys.every(key => {
+      const [isCompatible] = isProductCompatible(selectedProducts[key])
+      return isCompatible;
+    })
 
     return result;
   }
-  
+
+  const hasAllSlots = Object.keys(selectedProducts).length === steps.length
+  const canAddToCart = hasAllSlots && isConfigurationCompatible();
 
   if (status === 'loading') {
     return <Spin />;
@@ -396,7 +433,7 @@ const Products: FC = () => {
           <Button
             type='primary'
             size='large'
-            disabled={Object.keys(selectedProducts).length !== steps.length}
+            disabled={!canAddToCart}
             style={{
               marginTop: 'auto'
             }}
