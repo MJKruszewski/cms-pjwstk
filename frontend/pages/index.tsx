@@ -594,7 +594,7 @@ const Home: FC = () => {
                       opacity: 0.65
                     }}>{new Date(news.createdAt.toString()).toLocaleDateString()}</Paragraph>
                   </div>
-                  <Paragraph style={{ alignSelf: 'stretch' }}>{news.summary}</Paragraph>
+                  <Paragraph style={{ alignSelf: 'stretch' }}><div dangerouslySetInnerHTML={{ __html: news.summary }}></div></Paragraph>
                 </div>
               </div>
             </Card>
